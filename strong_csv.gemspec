@@ -9,7 +9,7 @@ Gem::Specification.new do |spec|
   spec.email = ["kamei@yykamei.me"]
 
   spec.summary = "Type check CSV objects"
-  spec.description = "strong_csv is intended for checking the type of each CSV cell by declaring expected types."
+  spec.description = "strong_csv is a type checker for a CSV file. It lets developers declare types for each column to ensure all cells are satisfied with desired types."
   spec.homepage = "https://github.com/yykamei/strong_csv"
   spec.license = "MIT"
   spec.required_ruby_version = ">= 2.5.5"
