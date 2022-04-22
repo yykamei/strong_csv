@@ -81,11 +81,8 @@ data = <<~CSV
   12,0.8,special item,True,4,20,M,https://example.com
 CSV
 
-result = strong_csv.parse(data) do |row|
-  # Do something with `row`.
-  row[:user_id]
-end
-result.count # 1
+result = strong_csv.parse(data)
+result.successes # => [<Row>, <Row>, ...]
 result.errors # => [{ row: 2, column: :user_id, messages: ["must be present", "must be an Integer", "must satisfy the custom validation"] }]
 ```
 
