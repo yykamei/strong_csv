@@ -66,13 +66,13 @@ strong_csv = StrongCSV.new(headers: true, max_rows: 500, encoding: "UTF-8") do
   let :url, %r{\Ahttps://}
 
   # Custom validation.
+  #
   # This example sees the database to fetch exactly stored `User` IDs,
   # and it checks the `:user_id` cell really exists in the `users` table.
   # `pick` would be useful to avoid N+1 problems.
   pick :user_id, as: :user_ids do |ids|
     User.where(id: ids).ids
   end
-
   let :user_id, int { |i| user_ids.include?(i) }
 end
 
@@ -81,14 +81,12 @@ data = <<~CSV
   12,0.8,special item,True,4,20,M,https://example.com
 CSV
 
-begin
-  strong_csv.parse(data) do |row|
-    # Do something with `row`.
-    row[:user_id]
-  end
-rescue StrongCSV::Error => e
-  e.errors # => [{ row: 2, column: :user_id, messages: ["must be present", "must be an Integer", "must satisfy the custom validation"] }]
+result = strong_csv.parse(data) do |row|
+  # Do something with `row`.
+  row[:user_id]
 end
+result.count # 1
+result.errors # => [{ row: 2, column: :user_id, messages: ["must be present", "must be an Integer", "must satisfy the custom validation"] }]
 ```
 
 ## Available types
