@@ -13,4 +13,11 @@ class TestStrongCSV < Minitest::Test
     end
     assert_instance_of StrongCSV, strong_csv
   end
+
+  def test_initialize_with_headers
+    strong_csv = StrongCSV.new do
+      let :abc, 123
+    end
+    assert_instance_of StrongCSV, strong_csv
+  end
 end
