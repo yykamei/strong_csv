@@ -18,6 +18,14 @@ class TypesIntegerTest < Minitest::Test
     assert_equal '`"1.3"` can\'t be casted to Integer', value_result.error_message
   end
 
+  def test_cast_with_nil_error
+    value_result = StrongCSV::Types::Integer.new.cast(nil)
+    assert_instance_of StrongCSV::ValueResult, value_result
+    refute value_result.success?
+    assert_equal nil, value_result.value
+    assert_equal '`nil` can\'t be casted to Integer', value_result.error_message
+  end
+
   def test_initialize_without_headers
     skip "#parse is not implemented"
 
