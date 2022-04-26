@@ -23,7 +23,7 @@ class TypesIntegerTest < Minitest::Test
     assert_instance_of StrongCSV::ValueResult, value_result
     refute value_result.success?
     assert_equal nil, value_result.value
-    assert_equal '`nil` can\'t be casted to Integer', value_result.error_message
+    assert_equal "`nil` can't be casted to Integer", value_result.error_message
   end
 
   def test_initialize_without_headers
