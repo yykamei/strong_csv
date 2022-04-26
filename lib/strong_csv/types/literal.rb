@@ -13,7 +13,7 @@ class StrongCSV
           if int == self
             ValueResult.new(value: int, original_value: value)
           else
-            ValueResult.new(original_value: value, error_message: "`#{self.inspect}` is expected, but `#{int}` was given.")
+            ValueResult.new(original_value: value, error_message: "`#{inspect}` is expected, but `#{int}` was given.")
           end
         rescue ArgumentError, TypeError
           ValueResult.new(original_value: value, error_message: "`#{value.inspect}` can't be casted to Integer")
