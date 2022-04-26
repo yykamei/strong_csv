@@ -21,7 +21,7 @@ class StrongCSV
 
   # @param csv [String, IO]
   # @param options [Hash] CSV options for parsing.
-  def parse(csv, **options, &block)
+  def parse(csv, **options)
     options = options.merge(headers: @let.headers, header_converters: :symbol)
     csv = CSV.new(csv, **options)
     if block_given?

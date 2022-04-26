@@ -39,7 +39,7 @@ gem install strong_csv
 TBD: This hasn't yet been implemented.
 
 ```ruby
-strong_csv = StrongCSV.new(max_rows: 500) do
+strong_csv = StrongCSV.new do
   let :stock, int
   let :tax_rate, float
   let :name, string(255)
@@ -81,7 +81,7 @@ data = <<~CSV
   12,0.8,special item,True,4,20,M,https://example.com
 CSV
 
-strong_csv.parse(data) do |row|
+strong_csv.parse(data, field_size_limit: 2048) do |row|
   if row.valid?
     row[:tax_rate] # => 0.8
     row[:active] # => true
