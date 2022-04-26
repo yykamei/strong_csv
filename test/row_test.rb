@@ -25,7 +25,7 @@ class RowTest < Minitest::Test
     row = StrongCSV::Row.new(row: csv_row, types: { abc: StrongCSV::Types::Integer.new, x: StrongCSV::Types::Integer.new }, lineno: 2)
     refute row.valid?
     assert_equal "abc!", row[:abc]
-    assert_equal({ abc: "`\"abc!\"` can't be casted to Integer", x: "`nil` can't be casted to Integer" }, row.errors)
+    assert_equal({ abc: ["`\"abc!\"` can't be casted to Integer"], x: ["`nil` can't be casted to Integer"] }, row.errors)
   end
 
   def test_row_with_invalid_data_lacking_headers
