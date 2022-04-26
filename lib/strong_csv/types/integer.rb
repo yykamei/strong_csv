@@ -5,6 +5,8 @@ class StrongCSV
     # Integer type
     class Integer < Base
       # @todo Use :exception for Integer after we drop the support of Ruby 2.5
+      # @param value [Object] Value to be casted to Integer
+      # @return [ValueResult]
       def cast(value)
         ValueResult.new(value: Integer(value), original_value: value)
       rescue ArgumentError, TypeError

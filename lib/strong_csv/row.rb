@@ -4,6 +4,7 @@ class StrongCSV
   # Row is a representation of a row in a CSV file, which has casted values with specified types.
   class Row
     extend Forwardable
+    using Types::Literal
 
     def_delegators :@values, :[], :fetch
 
