@@ -10,7 +10,7 @@ class StrongCSV
       def cast(value)
         ValueResult.new(value: Integer(value), original_value: value)
       rescue ArgumentError, TypeError
-        ValueResult.new(original_value: value, error_message: "`#{value.inspect}` can't be casted to Integer")
+        ValueResult.new(original_value: value, error_messages: ["`#{value.inspect}` can't be casted to Integer"])
       end
     end
   end

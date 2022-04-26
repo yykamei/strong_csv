@@ -6,13 +6,13 @@ class StrongCSV
     DEFAULT_VALUE = Object.new
     private_constant :DEFAULT_VALUE
 
-    # @return [String, nil] The error message for the field.
-    attr_reader :error_message
+    # @return [Array<String>, nil] The error messages for the field.
+    attr_reader :error_messages
 
-    def initialize(original_value:, value: DEFAULT_VALUE, error_message: nil)
+    def initialize(original_value:, value: DEFAULT_VALUE, error_messages: nil)
       @value = value
       @original_value = original_value
-      @error_message = error_message
+      @error_messages = error_messages
     end
 
     # @return [Object] The casted value if it's valid. Otherwise, returns the original value.
@@ -22,7 +22,7 @@ class StrongCSV
 
     # @return [Boolean]
     def success?
-      @error_message.nil?
+      @error_messages.nil?
     end
   end
 end
