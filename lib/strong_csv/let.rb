@@ -23,7 +23,7 @@ class StrongCSV
       validate_columns
     end
 
-    def int
+    def integer
       Types::Integer.new
     end
 

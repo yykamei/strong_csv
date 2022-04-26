@@ -40,7 +40,7 @@ TBD: This hasn't yet been implemented.
 
 ```ruby
 strong_csv = StrongCSV.new do
-  let :stock, int
+  let :stock, integer
   let :tax_rate, float
   let :name, string(255)
   let :description, string?(1000)
@@ -73,7 +73,7 @@ strong_csv = StrongCSV.new do
   pick :user_id, as: :user_ids do |ids|
     User.where(id: ids).ids
   end
-  let :user_id, int { |i| user_ids.include?(i) }
+  let :user_id, integer { |i| user_ids.include?(i) }
 end
 
 data = <<~CSV
@@ -95,7 +95,9 @@ end
 
 ## Available types
 
-TBD
+| Type    | Description |
+| ------- | ----------- |
+| integer | Integer     |
 
 ## Contributing
 

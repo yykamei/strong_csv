@@ -41,7 +41,7 @@ class LetTest < Minitest::Test
     end
   end
 
-  def test_int
-    assert_instance_of StrongCSV::Types::Integer, StrongCSV::Let.new.int
+  def test_integer
+    assert_instance_of StrongCSV::Types::Integer, StrongCSV::Let.new.integer
   end
 end

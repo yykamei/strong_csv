@@ -9,21 +9,21 @@ class StrongCSVTest < Minitest::Test
 
   def test_initialize_without_headers
     strong_csv = StrongCSV.new do
-      let 0, int
+      let 0, integer
     end
     assert_instance_of StrongCSV, strong_csv
   end
 
   def test_initialize_with_headers
     strong_csv = StrongCSV.new do
-      let :abc, int
+      let :abc, integer
     end
     assert_instance_of StrongCSV, strong_csv
   end
 
   def test_parse
     strong_csv = StrongCSV.new do
-      let :abc, int
+      let :abc, integer
     end
     result = strong_csv.parse("abc\n123\n455")
     assert_instance_of Array, result
@@ -33,7 +33,7 @@ class StrongCSVTest < Minitest::Test
 
   def test_parse_with_block
     strong_csv = StrongCSV.new do
-      let :abc, int
+      let :abc, integer
     end
     strong_csv.parse("abc\n123\n455") do |row|
       assert_instance_of StrongCSV::Row, row

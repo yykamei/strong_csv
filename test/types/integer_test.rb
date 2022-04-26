@@ -28,7 +28,7 @@ class TypesIntegerTest < Minitest::Test
 
   def test_initialize_without_headers
     strong_csv = StrongCSV.new do
-      let 0, int
+      let 0, integer
     end
     strong_csv.parse("40") do |row|
       assert_instance_of StrongCSV::Row, row
@@ -39,7 +39,7 @@ class TypesIntegerTest < Minitest::Test
 
   def test_initialize_with_headers
     strong_csv = StrongCSV.new do
-      let :id, int
+      let :id, integer
     end
     data = <<~CSV
       id
@@ -54,7 +54,7 @@ class TypesIntegerTest < Minitest::Test
 
   def test_int_with_negative_value
     strong_csv = StrongCSV.new do
-      let :id, int
+      let :id, integer
     end
     data = <<~CSV
       id
@@ -69,7 +69,7 @@ class TypesIntegerTest < Minitest::Test
 
   def test_int_with_hex_value
     strong_csv = StrongCSV.new do
-      let :id, int
+      let :id, integer
     end
     result = strong_csv.parse(<<~CSV)
       id
@@ -82,7 +82,7 @@ class TypesIntegerTest < Minitest::Test
 
   def test_int_with_octal_value
     strong_csv = StrongCSV.new do
-      let :id, int
+      let :id, integer
     end
     result = strong_csv.parse(<<~CSV)
       id
@@ -94,7 +94,7 @@ class TypesIntegerTest < Minitest::Test
 
   def test_int_with_float_value
     strong_csv = StrongCSV.new do
-      let :id, int
+      let :id, integer
     end
     result = strong_csv.parse(<<~CSV)
       id
@@ -106,7 +106,7 @@ class TypesIntegerTest < Minitest::Test
 
   def test_int_with_non_numeric_value
     strong_csv = StrongCSV.new do
-      let :id, int
+      let :id, integer
     end
     result = strong_csv.parse(<<~CSV)
       id
@@ -118,7 +118,7 @@ class TypesIntegerTest < Minitest::Test
 
   def test_int_with_null
     strong_csv = StrongCSV.new do
-      let :id, int
+      let :id, integer
     end
     result = strong_csv.parse(<<~CSV)
       id,
@@ -131,7 +131,7 @@ class TypesIntegerTest < Minitest::Test
 
   def test_int_with_blank_value
     strong_csv = StrongCSV.new do
-      let :id, int
+      let :id, integer
     end
     result = strong_csv.parse(<<~CSV)
       id,
