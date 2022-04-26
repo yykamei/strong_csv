@@ -1,6 +1,8 @@
 # strong_csv
 
-Type checker for a CSV file inspired by [soutaro/strong_json](https://github.com/soutaro/strong_json).
+NOTE: This repository is still under development 🚧🚜🚧
+
+Type checker for a CSV file inspired by [strong_json](https://github.com/soutaro/strong_json).
 
 **Motivation**
 
