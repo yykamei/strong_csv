@@ -7,7 +7,7 @@ class LetTest < Minitest::Test
     let = StrongCSV::Let.new
     let.let(:abc, 123)
     let.let(:xyz, 243)
-    assert_equal({ abc: 123, xyz: 243 }, let.columns)
+    assert_equal({ abc: 123, xyz: 243 }, let.types)
     assert let.headers
   end
 
@@ -15,7 +15,7 @@ class LetTest < Minitest::Test
     let = StrongCSV::Let.new
     let.let("abc", 123)
     let.let("xyz", 243)
-    assert_equal({ abc: 123, xyz: 243 }, let.columns)
+    assert_equal({ abc: 123, xyz: 243 }, let.types)
     assert let.headers
   end
 
@@ -23,7 +23,7 @@ class LetTest < Minitest::Test
     let = StrongCSV::Let.new
     let.let(0, 123)
     let.let(1, 89)
-    assert_equal({ 0 => 123, 1 => 89 }, let.columns)
+    assert_equal({ 0 => 123, 1 => 89 }, let.types)
     refute let.headers
   end
 

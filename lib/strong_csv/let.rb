@@ -3,10 +3,10 @@
 class StrongCSV
   # Let is a class that is used to define types for columns.
   class Let
-    attr_reader :columns, :headers
+    attr_reader :types, :headers
 
     def initialize
-      @columns = {}
+      @types = {}
       @headers = false
     end
 
@@ -14,9 +14,9 @@ class StrongCSV
     def let(name, type)
       case name
       when Integer
-        @columns[name] = type
+        @types[name] = type
       when String, Symbol
-        @columns[name.to_sym] = type
+        @types[name.to_sym] = type
       else
         raise TypeError, "Invalid type specified for `name`. `name` must be String, Symbol, or Integer: #{name.inspect}"
       end
@@ -26,12 +26,12 @@ class StrongCSV
     private
 
     def validate_columns
-      if @columns.keys.all? { |k| k.is_a?(Integer) }
+      if @types.keys.all? { |k| k.is_a?(Integer) }
         @headers = false
-      elsif @columns.keys.all? { |k| k.is_a?(Symbol) }
+      elsif @types.keys.all? { |k| k.is_a?(Symbol) }
         @headers = true
       else
-        raise ArgumentError, "`columns` cannot be mixed with Integer and Symbol keys: #{@columns.keys.inspect}"
+        raise ArgumentError, "`types` cannot be mixed with Integer and Symbol keys: #{@types.keys.inspect}"
       end
     end
   end
