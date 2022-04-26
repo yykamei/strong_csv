@@ -9,8 +9,6 @@ class StrongCSV
       # @param left [Base]
       # @param right [Base]
       def initialize(left, right)
-        raise ArgumentError, "`left` and `right` must have #cast." unless left.respond_to?(:cast) && right.respond_to?(:cast)
-
         super()
         @left = left
         @right = right
