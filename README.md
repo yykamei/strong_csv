@@ -95,9 +95,9 @@ end
 
 ## Available types
 
-| Type    | Description |
-| ------- | ----------- |
-| integer | Integer     |
+| Type    | Description                         |
+| ------- | ----------------------------------- |
+| integer | The value must be casted to Integer |
 
 ## Contributing
 
