@@ -17,7 +17,7 @@ class LiteralIntegerTest < Minitest::Test
     assert_instance_of StrongCSV::ValueResult, value_result
     refute value_result.success?
     assert_equal "13", value_result.value
-    assert_equal ["`8` is expected, but `13` was given."], value_result.error_messages
+    assert_equal ["`8` is expected, but `13` was given"], value_result.error_messages
   end
 
   def test_cast_with_error
