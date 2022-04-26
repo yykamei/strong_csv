@@ -4,9 +4,17 @@
 
 [Full Changelog](https://github.com/yykamei/strong_csv/compare/v0.1.0...HEAD)
 
+**Breaking changes:**
+
+- Change \#error\_message to \#error\_messages [\#5](https://github.com/yykamei/strong_csv/pull/5) ([yykamei](https://github.com/yykamei))
+
 **Implemented enhancements:**
 
 - Support Integer literal [\#3](https://github.com/yykamei/strong_csv/pull/3) ([yykamei](https://github.com/yykamei))
+
+**Merged pull requests:**
+
+- Follow the change of \#error\_message [\#8](https://github.com/yykamei/strong_csv/pull/8) ([yykamei](https://github.com/yykamei))
 
 ## [v0.1.0](https://github.com/yykamei/strong_csv/tree/v0.1.0) (2022-04-26)
 
