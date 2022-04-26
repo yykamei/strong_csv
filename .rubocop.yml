@@ -12,3 +12,7 @@ Style/StringLiteralsInInterpolation:
 
 Layout/LineLength:
   Max: 240
+
+Metrics/ClassLength:
+  Exclude:
+    - "test/**/*.rb"
