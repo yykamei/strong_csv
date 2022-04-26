@@ -14,7 +14,6 @@ It would be cumbersome to write such validations always.
 
 strong_json helps you to mitigate such a drudgery by letting you declare desired types beforehand.
 
-
 ## Installation
 
 Add this line to your application's Gemfile:
@@ -34,17 +33,18 @@ Or install it yourself as:
 ```console
 gem install strong_csv
 ```
+
 ## Usage
 
 TBD: This hasn't yet been implemented.
 
 ```ruby
-strong_csv = StrongCSV.new(headers: true, max_rows: 500, encoding: "UTF-8") do
+strong_csv = StrongCSV.new(max_rows: 500) do
   let :stock, int
   let :tax_rate, float
   let :name, string(255)
   let :description, string?(1000)
-  let :active,  boolean
+  let :active, boolean
   let :started_at, time?
   let :data, any?
 
@@ -81,9 +81,16 @@ data = <<~CSV
   12,0.8,special item,True,4,20,M,https://example.com
 CSV
 
-result = strong_csv.parse(data)
-result.successes # => [<Row>, <Row>, ...]
-result.errors # => [{ row: 2, column: :user_id, messages: ["must be present", "must be an Integer", "must satisfy the custom validation"] }]
+strong_csv.parse(data) do |row|
+  if row.valid?
+    row[:tax_rate] # => 0.8
+    row[:active] # => true
+    # do something with row
+  else
+    row.errors # => [{ row: 2, column: :user_id, messages: ["must be present", "must be an Integer", "must satisfy the custom validation"] }]
+    # do something with row.errors
+  end
+end
 ```
 
 ## Available types

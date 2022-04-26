@@ -40,4 +40,8 @@ class LetTest < Minitest::Test
       let.let(:abc, 8)
     end
   end
+
+  def test_int
+    assert_instance_of StrongCSV::Types::Integer, StrongCSV::Let.new.int
+  end
 end

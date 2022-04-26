@@ -9,15 +9,35 @@ class StrongCSVTest < Minitest::Test
 
   def test_initialize_without_headers
     strong_csv = StrongCSV.new do
-      let 0, 123
+      let 0, int
     end
     assert_instance_of StrongCSV, strong_csv
   end
 
   def test_initialize_with_headers
     strong_csv = StrongCSV.new do
-      let :abc, 123
+      let :abc, int
     end
     assert_instance_of StrongCSV, strong_csv
+  end
+
+  def test_parse
+    strong_csv = StrongCSV.new do
+      let :abc, int
+    end
+    result = strong_csv.parse("abc\n123\n455")
+    assert_instance_of Array, result
+    assert result.all? { |row| row.is_a?(StrongCSV::Row) }
+    assert_equal([123, 455], result.map { |row| row[:abc] })
+  end
+
+  def test_parse_with_block
+    strong_csv = StrongCSV.new do
+      let :abc, int
+    end
+    strong_csv.parse("abc\n123\n455") do |row|
+      assert_instance_of StrongCSV::Row, row
+      assert_instance_of Integer, row[:abc]
+    end
   end
 end
