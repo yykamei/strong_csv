@@ -27,6 +27,10 @@ class StrongCSV
       Types::Integer.new
     end
 
+    def boolean
+      Types::Boolean.new
+    end
+
     private
 
     def validate_columns

@@ -2,11 +2,13 @@
 
 require "csv"
 require "forwardable"
+require "set"
 
 require_relative "strong_csv/version"
 require_relative "strong_csv/let"
 require_relative "strong_csv/value_result"
 require_relative "strong_csv/types/base"
+require_relative "strong_csv/types/boolean"
 require_relative "strong_csv/types/integer"
 require_relative "strong_csv/types/literal"
 require_relative "strong_csv/row"

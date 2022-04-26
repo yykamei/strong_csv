@@ -44,4 +44,8 @@ class LetTest < Minitest::Test
   def test_integer
     assert_instance_of StrongCSV::Types::Integer, StrongCSV::Let.new.integer
   end
+
+  def test_boolean
+    assert_instance_of StrongCSV::Types::Boolean, StrongCSV::Let.new.boolean
+  end
 end
