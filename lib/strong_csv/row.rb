@@ -24,7 +24,7 @@ class StrongCSV
       types.each do |key, type|
         value_result = type.cast(row[key])
         @values[key] = value_result.value
-        @errors[key] = value_result.error_message unless value_result.success?
+        @errors[key] = value_result.error_messages unless value_result.success?
       end
     end
 

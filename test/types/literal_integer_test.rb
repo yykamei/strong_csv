@@ -17,7 +17,7 @@ class LiteralIntegerTest < Minitest::Test
     assert_instance_of StrongCSV::ValueResult, value_result
     refute value_result.success?
     assert_equal "13", value_result.value
-    assert_equal "`8` is expected, but `13` was given.", value_result.error_message
+    assert_equal ["`8` is expected, but `13` was given."], value_result.error_messages
   end
 
   def test_cast_with_error
@@ -25,7 +25,7 @@ class LiteralIntegerTest < Minitest::Test
     assert_instance_of StrongCSV::ValueResult, value_result
     refute value_result.success?
     assert_equal "1.3", value_result.value
-    assert_equal '`"1.3"` can\'t be casted to Integer', value_result.error_message
+    assert_equal ['`"1.3"` can\'t be casted to Integer'], value_result.error_messages
   end
 
   def test_cast_with_nil_error
@@ -33,7 +33,7 @@ class LiteralIntegerTest < Minitest::Test
     assert_instance_of StrongCSV::ValueResult, value_result
     refute value_result.success?
     assert_nil value_result.value
-    assert_equal "`nil` can't be casted to Integer", value_result.error_message
+    assert_equal ["`nil` can't be casted to Integer"], value_result.error_messages
   end
 
   def test_initialize_without_headers
