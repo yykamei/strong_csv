@@ -89,7 +89,7 @@ strong_csv.parse(data, field_size_limit: 2048) do |row|
     row[:active] # => true
     # do something with row
   else
-    row.errors # => [{ row: 2, column: :user_id, messages: ["must be present", "must be an Integer", "must satisfy the custom validation"] }]
+    row.errors # => { user_id: ["must be present", "must be an integer"] }
     # do something with row.errors
   end
 end
