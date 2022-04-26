@@ -1,5 +1,13 @@
 # Changelog
 
+## [Unreleased](https://github.com/yykamei/strong_csv/tree/HEAD)
+
+[Full Changelog](https://github.com/yykamei/strong_csv/compare/v0.1.0...HEAD)
+
+**Implemented enhancements:**
+
+- Support Integer literal [\#3](https://github.com/yykamei/strong_csv/pull/3) ([yykamei](https://github.com/yykamei))
+
 ## [v0.1.0](https://github.com/yykamei/strong_csv/tree/v0.1.0) (2022-04-26)
 
 [Full Changelog](https://github.com/yykamei/strong_csv/compare/cd7d208cbc748378fa240bcbe9109d38e9c534bb...v0.1.0)
