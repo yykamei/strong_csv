@@ -31,7 +31,7 @@ jobs:
           # frozen_string_literal: true
 
           class StrongCSV
-            VERSION = '${{ github.event.inputs.version }}'
+            VERSION = "${{ github.event.inputs.version }}"
           end
           RUBY
 
