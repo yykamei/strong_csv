@@ -97,10 +97,10 @@ end
 
 ## Available types
 
-| Type                        | Description                         | Example               |
-| --------------------------- | ----------------------------------- | --------------------- |
-| integer                     | The value must be casted to Integer | `let :stock, integer` |
-| 1, 2, ... (Integer literal) | The value must be casted to Integer | `let :id, 3`          |
+| Type                        | Description                                  | Example               |
+| --------------------------- | -------------------------------------------- | --------------------- |
+| integer                     | The value must be casted to Integer          | `let :stock, integer` |
+| 1, 2, ... (Integer literal) | The value must be casted to specific Integer | `let :id, 3`          |
 
 ## Contributing
 
