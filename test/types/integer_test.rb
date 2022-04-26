@@ -63,7 +63,7 @@ class TypesIntegerTest < Minitest::Test
     strong_csv.parse(data) do |row|
       assert_instance_of StrongCSV::Row, row
       assert row.valid?
-      assert_equal -4, row[:id]
+      assert_equal(-4, row[:id])
     end
   end
 

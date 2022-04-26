@@ -14,5 +14,7 @@ Layout/LineLength:
   Max: 240
 
 Metrics/ClassLength:
-  Exclude:
-    - "test/**/*.rb"
+  Enabled: false
+
+Metrics/MethodLength:
+  Enabled: false
