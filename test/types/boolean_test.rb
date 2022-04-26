@@ -37,7 +37,7 @@ class TypesBooleanTest < Minitest::Test
     end
   end
 
-  def test_initialize_without_headers
+  def test_without_headers
     strong_csv = StrongCSV.new do
       let 0, boolean
       let 1, boolean
@@ -50,7 +50,7 @@ class TypesBooleanTest < Minitest::Test
     end
   end
 
-  def test_initialize_with_headers
+  def test_with_headers
     strong_csv = StrongCSV.new do
       let :id, boolean
     end
@@ -65,7 +65,7 @@ class TypesBooleanTest < Minitest::Test
     end
   end
 
-  def test_int_with_non_boolean_value
+  def test_with_non_boolean_value
     strong_csv = StrongCSV.new do
       let :id, boolean
     end
@@ -78,7 +78,7 @@ class TypesBooleanTest < Minitest::Test
     assert_equal([["`\"abc\"` can't be casted to Boolean"]], result.map { |row| row.errors[:id] })
   end
 
-  def test_int_with_null
+  def test_with_null
     strong_csv = StrongCSV.new do
       let :id, boolean
     end
@@ -92,7 +92,7 @@ class TypesBooleanTest < Minitest::Test
     assert_equal([["`\"3\"` can't be casted to Boolean"], ["`nil` can't be casted to Boolean"]], result.map { |row| row.errors[:id] })
   end
 
-  def test_int_with_blank_value
+  def test_with_blank_value
     strong_csv = StrongCSV.new do
       let :id, boolean
     end

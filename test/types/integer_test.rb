@@ -26,7 +26,7 @@ class TypesIntegerTest < Minitest::Test
     assert_equal ["`nil` can't be casted to Integer"], value_result.error_messages
   end
 
-  def test_initialize_without_headers
+  def test_without_headers
     strong_csv = StrongCSV.new do
       let 0, integer
     end
@@ -37,7 +37,7 @@ class TypesIntegerTest < Minitest::Test
     end
   end
 
-  def test_initialize_with_headers
+  def test_with_headers
     strong_csv = StrongCSV.new do
       let :id, integer
     end
@@ -52,7 +52,7 @@ class TypesIntegerTest < Minitest::Test
     end
   end
 
-  def test_int_with_negative_value
+  def test_with_negative_value
     strong_csv = StrongCSV.new do
       let :id, integer
     end
@@ -67,7 +67,7 @@ class TypesIntegerTest < Minitest::Test
     end
   end
 
-  def test_int_with_hex_value
+  def test_with_hex_value
     strong_csv = StrongCSV.new do
       let :id, integer
     end
@@ -80,7 +80,7 @@ class TypesIntegerTest < Minitest::Test
     assert_equal([0x12, 123], result.map { |row| row[:id] })
   end
 
-  def test_int_with_octal_value
+  def test_with_octal_value
     strong_csv = StrongCSV.new do
       let :id, integer
     end
@@ -92,7 +92,7 @@ class TypesIntegerTest < Minitest::Test
     assert_equal([0o12], result.map { |row| row[:id] })
   end
 
-  def test_int_with_float_value
+  def test_with_float_value
     strong_csv = StrongCSV.new do
       let :id, integer
     end
@@ -104,7 +104,7 @@ class TypesIntegerTest < Minitest::Test
     assert_equal(["4.5"], result.map { |row| row[:id] })
   end
 
-  def test_int_with_non_numeric_value
+  def test_with_non_numeric_value
     strong_csv = StrongCSV.new do
       let :id, integer
     end
@@ -116,7 +116,7 @@ class TypesIntegerTest < Minitest::Test
     assert_equal(["abc"], result.map { |row| row[:id] })
   end
 
-  def test_int_with_null
+  def test_with_null
     strong_csv = StrongCSV.new do
       let :id, integer
     end
@@ -129,7 +129,7 @@ class TypesIntegerTest < Minitest::Test
     assert_equal([3, nil], result.map { |row| row[:id] })
   end
 
-  def test_int_with_blank_value
+  def test_with_blank_value
     strong_csv = StrongCSV.new do
       let :id, integer
     end
