@@ -5,7 +5,7 @@ require_relative "../test_helper"
 class LiteralIntegerTest < Minitest::Test
   using StrongCSV::Types::Literal
 
-  def test_cast
+  def test_cast_literal_integer
     value_result = 123.cast("123")
     assert_instance_of StrongCSV::ValueResult, value_result
     assert value_result.success?
@@ -20,7 +20,7 @@ class LiteralIntegerTest < Minitest::Test
     assert_equal ["`8` is expected, but `13` was given"], value_result.error_messages
   end
 
-  def test_cast_with_error
+  def test_cast_with_error_for_literal_integer
     value_result = 8.cast("1.3")
     assert_instance_of StrongCSV::ValueResult, value_result
     refute value_result.success?
@@ -28,7 +28,7 @@ class LiteralIntegerTest < Minitest::Test
     assert_equal ['`"1.3"` can\'t be casted to Integer'], value_result.error_messages
   end
 
-  def test_cast_with_nil_error
+  def test_cast_with_nil_error_for_literal_integer
     value_result = 31.cast(nil)
     assert_instance_of StrongCSV::ValueResult, value_result
     refute value_result.success?
