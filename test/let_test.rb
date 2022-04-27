@@ -59,4 +59,9 @@ class LetTest < Minitest::Test
   def test_float
     assert_instance_of StrongCSV::Types::Float, StrongCSV::Let.new.float
   end
+
+  def test_string
+    assert_instance_of StrongCSV::Types::String, StrongCSV::Let.new.string
+    assert_instance_of StrongCSV::Types::String, StrongCSV::Let.new.string(within: 1..10)
+  end
 end

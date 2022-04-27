@@ -16,9 +16,9 @@ class StrongCSV
     def let(name, type, *types)
       type = types.empty? ? type : Types::Union.new(type, *types)
       case name
-      when Integer
+      when ::Integer
         @types[name] = type
-      when String, Symbol
+      when ::String, ::Symbol
         @types[name.to_sym] = type
       else
         raise TypeError, "Invalid type specified for `name`. `name` must be String, Symbol, or Integer: #{name.inspect}"
@@ -36,6 +36,11 @@ class StrongCSV
 
     def float
       Types::Float.new
+    end
+
+    # @param options [Hash] See `Types::String#initialize` for more details.
+    def string(**options)
+      Types::String.new(**options)
     end
 
     private

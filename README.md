@@ -46,8 +46,8 @@ require "strong_csv"
 strong_csv = StrongCSV.new do
   let :stock, integer
   let :tax_rate, float
-  let :name, string(255)
-  let :description, string?(1000)
+  let :name, string(within: 1..255)
+  let :description, string?(within: 1..1000)
   let :active, boolean
   let :started_at, time?
   let :data, any?
@@ -99,14 +99,15 @@ end
 
 ## Available types
 
-| Type                                       | Description                                        | Example                |
-| ------------------------------------------ | -------------------------------------------------- | ---------------------- |
-| integer                                    | The value must be casted to Integer                | `let :stock, integer`  |
-| float                                      | The value must be casted to Float                  | `let :rate, float`     |
-| boolean                                    | The value must be casted to Boolean                | `let :active, boolean` |
-| 1, 2, ... (Integer literal)                | The value must be casted to specific Integer       | `let :id, 3`           |
-| 1..10, , 1.0..30, "a".."z" (Range literal) | The value must be casted to the beginning of Range | `let :id, 10..30`      |
-| , (Union type)                             | The value must satisfy one of the subtypes         | `let :id, 1, 2, 3`     |
+| Type                                       | Description                                        | Example                             |
+| ------------------------------------------ | -------------------------------------------------- | ----------------------------------- |
+| integer                                    | The value must be casted to Integer                | `let :stock, integer`               |
+| float                                      | The value must be casted to Float                  | `let :rate, float`                  |
+| boolean                                    | The value must be casted to Boolean                | `let :active, boolean`              |
+| string OR string(within: 1..10)            | The value must be casted to String                 | `let :name, string(within: 1..255)` |
+| 1, 2, ... (Integer literal)                | The value must be casted to specific Integer       | `let :id, 3`                        |
+| 1..10, , 1.0..30, "a".."z" (Range literal) | The value must be casted to the beginning of Range | `let :id, 10..30`                   |
+| , (Union type)                             | The value must satisfy one of the subtypes         | `let :id, 1, 2, 3`                  |
 
 ## Contributing
 
