@@ -12,6 +12,7 @@
 
 **Implemented enhancements:**
 
+- Support \#string [\#20](https://github.com/yykamei/strong_csv/pull/20) ([yykamei](https://github.com/yykamei))
 - Support float [\#18](https://github.com/yykamei/strong_csv/pull/18) ([yykamei](https://github.com/yykamei))
 - Support Range literal [\#16](https://github.com/yykamei/strong_csv/pull/16) ([yykamei](https://github.com/yykamei))
 - Add Types::Boolean [\#10](https://github.com/yykamei/strong_csv/pull/10) ([yykamei](https://github.com/yykamei))
