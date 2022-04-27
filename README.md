@@ -102,6 +102,7 @@ end
 | Type                                       | Description                                        | Example                |
 | ------------------------------------------ | -------------------------------------------------- | ---------------------- |
 | integer                                    | The value must be casted to Integer                | `let :stock, integer`  |
+| float                                      | The value must be casted to Float                  | `let :rate, float`     |
 | boolean                                    | The value must be casted to Boolean                | `let :active, boolean` |
 | 1, 2, ... (Integer literal)                | The value must be casted to specific Integer       | `let :id, 3`           |
 | 1..10, , 1.0..30, "a".."z" (Range literal) | The value must be casted to the beginning of Range | `let :id, 10..30`      |
