@@ -6,6 +6,7 @@
 
 **Breaking changes:**
 
+- Change Union syntax from `|` to `,` [\#14](https://github.com/yykamei/strong_csv/pull/14) ([yykamei](https://github.com/yykamei))
 - Support Union type [\#12](https://github.com/yykamei/strong_csv/pull/12) ([yykamei](https://github.com/yykamei))
 - Change \#error\_message to \#error\_messages [\#5](https://github.com/yykamei/strong_csv/pull/5) ([yykamei](https://github.com/yykamei))
 
