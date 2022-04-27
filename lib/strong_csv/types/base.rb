@@ -7,10 +7,6 @@ class StrongCSV
       def cast(_value)
         raise NotImplementedError
       end
-
-      def |(other)
-        Union.new(self, other)
-      end
     end
   end
 end

@@ -3,16 +3,14 @@
 require_relative "../test_helper"
 
 class TypesIntegerTest < Minitest::Test
-  using StrongCSV::Types::Literal
-
-  def test_cast
+  def test_cast_for_union
     value_result = StrongCSV::Types::Union.new(12, 3).cast("3")
     assert_instance_of StrongCSV::ValueResult, value_result
     assert value_result.success?
     assert_equal 3, value_result.value
   end
 
-  def test_cast_with_error
+  def test_cast_with_error_for_union
     value_result = StrongCSV::Types::Union.new(10, 8).cast("1.3")
     assert_instance_of StrongCSV::ValueResult, value_result
     refute value_result.success?
@@ -20,7 +18,7 @@ class TypesIntegerTest < Minitest::Test
     assert_equal ['`"1.3"` can\'t be casted to Integer'], value_result.error_messages
   end
 
-  def test_cast_with_nil_error
+  def test_cast_with_nil_error_for_union
     value_result = StrongCSV::Types::Union.new(10, 11).cast(nil)
     assert_instance_of StrongCSV::ValueResult, value_result
     refute value_result.success?
@@ -38,7 +36,7 @@ class TypesIntegerTest < Minitest::Test
 
   def test_with_multiple_values
     strong_csv = StrongCSV.new do
-      let 0, integer | boolean
+      let 0, integer, boolean
     end
     result = strong_csv.parse(<<~CSV)
       123
@@ -53,7 +51,7 @@ class TypesIntegerTest < Minitest::Test
 
   def test_with_multiple_values_including_error
     strong_csv = StrongCSV.new do
-      let :id, integer | boolean
+      let :id, integer, boolean
     end
     result = strong_csv.parse(<<~CSV)
       id
@@ -83,7 +81,7 @@ class TypesIntegerTest < Minitest::Test
 
   def test_with_many_multiple_values
     strong_csv = StrongCSV.new do
-      let 0, 10 | 20 | 30 | 40 | 50
+      let 0, 10, 20, 30, 40, 50
     end
     result = strong_csv.parse(<<~CSV)
       15

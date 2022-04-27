@@ -3,14 +3,14 @@
 require_relative "../test_helper"
 
 class TypesBooleanTest < Minitest::Test
-  def test_cast
+  def test_cast_for_boolean
     value_result = StrongCSV::Types::Boolean.new.cast("True")
     assert_instance_of StrongCSV::ValueResult, value_result
     assert value_result.success?
     assert value_result.value
   end
 
-  def test_cast_with_error
+  def test_cast_with_error_for_boolean
     value_result = StrongCSV::Types::Boolean.new.cast("1.3")
     assert_instance_of StrongCSV::ValueResult, value_result
     refute value_result.success?
@@ -18,7 +18,7 @@ class TypesBooleanTest < Minitest::Test
     assert_equal ['`"1.3"` can\'t be casted to Boolean'], value_result.error_messages
   end
 
-  def test_cast_with_nil_error
+  def test_cast_with_nil_error_for_boolean
     value_result = StrongCSV::Types::Boolean.new.cast(nil)
     assert_instance_of StrongCSV::ValueResult, value_result
     refute value_result.success?

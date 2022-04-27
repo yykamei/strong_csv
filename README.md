@@ -42,7 +42,6 @@ TBD: This hasn't yet been implemented.
 
 ```ruby
 require "strong_csv"
-using StrongCSV::Types::Literal # This is required to use Union types for literal values.
 
 strong_csv = StrongCSV.new do
   let :stock, integer
@@ -55,8 +54,8 @@ strong_csv = StrongCSV.new do
 
   # Literal declaration
   let :status, 0..6
-  let :priority, 10 | 20 | 30 | 40 | 50
-  let :size, "S" | "M" | "L" do |value|
+  let :priority, 10, 20, 30, 40, 50
+  let :size, "S", "M", "L" do |value|
     case value
     when "S"
       1
@@ -105,7 +104,7 @@ end
 | integer                     | The value must be casted to Integer          | `let :stock, integer`  |
 | boolean                     | The value must be casted to Boolean          | `let :active, boolean` |
 | 1, 2, ... (Integer literal) | The value must be casted to specific Integer | `let :id, 3`           |
-| \| (Union type)             | The value must satisfy one of the subtypes   | `let :id, 1 \| 2 \| 3` |
+| , (Union type)              | The value must satisfy one of the subtypes   | `let :id, 1, 2 , 3`    |
 
 ## Contributing
 
