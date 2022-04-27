@@ -55,4 +55,8 @@ class LetTest < Minitest::Test
   def test_boolean
     assert_instance_of StrongCSV::Types::Boolean, StrongCSV::Let.new.boolean
   end
+
+  def test_float
+    assert_instance_of StrongCSV::Types::Float, StrongCSV::Let.new.float
+  end
 end
