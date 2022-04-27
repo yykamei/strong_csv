@@ -104,7 +104,7 @@ end
 | integer                     | The value must be casted to Integer          | `let :stock, integer`  |
 | boolean                     | The value must be casted to Boolean          | `let :active, boolean` |
 | 1, 2, ... (Integer literal) | The value must be casted to specific Integer | `let :id, 3`           |
-| , (Union type)              | The value must satisfy one of the subtypes   | `let :id, 1, 2 , 3`    |
+| , (Union type)              | The value must satisfy one of the subtypes   | `let :id, 1, 2, 3`     |
 
 ## Contributing
 
