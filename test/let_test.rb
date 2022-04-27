@@ -41,6 +41,13 @@ class LetTest < Minitest::Test
     end
   end
 
+  def test_union_via_let
+    let = StrongCSV::Let.new
+    let.let(:id, 10..50, StrongCSV::Types::Boolean.new)
+    assert_instance_of StrongCSV::Types::Union, let.types[:id]
+    assert let.headers
+  end
+
   def test_integer
     assert_instance_of StrongCSV::Types::Integer, StrongCSV::Let.new.integer
   end

@@ -19,6 +19,32 @@ class StrongCSV
           ValueResult.new(original_value: value, error_messages: ["`#{value.inspect}` can't be casted to Integer"])
         end
       end
+
+      refine Range do
+        # @param value [Object] Value to be casted to Integer
+        # @return [ValueResult]
+        def cast(value)
+          return ValueResult.new(original_value: value, error_messages: ["`nil` can't be casted to the beginning of `#{inspect}`"]) if value.nil?
+
+          casted = case self.begin
+                   when ::Float
+                     Float(value)
+                   when ::Integer
+                     Integer(value)
+                   when ::String
+                     value
+                   else
+                     raise TypeError, "#{self.begin.class} is not supported"
+                   end
+          if cover?(casted)
+            ValueResult.new(value: casted, original_value: value)
+          else
+            ValueResult.new(original_value: value, error_messages: ["`#{casted.inspect}` is not within `#{inspect}`"])
+          end
+        rescue ArgumentError
+          ValueResult.new(original_value: value, error_messages: ["`#{value.inspect}` can't be casted to the beginning of `#{inspect}`"])
+        end
+      end
     end
   end
 end
