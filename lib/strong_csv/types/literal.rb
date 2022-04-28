@@ -20,7 +20,7 @@ class StrongCSV
         end
       end
 
-      refine Range do
+      refine ::Range do
         # @param value [Object] Value to be casted to Integer
         # @return [ValueResult]
         def cast(value)
