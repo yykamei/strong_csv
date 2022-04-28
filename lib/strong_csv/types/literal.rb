@@ -46,7 +46,7 @@ class StrongCSV
         end
       end
 
-      refine String do
+      refine ::String do
         # @param value [Object] Value to be casted to String
         # @return [ValueResult]
         def cast(value)
