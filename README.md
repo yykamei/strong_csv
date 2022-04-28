@@ -23,7 +23,7 @@ strong_json helps you to mitigate such a drudgery by letting you declare desired
 Add this line to your application's Gemfile:
 
 ```ruby
-gem 'strong_csv'
+gem "strong_csv"
 ```
 
 And then execute:
