@@ -21,6 +21,7 @@
 
 **Merged pull requests:**
 
+- Prefix :: to avoid ambiguous constant resolution [\#24](https://github.com/yykamei/strong_csv/pull/24) ([yykamei](https://github.com/yykamei))
 - Follow the change of \#error\_message [\#8](https://github.com/yykamei/strong_csv/pull/8) ([yykamei](https://github.com/yykamei))
 
 ## [v0.1.0](https://github.com/yykamei/strong_csv/tree/v0.1.0) (2022-04-26)
