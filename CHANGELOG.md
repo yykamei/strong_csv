@@ -12,6 +12,7 @@
 
 **Implemented enhancements:**
 
+- Support time [\#29](https://github.com/yykamei/strong_csv/pull/29) ([yykamei](https://github.com/yykamei))
 - Support Float literal [\#26](https://github.com/yykamei/strong_csv/pull/26) ([yykamei](https://github.com/yykamei))
 - Support String literal [\#22](https://github.com/yykamei/strong_csv/pull/22) ([yykamei](https://github.com/yykamei))
 - Support \#string [\#20](https://github.com/yykamei/strong_csv/pull/20) ([yykamei](https://github.com/yykamei))
