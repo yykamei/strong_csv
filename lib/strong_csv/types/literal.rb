@@ -45,6 +45,18 @@ class StrongCSV
           ValueResult.new(original_value: value, error_messages: ["`#{value.inspect}` can't be casted to the beginning of `#{inspect}`"])
         end
       end
+
+      refine String do
+        # @param value [Object] Value to be casted to String
+        # @return [ValueResult]
+        def cast(value)
+          if self == value
+            ValueResult.new(value: self, original_value: value)
+          else
+            ValueResult.new(original_value: value, error_messages: ["`#{inspect}` is expected, but `#{value.inspect}` was given"])
+          end
+        end
+      end
     end
   end
 end
