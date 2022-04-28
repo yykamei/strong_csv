@@ -43,6 +43,11 @@ class StrongCSV
       Types::String.new(**options)
     end
 
+    # @param options [Hash] See `Types::Time#initialize` for more details.
+    def time(**options)
+      Types::Time.new(**options)
+    end
+
     private
 
     def validate_columns
