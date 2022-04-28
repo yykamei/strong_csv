@@ -9,7 +9,7 @@ class TypesStringTest < Minitest::Test
     end
   end
 
-  def test_cast_for_string
+  def test_cast
     value_result = StrongCSV::Types::String.new.cast("-1")
     assert_instance_of StrongCSV::ValueResult, value_result
     assert value_result.success?
@@ -24,7 +24,7 @@ class TypesStringTest < Minitest::Test
     assert_equal ["`\"foo_box\"` is out of range `1..4`"], value_result.error_messages
   end
 
-  def test_cast_with_nil_error_for_string
+  def test_cast_with_nil_error
     value_result = StrongCSV::Types::String.new.cast(nil)
     assert_instance_of StrongCSV::ValueResult, value_result
     refute value_result.success?

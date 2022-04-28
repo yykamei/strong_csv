@@ -3,14 +3,14 @@
 require_relative "../test_helper"
 
 class TypesIntegerTest < Minitest::Test
-  def test_cast_for_integer
+  def test_cast
     value_result = StrongCSV::Types::Integer.new.cast("-1")
     assert_instance_of StrongCSV::ValueResult, value_result
     assert value_result.success?
     assert_equal(-1, value_result.value)
   end
 
-  def test_cast_with_error_for_integer
+  def test_cast_with
     value_result = StrongCSV::Types::Integer.new.cast("1.3")
     assert_instance_of StrongCSV::ValueResult, value_result
     refute value_result.success?
@@ -18,7 +18,7 @@ class TypesIntegerTest < Minitest::Test
     assert_equal ['`"1.3"` can\'t be casted to Integer'], value_result.error_messages
   end
 
-  def test_cast_with_nil_error_for_integer
+  def test_cast_with_nil
     value_result = StrongCSV::Types::Integer.new.cast(nil)
     assert_instance_of StrongCSV::ValueResult, value_result
     refute value_result.success?
