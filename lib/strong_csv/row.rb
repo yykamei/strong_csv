@@ -21,9 +21,9 @@ class StrongCSV
       @values = {}
       @errors = {}
       @lineno = lineno
-      types.each do |key, type|
+      types.each do |key, (type, block)|
         value_result = type.cast(row[key])
-        @values[key] = value_result.value
+        @values[key] = block && value_result.success? ? block.call(value_result.value) : value_result.value
         @errors[key] = value_result.error_messages unless value_result.success?
       end
     end

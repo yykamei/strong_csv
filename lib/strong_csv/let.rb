@@ -3,7 +3,11 @@
 class StrongCSV
   # Let is a class that is used to define types for columns.
   class Let
-    attr_reader :types, :headers
+    # @return [Hash{Symbol => [Types::Base, Proc]}]
+    attr_reader :types
+
+    # @return [Boolean]
+    attr_reader :headers
 
     def initialize
       @types = {}
@@ -13,13 +17,13 @@ class StrongCSV
     # @param name [String, Symbol, Integer]
     # @param type [StrongCSV::Type::Base]
     # @param types [Array<StrongCSV::Type::Base>]
-    def let(name, type, *types)
+    def let(name, type, *types, &block)
       type = types.empty? ? type : Types::Union.new(type, *types)
       case name
       when ::Integer
-        @types[name] = type
+        @types[name] = [type, block]
       when ::String, ::Symbol
-        @types[name.to_sym] = type
+        @types[name.to_sym] = [type, block]
       else
         raise TypeError, "Invalid type specified for `name`. `name` must be String, Symbol, or Integer: #{name.inspect}"
       end

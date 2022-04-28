@@ -7,7 +7,7 @@ class LetTest < Minitest::Test
     let = StrongCSV::Let.new
     let.let(:abc, 123)
     let.let(:xyz, 243)
-    assert_equal({ abc: 123, xyz: 243 }, let.types)
+    assert_equal({ abc: [123, nil], xyz: [243, nil] }, let.types)
     assert let.headers
   end
 
@@ -15,7 +15,7 @@ class LetTest < Minitest::Test
     let = StrongCSV::Let.new
     let.let("abc", 123)
     let.let("xyz", 243)
-    assert_equal({ abc: 123, xyz: 243 }, let.types)
+    assert_equal({ abc: [123, nil], xyz: [243, nil] }, let.types)
     assert let.headers
   end
 
@@ -23,7 +23,7 @@ class LetTest < Minitest::Test
     let = StrongCSV::Let.new
     let.let(0, 123)
     let.let(1, 89)
-    assert_equal({ 0 => 123, 1 => 89 }, let.types)
+    assert_equal({ 0 => [123, nil], 1 => [89, nil] }, let.types)
     refute let.headers
   end
 
@@ -41,10 +41,19 @@ class LetTest < Minitest::Test
     end
   end
 
+  def test_let_block
+    let = StrongCSV::Let.new
+    let.let(:id, "abc") { |v| v }
+    assert_equal "abc", let.types[:id][0]
+    assert_instance_of Proc, let.types[:id][1]
+    assert let.headers
+  end
+
   def test_union_via_let
     let = StrongCSV::Let.new
-    let.let(:id, 10..50, StrongCSV::Types::Boolean.new)
-    assert_instance_of StrongCSV::Types::Union, let.types[:id]
+    let.let(:id, 10..50, StrongCSV::Types::Boolean.new) { |v| v }
+    assert_instance_of StrongCSV::Types::Union, let.types[:id][0]
+    assert_instance_of Proc, let.types[:id][1]
     assert let.headers
   end
 

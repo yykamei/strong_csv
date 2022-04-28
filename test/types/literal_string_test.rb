@@ -55,4 +55,27 @@ class LiteralStringTest < Minitest::Test
     assert result.all?(&:valid?)
     assert_equal(%w[abc xyz], result.map { |row| row[:id] })
   end
+
+  def test_with_let_block
+    strong_csv = StrongCSV.new do
+      let :size, "S", "M", "L" do |size|
+        case size
+        when "S"
+          1
+        when "M"
+          2
+        when "L"
+          3
+        end
+      end
+    end
+    result = strong_csv.parse(<<~CSV)
+      size
+      S
+      M
+      L
+    CSV
+    assert result.all?(&:valid?)
+    assert_equal([1, 2, 3], result.map { |row| row[:size] })
+  end
 end
