@@ -3,14 +3,14 @@
 require_relative "../test_helper"
 
 class TypesFloatTest < Minitest::Test
-  def test_cast_for_float
+  def test_cast
     value_result = StrongCSV::Types::Float.new.cast("-1")
     assert_instance_of StrongCSV::ValueResult, value_result
     assert value_result.success?
     assert_equal(-1.0, value_result.value)
   end
 
-  def test_cast_with_error_for_float
+  def test_cast_with_error
     value_result = StrongCSV::Types::Float.new.cast("++1.3")
     assert_instance_of StrongCSV::ValueResult, value_result
     refute value_result.success?
@@ -18,7 +18,7 @@ class TypesFloatTest < Minitest::Test
     assert_equal ['`"++1.3"` can\'t be casted to Float'], value_result.error_messages
   end
 
-  def test_cast_with_nil_error_for_float
+  def test_cast_with_nil
     value_result = StrongCSV::Types::Float.new.cast(nil)
     assert_instance_of StrongCSV::ValueResult, value_result
     refute value_result.success?

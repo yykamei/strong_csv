@@ -26,7 +26,7 @@ class LiteralRangeTest < Minitest::Test
     assert_equal "z", value_result.value
   end
 
-  def test_cast_with_unexpected_value_for_literal_range
+  def test_cast_with_unexpected_value
     value_result = (1..34).cast("1.34")
     assert_instance_of StrongCSV::ValueResult, value_result
     refute value_result.success?
@@ -34,7 +34,7 @@ class LiteralRangeTest < Minitest::Test
     assert_equal ["`\"1.34\"` can't be casted to the beginning of `1..34`"], value_result.error_messages
   end
 
-  def test_cast_with_error_for_literal_range
+  def test_cast_with_error
     value_result = (1..34).cast("-1")
     assert_instance_of StrongCSV::ValueResult, value_result
     refute value_result.success?
@@ -42,7 +42,7 @@ class LiteralRangeTest < Minitest::Test
     assert_equal ["`-1` is not within `1..34`"], value_result.error_messages
   end
 
-  def test_cast_with_nil_error_for_literal_range
+  def test_cast_with_nil_error
     value_result = (0..9).cast(nil)
     assert_instance_of StrongCSV::ValueResult, value_result
     refute value_result.success?

@@ -5,7 +5,7 @@ require_relative "../test_helper"
 class LiteralIntegerTest < Minitest::Test
   using StrongCSV::Types::Literal
 
-  def test_cast_literal_integer
+  def test_cast
     value_result = 123.cast("123")
     assert_instance_of StrongCSV::ValueResult, value_result
     assert value_result.success?
@@ -20,15 +20,15 @@ class LiteralIntegerTest < Minitest::Test
     assert_equal ["`8` is expected, but `13` was given"], value_result.error_messages
   end
 
-  def test_cast_with_error_for_literal_integer
+  def test_cast_with_error
     value_result = 8.cast("1.3")
     assert_instance_of StrongCSV::ValueResult, value_result
     refute value_result.success?
     assert_equal "1.3", value_result.value
-    assert_equal ['`"1.3"` can\'t be casted to Integer'], value_result.error_messages
+    assert_equal ["`\"1.3\"` can't be casted to Integer"], value_result.error_messages
   end
 
-  def test_cast_with_nil_error_for_literal_integer
+  def test_cast_with_nil_error
     value_result = 31.cast(nil)
     assert_instance_of StrongCSV::ValueResult, value_result
     refute value_result.success?
@@ -112,6 +112,7 @@ class LiteralIntegerTest < Minitest::Test
     CSV
     refute result.all?(&:valid?)
     assert_equal(["4.5"], result.map { |row| row[:id] })
+    assert_equal([["`\"4.5\"` can't be casted to Integer"]], result.map { |row| row.errors[:id] })
   end
 
   def test_int_with_non_numeric_value
@@ -124,6 +125,7 @@ class LiteralIntegerTest < Minitest::Test
     CSV
     refute result.all?(&:valid?)
     assert_equal(["abc"], result.map { |row| row[:id] })
+    assert_equal([["`\"abc\"` can't be casted to Integer"]], result.map { |row| row.errors[:id] })
   end
 
   def test_int_with_null
@@ -137,6 +139,7 @@ class LiteralIntegerTest < Minitest::Test
     CSV
     refute result.all?(&:valid?)
     assert_equal(["3", nil], result.map { |row| row[:id] })
+    assert_equal([["`80` is expected, but `3` was given"], ["`nil` can't be casted to Integer"]], result.map { |row| row.errors[:id] })
   end
 
   def test_int_with_blank_value
@@ -150,5 +153,6 @@ class LiteralIntegerTest < Minitest::Test
     CSV
     refute result.all?(&:valid?)
     assert_equal(["3", " "], result.map { |row| row[:id] })
+    assert_equal([["`80` is expected, but `3` was given"], ["`\" \"` can't be casted to Integer"]], result.map { |row| row.errors[:id] })
   end
 end

@@ -5,7 +5,7 @@ require_relative "../test_helper"
 class LiteralStringTest < Minitest::Test
   using StrongCSV::Types::Literal
 
-  def test_cast_literal_string
+  def test_cast
     value_result = "abc".cast("abc")
     assert_instance_of StrongCSV::ValueResult, value_result
     assert value_result.success?
@@ -20,7 +20,7 @@ class LiteralStringTest < Minitest::Test
     assert_equal ["`\"x\"` is expected, but `\"13\"` was given"], value_result.error_messages
   end
 
-  def test_cast_with_nil_error_for_literal_string
+  def test_cast_with_nil_error
     value_result = "😇".cast(nil)
     assert_instance_of StrongCSV::ValueResult, value_result
     refute value_result.success?
