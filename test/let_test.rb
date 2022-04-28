@@ -64,4 +64,9 @@ class LetTest < Minitest::Test
     assert_instance_of StrongCSV::Types::String, StrongCSV::Let.new.string
     assert_instance_of StrongCSV::Types::String, StrongCSV::Let.new.string(within: 1..10)
   end
+
+  def test_time
+    assert_instance_of StrongCSV::Types::Time, StrongCSV::Let.new.time
+    assert_instance_of StrongCSV::Types::Time, StrongCSV::Let.new.time(format: "%H:%M")
+  end
 end

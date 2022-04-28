@@ -101,17 +101,18 @@ end
 
 ## Available types
 
-| Type                                           | Description                                                               | Example                             |
-| ---------------------------------------------- | ------------------------------------------------------------------------- | ----------------------------------- |
-| `integer`                                      | The value must be casted to Integer                                       | `let :stock, integer`               |
-| `float`                                        | The value must be casted to Float                                         | `let :rate, float`                  |
-| `boolean`                                      | The value must be casted to Boolean                                       | `let :active, boolean`              |
-| `string` OR `string(within: 1..10)`            | The value must be casted to String                                        | `let :name, string(within: 1..255)` |
-| `1`, `2`, ... (Integer literal)                | The value must be casted to the specific Integer literal                  | `let :id, 3`                        |
-| `1.0`, `15.12`, ... (Float literal)            | The value must be casted to the specific Float literal                    | `let :id, 3.8`                      |
-| `1..10`, `1.0..30`, `"a".."z"` (Range literal) | The value must be casted to the beginning of Range and be covered with it | `let :id, 10..30`                   |
-| `"abc"`, `"bar"` (String literal)              | The value must be casted to the specific String literal                   | `let :drink, "coffee"`              |
-| , (Union type)                                 | The value must satisfy one of the subtypes                                | `let :id, 1, 2, 3`                  |
+| Type                                           | Description                                                               | Example                                               |
+| ---------------------------------------------- | ------------------------------------------------------------------------- | ----------------------------------------------------- |
+| `integer`                                      | The value must be casted to Integer                                       | `let :stock, integer`                                 |
+| `float`                                        | The value must be casted to Float                                         | `let :rate, float`                                    |
+| `boolean`                                      | The value must be casted to Boolean                                       | `let :active, boolean`                                |
+| `string` OR `string(within: 1..10)`            | The value must be casted to String                                        | `let :name, string(within: 1..255)`                   |
+| `time` OR `time(format: "%H:%M")`              | The value must be casted to Time                                          | `let :started_at, time(format: "%Y-%m-%dT%%H:%M:%S")` |
+| `1`, `2`, ... (Integer literal)                | The value must be casted to the specific Integer literal                  | `let :id, 3`                                          |
+| `1.0`, `15.12`, ... (Float literal)            | The value must be casted to the specific Float literal                    | `let :id, 3.8`                                        |
+| `1..10`, `1.0..30`, `"a".."z"` (Range literal) | The value must be casted to the beginning of Range and be covered with it | `let :id, 10..30`                                     |
+| `"abc"`, `"bar"` (String literal)              | The value must be casted to the specific String literal                   | `let :drink, "coffee"`                                |
+| , (Union type)                                 | The value must satisfy one of the subtypes                                | `let :id, 1, 2, 3`                                    |
 
 ## Contributing
 
