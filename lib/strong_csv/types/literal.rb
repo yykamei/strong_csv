@@ -16,12 +16,27 @@ class StrongCSV
             ValueResult.new(original_value: value, error_messages: ["`#{inspect}` is expected, but `#{int}` was given"])
           end
         rescue ArgumentError, TypeError
-          ValueResult.new(original_value: value, error_messages: ["`#{value.inspect}` can't be casted to Integer"])
+          ValueResult.new(original_value: value, error_messages: ["`#{value.inspect}` can't be casted to #{self.class.name}"])
+        end
+      end
+
+      refine ::Float do
+        # @param value [Object] Value to be casted to Float
+        # @return [ValueResult]
+        def cast(value)
+          float = Float(value)
+          if float == self
+            ValueResult.new(value: float, original_value: value)
+          else
+            ValueResult.new(original_value: value, error_messages: ["`#{inspect}` is expected, but `#{float}` was given"])
+          end
+        rescue ArgumentError, TypeError
+          ValueResult.new(original_value: value, error_messages: ["`#{value.inspect}` can't be casted to #{self.class.name}"])
         end
       end
 
       refine ::Range do
-        # @param value [Object] Value to be casted to Integer
+        # @param value [Object] Value to be casted to Range
         # @return [ValueResult]
         def cast(value)
           return ValueResult.new(original_value: value, error_messages: ["`nil` can't be casted to the beginning of `#{inspect}`"]) if value.nil?
