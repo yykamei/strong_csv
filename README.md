@@ -79,7 +79,7 @@ strong_csv = StrongCSV.new do
   pick :user_id, as: :user_ids do |ids|
     User.where(id: ids).ids
   end
-  let :user_id, integer { |i| user_ids.include?(i) }
+  let :user_id, integer(constraint: ->(i) { user_ids.include?(i) })
 end
 
 data = <<~CSV
