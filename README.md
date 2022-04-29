@@ -113,7 +113,7 @@ end
 | `string?`                | `:within` | The value can be `nil`. If the value exists, it must satisfy `string` constraint.       | `let :name, string?(within: 1..255)`                       |
 | `time`                   | `:format` | The value must be casted to Time                                                        | `let :started_at, time(format: "%Y-%m-%dT%%H:%M:%S")`      |
 | `time?`                  | `:format` | The value can be `nil`. If the value exists, it must satisfy `time` constraint.         | `let :started_at, time?(format: "%Y-%m-%dT%%H:%M:%S")`     |
-| `optional`               | `type`    | The value can be `nil`. If the value exists, it must satisfy the given type constraint. | `let :foo, optional(123)                                   |
+| `optional`               | `type`    | The value can be `nil`. If the value exists, it must satisfy the given type constraint. | `let :foo, optional(123)`                                  |
 | `23` (Integer literal)   |           | The value must be casted to the specific Integer literal                                | `let :id, 3`                                               |
 | `15.12` (Float literal)  |           | The value must be casted to the specific Float literal                                  | `let :id, 3.8`                                             |
 | `1..10` (Range literal)  |           | The value must be casted to the beginning of Range and be covered with it               | `let :id, 10..30`, `let :id, 1.0..30`, `let :id, "a".."z"` |
