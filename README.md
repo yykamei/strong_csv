@@ -120,6 +120,58 @@ end
 | `"abc"` (String literal) |           | The value must be casted to the specific String literal                                 | `let :drink, "coffee"`                                     |
 | , (Union type)           |           | The value must satisfy one of the subtypes                                              | `let :id, 1, 2, 3`                                         |
 
+### `integer` and `integer?`
+
+The value must be casted to Integer. `integer?` allows the value to be `nil`, so you can declare optional integer type for columns.
+
+*Example*
+
+```ruby
+strong_csv = StrongCSV.new do
+  let :stock, integer
+  let :state, integer?
+end
+
+result = strong_csv.parse(<<~CSV)
+  stock,state
+  12,0
+  20,
+  34,1
+CSV
+result[0][:stock] # => 12
+result[0][:state] # => 0
+result[1][:stock] # => 20
+result[1][:state] # => nil
+result[0][:stock] # => 34
+result[0][:state] # => 1
+```
+
+### `float` and `float?`
+
+The value must be casted to Float. `float?` allows the value to be `nil`, so you can declare optional float type for columns.
+
+*Example*
+
+```ruby
+strong_csv = StrongCSV.new do
+  let :tax_rate, float
+  let :fail_rate, float?
+end
+
+result = strong_csv.parse(<<~CSV)
+  tax_rate,fail_rate
+  0.02,0.1
+  0.05,
+  0.12,0.8
+CSV
+result[0][:tax_rate]  # => 0.02
+result[0][:fail_rate] # => 0.1
+result[1][:tax_rate]  # => 0.05
+result[1][:fail_rate] # => nil
+result[0][:tax_rate]  # => 0.12
+result[0][:fail_rate] # => 0.8
+```
+
 ## Contributing
 
 Bug reports and pull requests are welcome on the [GitHub repository](https://github.com/yykamei/strong_csv).
