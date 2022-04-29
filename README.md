@@ -101,18 +101,24 @@ end
 
 ## Available types
 
-| Type                     | Arguments | Description                                                               | Example                                                    |
-| ------------------------ | --------- | ------------------------------------------------------------------------- | ---------------------------------------------------------- |
-| `integer`                |           | The value must be casted to Integer                                       | `let :stock, integer`                                      |
-| `float`                  |           | The value must be casted to Float                                         | `let :rate, float`                                         |
-| `boolean`                |           | The value must be casted to Boolean                                       | `let :active, boolean`                                     |
-| `string`                 | `:within` | The value must be casted to String                                        | `let :name, string(within: 1..255)`                        |
-| `time`                   | `:format` | The value must be casted to Time                                          | `let :started_at, time(format: "%Y-%m-%dT%%H:%M:%S")`      |
-| `23` (Integer literal)   |           | The value must be casted to the specific Integer literal                  | `let :id, 3`                                               |
-| `15.12` (Float literal)  |           | The value must be casted to the specific Float literal                    | `let :id, 3.8`                                             |
-| `1..10` (Range literal)  |           | The value must be casted to the beginning of Range and be covered with it | `let :id, 10..30`, `let :id, 1.0..30`, `let :id, "a".."z"` |
-| `"abc"` (String literal) |           | The value must be casted to the specific String literal                   | `let :drink, "coffee"`                                     |
-| , (Union type)           |           | The value must satisfy one of the subtypes                                | `let :id, 1, 2, 3`                                         |
+| Type                     | Arguments | Description                                                                             | Example                                                    |
+| ------------------------ | --------- | --------------------------------------------------------------------------------------- | ---------------------------------------------------------- |
+| `integer`                |           | The value must be casted to Integer                                                     | `let :stock, integer`                                      |
+| `integer?`               |           | The value can be `nil`. If the value exists, it must satisfy `integer` constraint.      | `let :stock, integer?`                                     |
+| `float`                  |           | The value must be casted to Float                                                       | `let :rate, float`                                         |
+| `float?`                 |           | The value can be `nil`. If the value exists, it must satisfy `float` constraint.        | `let :rate, float?`                                        |
+| `boolean`                |           | The value must be casted to Boolean                                                     | `let :active, boolean`                                     |
+| `boolean?`               |           | The value can be `nil`. If the value exists, it must satisfy `boolean` constraint.      | `let :active, boolean?`                                    |
+| `string`                 | `:within` | The value must be casted to String                                                      | `let :name, string(within: 1..255)`                        |
+| `string?`                | `:within` | The value can be `nil`. If the value exists, it must satisfy `string` constraint.       | `let :name, string?(within: 1..255)`                       |
+| `time`                   | `:format` | The value must be casted to Time                                                        | `let :started_at, time(format: "%Y-%m-%dT%%H:%M:%S")`      |
+| `time?`                  | `:format` | The value can be `nil`. If the value exists, it must satisfy `time` constraint.         | `let :started_at, time?(format: "%Y-%m-%dT%%H:%M:%S")`     |
+| `optional`               | `type`    | The value can be `nil`. If the value exists, it must satisfy the given type constraint. | `let :foo, optional(123)                                   |
+| `23` (Integer literal)   |           | The value must be casted to the specific Integer literal                                | `let :id, 3`                                               |
+| `15.12` (Float literal)  |           | The value must be casted to the specific Float literal                                  | `let :id, 3.8`                                             |
+| `1..10` (Range literal)  |           | The value must be casted to the beginning of Range and be covered with it               | `let :id, 10..30`, `let :id, 1.0..30`, `let :id, "a".."z"` |
+| `"abc"` (String literal) |           | The value must be casted to the specific String literal                                 | `let :drink, "coffee"`                                     |
+| , (Union type)           |           | The value must satisfy one of the subtypes                                              | `let :id, 1, 2, 3`                                         |
 
 ## Contributing
 

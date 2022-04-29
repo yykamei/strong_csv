@@ -61,12 +61,27 @@ class LetTest < Minitest::Test
     assert_instance_of StrongCSV::Types::Integer, StrongCSV::Let.new.integer
   end
 
+  def test_integer?
+    assert_instance_of StrongCSV::Types::Optional, StrongCSV::Let.new.integer?
+    assert_instance_of StrongCSV::Types::Integer, StrongCSV::Let.new.integer?.instance_variable_get(:@type)
+  end
+
   def test_boolean
     assert_instance_of StrongCSV::Types::Boolean, StrongCSV::Let.new.boolean
   end
 
+  def test_boolean?
+    assert_instance_of StrongCSV::Types::Optional, StrongCSV::Let.new.boolean?
+    assert_instance_of StrongCSV::Types::Boolean, StrongCSV::Let.new.boolean?.instance_variable_get(:@type)
+  end
+
   def test_float
     assert_instance_of StrongCSV::Types::Float, StrongCSV::Let.new.float
+  end
+
+  def test_float?
+    assert_instance_of StrongCSV::Types::Optional, StrongCSV::Let.new.float?
+    assert_instance_of StrongCSV::Types::Float, StrongCSV::Let.new.float?.instance_variable_get(:@type)
   end
 
   def test_string
@@ -74,8 +89,24 @@ class LetTest < Minitest::Test
     assert_instance_of StrongCSV::Types::String, StrongCSV::Let.new.string(within: 1..10)
   end
 
+  def test_string?
+    assert_instance_of StrongCSV::Types::Optional, StrongCSV::Let.new.string?
+    assert_instance_of StrongCSV::Types::Optional, StrongCSV::Let.new.string?(within: 1..10)
+    assert_instance_of StrongCSV::Types::String, StrongCSV::Let.new.string?.instance_variable_get(:@type)
+  end
+
   def test_time
     assert_instance_of StrongCSV::Types::Time, StrongCSV::Let.new.time
     assert_instance_of StrongCSV::Types::Time, StrongCSV::Let.new.time(format: "%H:%M")
+  end
+
+  def test_time?
+    assert_instance_of StrongCSV::Types::Optional, StrongCSV::Let.new.time?
+    assert_instance_of StrongCSV::Types::Optional, StrongCSV::Let.new.time?(format: "%H:%M")
+    assert_instance_of StrongCSV::Types::Time, StrongCSV::Let.new.time?.instance_variable_get(:@type)
+  end
+
+  def test_optional
+    assert_instance_of StrongCSV::Types::Optional, StrongCSV::Let.new.optional(123)
   end
 end
