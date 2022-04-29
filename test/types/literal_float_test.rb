@@ -12,7 +12,7 @@ class LiteralFloatTest < Minitest::Test
     assert_equal 123.3, value_result.value
   end
 
-  def test_cast_with_unexpected_value
+  def test_cast_unexpected_value
     value_result = 8.0.cast("13")
     assert_instance_of StrongCSV::ValueResult, value_result
     refute value_result.success?
@@ -20,7 +20,7 @@ class LiteralFloatTest < Minitest::Test
     assert_equal ["`8.0` is expected, but `13.0` was given"], value_result.error_messages
   end
 
-  def test_cast_with_nil_error
+  def test_cast_nil
     value_result = 31.0.cast(nil)
     assert_instance_of StrongCSV::ValueResult, value_result
     refute value_result.success?

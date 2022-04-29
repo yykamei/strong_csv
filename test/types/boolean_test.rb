@@ -10,7 +10,7 @@ class TypesBooleanTest < Minitest::Test
     assert value_result.value
   end
 
-  def test_cast_with_error
+  def test_cast_unexpected_value
     value_result = StrongCSV::Types::Boolean.new.cast("1.3")
     assert_instance_of StrongCSV::ValueResult, value_result
     refute value_result.success?
@@ -18,7 +18,7 @@ class TypesBooleanTest < Minitest::Test
     assert_equal ['`"1.3"` can\'t be casted to Boolean'], value_result.error_messages
   end
 
-  def test_cast_with_nil
+  def test_cast_nil
     value_result = StrongCSV::Types::Boolean.new.cast(nil)
     assert_instance_of StrongCSV::ValueResult, value_result
     refute value_result.success?

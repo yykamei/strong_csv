@@ -12,7 +12,7 @@ class LiteralIntegerTest < Minitest::Test
     assert_equal 123, value_result.value
   end
 
-  def test_cast_with_unexpected_value
+  def test_cast_unexpected_value
     value_result = 8.cast("13")
     assert_instance_of StrongCSV::ValueResult, value_result
     refute value_result.success?

@@ -12,7 +12,7 @@ class TypesTimeTest < Minitest::Test
     assert_equal 3, value_result.value.day
   end
 
-  def test_cast_with_format
+  def test_cast_time_with_format
     value_result = StrongCSV::Types::Time.new(format: "%H:%M").cast("14:38")
     assert_instance_of StrongCSV::ValueResult, value_result
     assert value_result.success?
@@ -20,7 +20,7 @@ class TypesTimeTest < Minitest::Test
     assert_equal 38, value_result.value.min
   end
 
-  def test_cast_with_error
+  def test_cast_unexpected_value
     value_result = StrongCSV::Types::Time.new(format: "%B").cast("foo")
     assert_instance_of StrongCSV::ValueResult, value_result
     refute value_result.success?
@@ -28,7 +28,7 @@ class TypesTimeTest < Minitest::Test
     assert_equal ["`\"foo\"` can't be casted to Time with the format `%B`"], value_result.error_messages
   end
 
-  def test_cast_with_nil_error
+  def test_cast_nil
     value_result = StrongCSV::Types::Time.new.cast(nil)
     assert_instance_of StrongCSV::ValueResult, value_result
     refute value_result.success?

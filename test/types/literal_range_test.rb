@@ -5,28 +5,28 @@ require_relative "../test_helper"
 class LiteralRangeTest < Minitest::Test
   using StrongCSV::Types::Literal
 
-  def test_cast_literal_range_with_integer
+  def test_cast_integer_with_integer_literal_range
     value_result = (1...5).cast("4")
     assert_instance_of StrongCSV::ValueResult, value_result
     assert value_result.success?
     assert_equal 4, value_result.value
   end
 
-  def test_cast_literal_range_with_float
+  def test_cast_float_with_float_literal_range
     value_result = (-1.0...5).cast("-0.999")
     assert_instance_of StrongCSV::ValueResult, value_result
     assert value_result.success?
     assert_equal(-0.999, value_result.value)
   end
 
-  def test_cast_literal_range_with_string
+  def test_cast_string_with_string_literal_range
     value_result = ("a".."z").cast("z")
     assert_instance_of StrongCSV::ValueResult, value_result
     assert value_result.success?
     assert_equal "z", value_result.value
   end
 
-  def test_cast_with_unexpected_value
+  def test_cast_float_with_integer_literal_range
     value_result = (1..34).cast("1.34")
     assert_instance_of StrongCSV::ValueResult, value_result
     refute value_result.success?
@@ -34,7 +34,7 @@ class LiteralRangeTest < Minitest::Test
     assert_equal ["`\"1.34\"` can't be casted to the beginning of `1..34`"], value_result.error_messages
   end
 
-  def test_cast_with_error
+  def test_cast_out_of_range_integer_with_integer_literal_range
     value_result = (1..34).cast("-1")
     assert_instance_of StrongCSV::ValueResult, value_result
     refute value_result.success?
@@ -42,7 +42,7 @@ class LiteralRangeTest < Minitest::Test
     assert_equal ["`-1` is not within `1..34`"], value_result.error_messages
   end
 
-  def test_cast_with_nil_error
+  def test_cast_nil
     value_result = (0..9).cast(nil)
     assert_instance_of StrongCSV::ValueResult, value_result
     refute value_result.success?
