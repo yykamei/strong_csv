@@ -6,7 +6,7 @@ class StrongCSV
     class Union < Base
       using Types::Literal
 
-      # @param type [Array<Base>]
+      # @param type [Base]
       # @param types [Array<Base>]
       def initialize(type, *types)
         super()
