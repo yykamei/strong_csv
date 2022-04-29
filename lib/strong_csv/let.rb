@@ -34,12 +34,24 @@ class StrongCSV
       Types::Integer.new
     end
 
+    def integer?
+      optional(integer)
+    end
+
     def boolean
       Types::Boolean.new
     end
 
+    def boolean?
+      optional(boolean)
+    end
+
     def float
       Types::Float.new
+    end
+
+    def float?
+      optional(float)
     end
 
     # @param options [Hash] See `Types::String#initialize` for more details.
@@ -47,9 +59,22 @@ class StrongCSV
       Types::String.new(**options)
     end
 
+    def string?(**options)
+      optional(string(**options))
+    end
+
     # @param options [Hash] See `Types::Time#initialize` for more details.
     def time(**options)
       Types::Time.new(**options)
+    end
+
+    def time?(**options)
+      optional(time(**options))
+    end
+
+    # @param args [Array] See `Types::Optional#initialize` for more details.
+    def optional(*args)
+      Types::Optional.new(*args)
     end
 
     private
