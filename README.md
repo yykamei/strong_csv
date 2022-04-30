@@ -130,72 +130,72 @@ end
         <td>The value can be `nil`. If the value exists, it must satisfy `integer` constraint.</td>
     </tr>
     <tr>
-        <td><a href="#float-and-float">`float`</a></td>
+        <td><a href="#float-and-float"><code>float</code></a></td>
         <td></td>
         <td>The value must be casted to Float</td>
     </tr>
     <tr>
-        <td><a href="#float-and-float">`float?`</a></td>
+        <td><a href="#float-and-float"><code>float?</code></a></td>
         <td></td>
         <td>The value can be `nil`. If the value exists, it must satisfy `float` constraint.</td>
     </tr>
     <tr>
-        <td><a href="#boolean-and-boolean">`boolean`</a></td>
+        <td><a href="#boolean-and-boolean"><code>boolean</code></a></td>
         <td></td>
         <td>The value must be casted to Boolean</td>
     </tr>
     <tr>
-        <td><a href="#boolean-and-boolean">`boolean?`</a></td>
+        <td><a href="#boolean-and-boolean"><code>boolean?</code></a></td>
         <td></td>
         <td>The value can be `nil`. If the value exists, it must satisfy `boolean` constraint.</td>
     </tr>
     <tr>
-        <td><a href="#string-and-string">`string`</a></td>
+        <td><a href="#string-and-string"><code>string</code></a></td>
         <td>`:within`</td>
         <td>The value must be casted to String</td>
     </tr>
     <tr>
-        <td><a href="#string-and-string">`string?`</a></td>
+        <td><a href="#string-and-string"><code>string?</code></a></td>
         <td>`:within`</td>
         <td>The value can be `nil`. If the value exists, it must satisfy `string` constraint.</td>
     </tr>
     <tr>
-        <td><a href="#time-and-time">`time`</a></td>
+        <td><a href="#time-and-time"><code>time</code></a></td>
         <td>`:format`</td>
         <td>The value must be casted to Time</td>
     </tr>
     <tr>
-        <td><a href="#time-and-time">`time?`</a></td>
+        <td><a href="#time-and-time"><code>time?</code></a></td>
         <td>`:format`</td>
         <td>The value can be `nil`. If the value exists, it must satisfy `time` constraint.</td>
     </tr>
     <tr>
-        <td><a href="#optional">`optional`</a></td>
+        <td><a href="#optional"><code>optional</code></a></td>
         <td>`type`</td>
         <td>The value can be `nil`. If the value exists, it must satisfy the given type constraint.</td>
     </tr>
     <tr>
-        <td><a href="#literal">`23` (Integer literal)</a></td>
+        <td><a href="#literal"><code>23</code> (Integer literal)</a></td>
         <td></td>
         <td>The value must be casted to the specific Integer literal</td>
     </tr>
     <tr>
-        <td><a href="#literal">`15.12` (Float literal)</a></td>
+        <td><a href="#literal"><code>15.12</code> (Float literal)</a></td>
         <td></td>
         <td>The value must be casted to the specific Float literal</td>
     </tr>
     <tr>
-        <td><a href="#literal">`1..10` (Range literal)</a></td>
+        <td><a href="#literal"><code>1..10</code> (Range literal)</a></td>
         <td></td>
         <td>The value must be casted to the beginning of Range and be covered with it</td>
     </tr>
     <tr>
-        <td><a href="#literal">`"abc"` (String literal)</a></td>
+        <td><a href="#literal"><code>"abc"</code> (String literal)</a></td>
         <td></td>
         <td>The value must be casted to the specific String literal</td>
     </tr>
     <tr>
-        <td><a href="#union">, (Union type)</a></td>
+        <td><a href="#union"><code>,</code> (Union type)</a></td>
         <td></td>
         <td>The value must satisfy one of the subtypes</td>
     </tr>
