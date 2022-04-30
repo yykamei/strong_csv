@@ -6,7 +6,7 @@ NOTE: This repository is still under development 🚧🚜🚧
 
 Type checker for a CSV file inspired by [strong_json](https://github.com/soutaro/strong_json).
 
-**Motivation**
+## Motivation
 
 Some applications have a feature to receive a CSV file uploaded by a user,
 and in general, it needs to validate each cell of the CSV file.
@@ -187,7 +187,7 @@ CSV
 result.map(&:valid?) # => [true, true, false]
 result[0].slice(:stock, :state) # => {:stock=>12, :state=>0}
 result[1].slice(:stock, :state) # => {:stock=>20, :state=>nil}
-result[2].slice(:stock, :state) # => {:stock=>"non-integer", :state=>1}
+result[2].slice(:stock, :state) # => {:stock=>"non-integer", :state=>1} ("non-integer" cannot be casted to Integer)
 ```
 
 ### `float` and `float?`
@@ -213,7 +213,7 @@ CSV
 result.map(&:valid?) # => [true, true, false]
 result[0].slice(:tax_rate, :fail_rate) # => {:tax_rate=>0.02, :fail_rate=>0.1}
 result[1].slice(:tax_rate, :fail_rate) # => {:tax_rate=>0.05, :fail_rate=>nil}
-result[2].slice(:tax_rate, :fail_rate) # => {:tax_rate=>nil, :fail_rate=>0.8}
+result[2].slice(:tax_rate, :fail_rate) # => {:tax_rate=>nil, :fail_rate=>0.8} (`nil` is not allowed for `tax_rate`)
 ```
 
 ### `boolean` and `boolean?`
@@ -239,7 +239,7 @@ CSV
 result.map(&:valid?) # => [true, true, false]
 result[0].slice(:enabled, :active) # => {:enabled=>true, :active=>true}
 result[1].slice(:enabled, :active) # => {:enabled=>false, :active=>nil}
-result[2].slice(:enabled, :active) # => {:enabled=>nil, :active=>nil}
+result[2].slice(:enabled, :active) # => {:enabled=>nil, :active=>nil} (`nil` is not allowed for `enabled`)
 ```
 
 ### `string` and `string?`
@@ -264,8 +264,8 @@ CSV
 
 result.map(&:valid?) # => [true, false, false]
 result[0].slice(:name, :description) # => {:name=>"JB", :description=>"Hello"}
-result[1].slice(:name, :description) # => {:name=>"yykamei", :description=>nil}
-result[2].slice(:name, :description) # => {:name=>nil, :description=>"🤷"}
+result[1].slice(:name, :description) # => {:name=>"yykamei", :description=>nil} ("yykamei" exceeds the `Range` specified with `:within`)
+result[2].slice(:name, :description) # => {:name=>nil, :description=>"🤷"} (`nil` is not allowed for `name`)
 ```
 
 ### `time` and `time?`
@@ -293,7 +293,7 @@ CSV
 result.map(&:valid?) # => [true, true, false]
 result[0].slice(:start_on, :updated_at) # => {:start_on=>2022-04-01 00:00:00 +0900, :updated_at=>2022-04-30 15:30:59 +0900}
 result[1].slice(:start_on, :updated_at) # => {:start_on=>2022-05-03 00:00:00 +0900, :updated_at=>nil}
-result[2].slice(:start_on, :updated_at) # => {:start_on=>"05-03", :updated_at=>2021-09-03 09:48:23 +0900}
+result[2].slice(:start_on, :updated_at) # => {:start_on=>"05-03", :updated_at=>2021-09-03 09:48:23 +0900} ("05-03" does not satisfy the default format `"%Y-%m-%d"`)
 ```
 
 ### `optional`
