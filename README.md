@@ -40,7 +40,18 @@ gem install strong_csv
 
 ## Usage
 
-TBD: This hasn't yet been implemented.
+The most important APIs of strong_csv are `StrongCSV.new` and `StrongCSV#parse`.
+`StrongCSV.new` lets you declare types for each CSV column with Ruby's block syntax.
+Inside the block, you will mainly use `let` and declare types for a column.
+
+After defining types, you can parse CSV content with `StrongCSV#parse`.
+`StrongCSV#parse` won't raise errors as possible and just store error messages in its rows.
+The reason why it won't raise errors is CSV content may contain _invalid_ rows,
+but sometimes, it makes sense to ignore them and process something for _valid_ rows.
+If you want to stop all processes with invalid rows,
+check whether all rows are valid before proceeding with computation.
+
+Here is an example usage of this gem:
 
 ```ruby
 require "strong_csv"
@@ -52,7 +63,6 @@ strong_csv = StrongCSV.new do
   let :description, string?(within: 1..1000)
   let :active, boolean
   let :started_at, time?
-  let :data, any?
 
   # Literal declaration
   let :status, 0..6
@@ -68,10 +78,12 @@ strong_csv = StrongCSV.new do
     end
   end
 
+  # TODO: The followings are not implemented so far.
+
   # Regular expressions
   let :url, %r{\Ahttps://}
 
-  # Custom validation.
+  # Custom validation
   #
   # This example sees the database to fetch exactly stored `User` IDs,
   # and it checks the `:user_id` cell really exists in the `users` table.
@@ -101,30 +113,100 @@ end
 
 ## Available types
 
-| Type                     | Arguments | Description                                                                             | Example                                                    |
-| ------------------------ | --------- | --------------------------------------------------------------------------------------- | ---------------------------------------------------------- |
-| `integer`                |           | The value must be casted to Integer                                                     | `let :stock, integer`                                      |
-| `integer?`               |           | The value can be `nil`. If the value exists, it must satisfy `integer` constraint.      | `let :stock, integer?`                                     |
-| `float`                  |           | The value must be casted to Float                                                       | `let :rate, float`                                         |
-| `float?`                 |           | The value can be `nil`. If the value exists, it must satisfy `float` constraint.        | `let :rate, float?`                                        |
-| `boolean`                |           | The value must be casted to Boolean                                                     | `let :active, boolean`                                     |
-| `boolean?`               |           | The value can be `nil`. If the value exists, it must satisfy `boolean` constraint.      | `let :active, boolean?`                                    |
-| `string`                 | `:within` | The value must be casted to String                                                      | `let :name, string(within: 1..255)`                        |
-| `string?`                | `:within` | The value can be `nil`. If the value exists, it must satisfy `string` constraint.       | `let :name, string?(within: 1..255)`                       |
-| `time`                   | `:format` | The value must be casted to Time                                                        | `let :started_at, time(format: "%Y-%m-%dT%%H:%M:%S")`      |
-| `time?`                  | `:format` | The value can be `nil`. If the value exists, it must satisfy `time` constraint.         | `let :started_at, time?(format: "%Y-%m-%dT%%H:%M:%S")`     |
-| `optional`               | `type`    | The value can be `nil`. If the value exists, it must satisfy the given type constraint. | `let :foo, optional(123)`                                  |
-| `23` (Integer literal)   |           | The value must be casted to the specific Integer literal                                | `let :id, 3`                                               |
-| `15.12` (Float literal)  |           | The value must be casted to the specific Float literal                                  | `let :id, 3.8`                                             |
-| `1..10` (Range literal)  |           | The value must be casted to the beginning of Range and be covered with it               | `let :id, 10..30`, `let :id, 1.0..30`, `let :id, "a".."z"` |
-| `"abc"` (String literal) |           | The value must be casted to the specific String literal                                 | `let :drink, "coffee"`                                     |
-| , (Union type)           |           | The value must satisfy one of the subtypes                                              | `let :id, 1, 2, 3`                                         |
+<table>
+    <tr>
+        <th>Type</th>
+        <th>Arguments</th>
+        <th>Description</th>
+    </tr>
+    <tr>
+        <td><a href="#integer-and-integer">`integer`</a></td>
+        <td></td>
+        <td>The value must be casted to Integer</td>
+    </tr>
+    <tr>
+        <td>`integer?`</td>
+        <td></td>
+        <td>The value can be `nil`. If the value exists, it must satisfy `integer` constraint.</td>
+    </tr>
+    <tr>
+        <td>`float`</td>
+        <td></td>
+        <td>The value must be casted to Float</td>
+    </tr>
+    <tr>
+        <td>`float?`</td>
+        <td></td>
+        <td>The value can be `nil`. If the value exists, it must satisfy `float` constraint.</td>
+    </tr>
+    <tr>
+        <td>`boolean`</td>
+        <td></td>
+        <td>The value must be casted to Boolean</td>
+    </tr>
+    <tr>
+        <td>`boolean?`</td>
+        <td></td>
+        <td>The value can be `nil`. If the value exists, it must satisfy `boolean` constraint.</td>
+    </tr>
+    <tr>
+        <td>`string`</td>
+        <td>`:within`</td>
+        <td>The value must be casted to String</td>
+    </tr>
+    <tr>
+        <td>`string?`</td>
+        <td>`:within`</td>
+        <td>The value can be `nil`. If the value exists, it must satisfy `string` constraint.</td>
+    </tr>
+    <tr>
+        <td>`time`</td>
+        <td>`:format`</td>
+        <td>The value must be casted to Time</td>
+    </tr>
+    <tr>
+        <td>`time?`</td>
+        <td>`:format`</td>
+        <td>The value can be `nil`. If the value exists, it must satisfy `time` constraint.</td>
+    </tr>
+    <tr>
+        <td>`optional`</td>
+        <td>`type`</td>
+        <td>The value can be `nil`. If the value exists, it must satisfy the given type constraint.</td>
+    </tr>
+    <tr>
+        <td>`23` (Integer literal)</td>
+        <td></td>
+        <td>The value must be casted to the specific Integer literal</td>
+    </tr>
+    <tr>
+        <td>`15.12` (Float literal)</td>
+        <td></td>
+        <td>The value must be casted to the specific Float literal</td>
+    </tr>
+    <tr>
+        <td>`1..10` (Range literal)</td>
+        <td></td>
+        <td>The value must be casted to the beginning of Range and be covered with it</td>
+    </tr>
+    <tr>
+        <td>`"abc"` (String literal)</td>
+        <td></td>
+        <td>The value must be casted to the specific String literal</td>
+    </tr>
+    <tr>
+        <td>, (Union type)</td>
+        <td></td>
+        <td>The value must satisfy one of the subtypes</td>
+    </tr>
+</table>
 
 ### `integer` and `integer?`
 
-The value must be casted to Integer. `integer?` allows the value to be `nil`, so you can declare optional integer type for columns.
+The value must be casted to Integer. `integer?` allows the value to be `nil`, so you can declare optional integer type
+for columns.
 
-*Example*
+_Example_
 
 ```ruby
 strong_csv = StrongCSV.new do
@@ -136,21 +218,21 @@ result = strong_csv.parse(<<~CSV)
   stock,state
   12,0
   20,
-  34,1
+  non-integer,1
 CSV
-result[0][:stock] # => 12
-result[0][:state] # => 0
-result[1][:stock] # => 20
-result[1][:state] # => nil
-result[0][:stock] # => 34
-result[0][:state] # => 1
+
+result.map(&:valid?) # => [true, true, false]
+result[0].slice(:stock, :state) # => {:stock=>12, :state=>0}
+result[1].slice(:stock, :state) # => {:stock=>20, :state=>nil}
+result[2].slice(:stock, :state) # => {:stock=>"non-integer", :state=>1}
 ```
 
 ### `float` and `float?`
 
-The value must be casted to Float. `float?` allows the value to be `nil`, so you can declare optional float type for columns.
+The value must be casted to Float. `float?` allows the value to be `nil`, so you can declare optional float type for
+columns.
 
-*Example*
+_Example_
 
 ```ruby
 strong_csv = StrongCSV.new do
@@ -162,14 +244,146 @@ result = strong_csv.parse(<<~CSV)
   tax_rate,fail_rate
   0.02,0.1
   0.05,
-  0.12,0.8
+  ,0.8
 CSV
-result[0][:tax_rate]  # => 0.02
-result[0][:fail_rate] # => 0.1
-result[1][:tax_rate]  # => 0.05
-result[1][:fail_rate] # => nil
-result[0][:tax_rate]  # => 0.12
-result[0][:fail_rate] # => 0.8
+
+result.map(&:valid?) # => [true, true, false]
+result[0].slice(:tax_rate, :fail_rate) # => {:tax_rate=>0.02, :fail_rate=>0.1}
+result[1].slice(:tax_rate, :fail_rate) # => {:tax_rate=>0.05, :fail_rate=>nil}
+result[2].slice(:tax_rate, :fail_rate) # => {:tax_rate=>nil, :fail_rate=>0.8}
+```
+
+### `boolean` and `boolean?`
+
+The value must be casted to Boolean (`true` of `false`). `boolean?` allows the value to be `nil` as an optional boolean
+value.
+
+_Example_
+
+```ruby
+strong_csv = StrongCSV.new do
+  let :enabled, boolean
+  let :active, boolean?
+end
+
+result = strong_csv.parse(<<~CSV)
+  enabled,active
+  True,True
+  False,
+  ,
+CSV
+
+result.map(&:valid?) # => [true, true, false]
+result[0].slice(:enabled, :active) # => {:enabled=>true, :active=>true}
+result[1].slice(:enabled, :active) # => {:enabled=>false, :active=>nil}
+result[2].slice(:enabled, :active) # => {:enabled=>nil, :active=>nil}
+```
+
+### `string` and `string?`
+
+The value must be casted to String. `string?` allows the value to be `nil` as an optional string value.
+They also support `:within` in its arguments, and it limits the length of the string value within the specified `Range`.
+
+_Example_
+
+```ruby
+strong_csv = StrongCSV.new do
+  let :name, string(within: 1..4)
+  let :description, string?
+end
+
+result = strong_csv.parse(<<~CSV)
+  name,description
+  JB,Hello
+  yykamei,
+  ,🤷
+CSV
+
+result.map(&:valid?) # => [true, false, false]
+result[0].slice(:name, :description) # => {:name=>"JB", :description=>"Hello"}
+result[1].slice(:name, :description) # => {:name=>"yykamei", :description=>nil}
+result[2].slice(:name, :description) # => {:name=>nil, :description=>"🤷"}
+```
+
+### `time` and `time?`
+
+The value must be casted to Time. `time?` allows the value to be `nil` as an optional time value.
+They have the `:format` argument, which is used as the format
+of [`Time.strptime`](https://rubydoc.info/stdlib/time/Time.strptime);
+it means you can ensure the value must satisfy the time format. The default value of `:format` is `"%Y-%m-%d"`.
+
+_Example_
+
+```ruby
+strong_csv = StrongCSV.new do
+  let :start_on, time
+  let :updated_at, time?(format: "%FT%T")
+end
+
+result = strong_csv.parse(<<~CSV)
+  start_on,updated_at
+  2022-04-01,2022-04-30T15:30:59
+  2022-05-03
+  05-03,2021-09-03T09:48:23
+CSV
+
+result.map(&:valid?) # => [true, true, false]
+result[0].slice(:start_on, :updated_at) # => {:start_on=>2022-04-01 00:00:00 +0900, :updated_at=>2022-04-30 15:30:59 +0900}
+result[1].slice(:start_on, :updated_at) # => {:start_on=>2022-05-03 00:00:00 +0900, :updated_at=>nil}
+result[2].slice(:start_on, :updated_at) # => {:start_on=>"05-03", :updated_at=>2021-09-03 09:48:23 +0900}
+```
+
+### `optional`
+
+While each type above has its optional type with `?`, literals cannot be suffixed with `?`.
+However, there would be a case to have an optional literal type.
+In this case, `optional` might be useful and lets you declare such types.
+
+_Example_
+
+```ruby
+strong_csv = StrongCSV.new do
+  let :foo, optional(123)
+  let :bar, optional("test")
+end
+
+result = strong_csv.parse(<<~CSV)
+  foo,bar
+  123,test
+  ,
+  124
+CSV
+
+result.map(&:valid?) # => [true, true, false]
+result[0].slice(:foo, :bar) # => {:foo=>123, :bar=>"test"}
+result[1].slice(:foo, :bar) # => {:foo=>nil, :bar=>nil}
+result[2].slice(:foo, :bar) # => {:foo=>"124", :bar=>nil} (124 is not equal to 123)
+```
+
+### Literal
+
+You can declare literal value as types. The supported literals are `Integer`, `Float`, `String`, and `Range`.
+
+_Example_
+
+```ruby
+strong_csv = StrongCSV.new do
+  let 0, 123
+  let 1, "test"
+  let 2, 2.5
+  let 3, 1..10
+end
+
+result = strong_csv.parse(<<~CSV)
+  123,test,2.5,9
+  123,test,2.5,0
+  123,Hey,2.5,10
+CSV
+
+result.map(&:valid?) # => [true, false, false]
+result[0].slice(0, 1, 2, 3) # => {0=>123, 1=>"test", 2=>2.5, 3=>9}
+result[1].slice(0, 1, 2, 3) # => {0=>123, 1=>"test", 2=>2.5, 3=>"0"} (0 is out of 1..10)
+result[2].slice(0, 1, 2, 3) # => {0=>123, 1=>"Hey", 2=>2.5, 3=>10} ("Hey" is not equal to "test")
 ```
 
 ## Contributing
