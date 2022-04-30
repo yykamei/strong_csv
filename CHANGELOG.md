@@ -1,5 +1,13 @@
 # Changelog
 
+## [Unreleased](https://github.com/yykamei/strong_csv/tree/HEAD)
+
+[Full Changelog](https://github.com/yykamei/strong_csv/compare/v0.2.0...HEAD)
+
+**Implemented enhancements:**
+
+- Add \#slice to Row [\#36](https://github.com/yykamei/strong_csv/pull/36) ([yykamei](https://github.com/yykamei))
+
 ## [v0.2.0](https://github.com/yykamei/strong_csv/tree/v0.2.0) (2022-04-29)
 
 [Full Changelog](https://github.com/yykamei/strong_csv/compare/v0.1.0...v0.2.0)
