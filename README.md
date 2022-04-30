@@ -125,77 +125,77 @@ end
         <td>The value must be casted to Integer</td>
     </tr>
     <tr>
-        <td>`integer?`</td>
+        <td><a href="#integer-and-integer">`integer?`</a></td>
         <td></td>
         <td>The value can be `nil`. If the value exists, it must satisfy `integer` constraint.</td>
     </tr>
     <tr>
-        <td>`float`</td>
+        <td><a href="#float-and-float">`float`</a></td>
         <td></td>
         <td>The value must be casted to Float</td>
     </tr>
     <tr>
-        <td>`float?`</td>
+        <td><a href="#float-and-float">`float?`</a></td>
         <td></td>
         <td>The value can be `nil`. If the value exists, it must satisfy `float` constraint.</td>
     </tr>
     <tr>
-        <td>`boolean`</td>
+        <td><a href="#boolean-and-boolean">`boolean`</a></td>
         <td></td>
         <td>The value must be casted to Boolean</td>
     </tr>
     <tr>
-        <td>`boolean?`</td>
+        <td><a href="#boolean-and-boolean">`boolean?`</a></td>
         <td></td>
         <td>The value can be `nil`. If the value exists, it must satisfy `boolean` constraint.</td>
     </tr>
     <tr>
-        <td>`string`</td>
+        <td><a href="#string-and-string">`string`</a></td>
         <td>`:within`</td>
         <td>The value must be casted to String</td>
     </tr>
     <tr>
-        <td>`string?`</td>
+        <td><a href="#string-and-string">`string?`</a></td>
         <td>`:within`</td>
         <td>The value can be `nil`. If the value exists, it must satisfy `string` constraint.</td>
     </tr>
     <tr>
-        <td>`time`</td>
+        <td><a href="#time-and-time">`time`</a></td>
         <td>`:format`</td>
         <td>The value must be casted to Time</td>
     </tr>
     <tr>
-        <td>`time?`</td>
+        <td><a href="#time-and-time">`time?`</a></td>
         <td>`:format`</td>
         <td>The value can be `nil`. If the value exists, it must satisfy `time` constraint.</td>
     </tr>
     <tr>
-        <td>`optional`</td>
+        <td><a href="#optional">`optional`</a></td>
         <td>`type`</td>
         <td>The value can be `nil`. If the value exists, it must satisfy the given type constraint.</td>
     </tr>
     <tr>
-        <td>`23` (Integer literal)</td>
+        <td><a href="#literal">`23` (Integer literal)</a></td>
         <td></td>
         <td>The value must be casted to the specific Integer literal</td>
     </tr>
     <tr>
-        <td>`15.12` (Float literal)</td>
+        <td><a href="#literal">`15.12` (Float literal)</a></td>
         <td></td>
         <td>The value must be casted to the specific Float literal</td>
     </tr>
     <tr>
-        <td>`1..10` (Range literal)</td>
+        <td><a href="#literal">`1..10` (Range literal)</a></td>
         <td></td>
         <td>The value must be casted to the beginning of Range and be covered with it</td>
     </tr>
     <tr>
-        <td>`"abc"` (String literal)</td>
+        <td><a href="#literal">`"abc"` (String literal)</a></td>
         <td></td>
         <td>The value must be casted to the specific String literal</td>
     </tr>
     <tr>
-        <td>, (Union type)</td>
+        <td><a href="#union">, (Union type)</a></td>
         <td></td>
         <td>The value must satisfy one of the subtypes</td>
     </tr>
@@ -384,6 +384,32 @@ result.map(&:valid?) # => [true, false, false]
 result[0].slice(0, 1, 2, 3) # => {0=>123, 1=>"test", 2=>2.5, 3=>9}
 result[1].slice(0, 1, 2, 3) # => {0=>123, 1=>"test", 2=>2.5, 3=>"0"} (0 is out of 1..10)
 result[2].slice(0, 1, 2, 3) # => {0=>123, 1=>"Hey", 2=>2.5, 3=>10} ("Hey" is not equal to "test")
+```
+
+### Union
+
+There would be a case that it's alright if a value satisfies one of the types.
+Union types are useful for such a case.
+
+_Example_
+
+```ruby
+strong_csv = StrongCSV.new do
+  let :priority, 10, 20, 30
+  let :size, "S", "M", "L"
+end
+
+result = strong_csv.parse(<<~CSV)
+  priority,size
+  10,M
+  30,A
+  11,S
+CSV
+
+result.map(&:valid?) # => [true, false, false]
+result[0].slice(:priority, :size) # => {:priority=>10, :size=>"M"}
+result[1].slice(:priority, :size) # => {:priority=>30, :size=>"A"} ("A" is not one of "S", "M", and "L")
+result[2].slice(:priority, :size) # => {:priority=>"11", :size=>"S"} (11 is not one of 10, 20, and 30)
 ```
 
 ## Contributing
