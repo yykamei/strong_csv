@@ -62,7 +62,7 @@ strong_csv = StrongCSV.new do
   let :name, string(within: 1..255)
   let :description, string?(within: 1..1000)
   let :active, boolean
-  let :started_at, time?
+  let :started_at, time?(format: "%Y-%m-%dT%H:%M:%S")
 
   # Literal declaration
   let :status, 0..6
@@ -120,47 +120,47 @@ end
     </tr>
     <tr>
         <td><a href="#integer-and-integer"><code>integer</code> and <code>integer?</code></a></td>
-        <td>The value must be casted to Integer</td>
+        <td>The value must be casted to <code>Integer</code>.</td>
     </tr>
     <tr>
         <td><a href="#float-and-float"><code>float</code> and <code>float?</code></a></td>
-        <td>The value must be casted to Float</td>
+        <td>The value must be casted to <code>Float</code>.</td>
     </tr>
     <tr>
         <td><a href="#boolean-and-boolean"><code>boolean</code> and <code>boolean?</code></a></td>
-        <td>The value must be casted to Boolean</td>
+        <td>The value must be casted to Boolean (<code>true</code> or <code>false</code>).</td>
     </tr>
     <tr>
         <td><a href="#string-and-string"><code>string</code> and <code>string?</code></a></td>
-        <td>The value must be casted to String</td>
+        <td>The value must be casted to <code>String</code>.</td>
     </tr>
     <tr>
         <td><a href="#time-and-time"><code>time</code> and <code>time?</code></a></td>
-        <td>The value must be casted to Time</td>
+        <td>The value must be casted to <code>Time</code>.</td>
     </tr>
     <tr>
         <td><a href="#optional"><code>optional</code></a></td>
-        <td>The value can be `nil`. If the value exists, it must satisfy the given type constraint.</td>
+        <td>The value can be <code>nil</code>. If the value exists, it must satisfy the given type constraint.</td>
     </tr>
     <tr>
         <td><a href="#literal"><code>23</code> (Integer literal)</a></td>
-        <td>The value must be casted to the specific Integer literal</td>
+        <td>The value must be casted to the specific <code>Integer</code> literal.</td>
     </tr>
     <tr>
         <td><a href="#literal"><code>15.12</code> (Float literal)</a></td>
-        <td>The value must be casted to the specific Float literal</td>
+        <td>The value must be casted to the specific <code>Float</code> literal.</td>
     </tr>
     <tr>
         <td><a href="#literal"><code>1..10</code> (Range literal)</a></td>
-        <td>The value must be casted to the beginning of Range and be covered with it</td>
+        <td>The value must be casted to the beginning of <code>Range</code> and be covered with it.</td>
     </tr>
     <tr>
         <td><a href="#literal"><code>"abc"</code> (String literal)</a></td>
-        <td>The value must be casted to the specific String literal</td>
+        <td>The value must be casted to the specific <code>String</code> literal.</td>
     </tr>
     <tr>
         <td><a href="#union"><code>,</code> (Union type)</a></td>
-        <td>The value must satisfy one of the subtypes</td>
+        <td>The value must satisfy one of the subtypes.</td>
     </tr>
 </table>
 
