@@ -20,6 +20,13 @@ class RowTest < Minitest::Test
     assert_equal 2, row.lineno
   end
 
+  def test_row_forwardable
+    row = StrongCSV::Row.new(row: %w[☕️ 12.0], types: { 0 => [StrongCSV::Types::String.new, nil], 1 => [StrongCSV::Types::Float.new, nil] }, lineno: 3)
+    assert_equal({ 0 => "☕️", 1 => 12.0 }, row.slice(0, 1))
+    assert_equal "☕️", row[0]
+    assert_equal 12.0, row.fetch(1)
+  end
+
   def test_row_with_invalid_data
     csv_row = CSV::Row.new(%i[abc], %w[abc!])
     row = StrongCSV::Row.new(row: csv_row, types: { abc: [StrongCSV::Types::Integer.new, nil], x: [StrongCSV::Types::Integer.new, nil] }, lineno: 2)
