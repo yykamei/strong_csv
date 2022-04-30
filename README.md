@@ -120,12 +120,12 @@ end
         <th>Description</th>
     </tr>
     <tr>
-        <td><a href="#integer-and-integer">`integer`</a></td>
+        <td><a href="#integer-and-integer"><code>integer</code></a></td>
         <td></td>
         <td>The value must be casted to Integer</td>
     </tr>
     <tr>
-        <td><a href="#integer-and-integer">`integer?`</a></td>
+        <td><a href="#integer-and-integer"><code>integer?</code></a></td>
         <td></td>
         <td>The value can be `nil`. If the value exists, it must satisfy `integer` constraint.</td>
     </tr>
