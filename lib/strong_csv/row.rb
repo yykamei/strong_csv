@@ -6,7 +6,7 @@ class StrongCSV
     extend Forwardable
     using Types::Literal
 
-    def_delegators :@values, :[], :fetch
+    def_delegators :@values, :[], :fetch, :slice
 
     # @return [Hash]
     attr_reader :errors
