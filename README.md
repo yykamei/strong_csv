@@ -218,7 +218,10 @@ result[2].slice(:tax_rate, :fail_rate) # => {:tax_rate=>nil, :fail_rate=>0.8} (`
 
 ### `boolean` and `boolean?`
 
-The value must be casted to Boolean (`true` of `false`). `boolean?` allows the value to be `nil` as an optional boolean
+The value must be casted to Boolean (`true` of `false`).
+`"true"`, `"True"`, and `"TRUE"` are casted to `true`,
+while `"false"`, `"False"`, and `"FALSE"` are casted to `false`.
+`boolean?` allows the value to be `nil` as an optional boolean
 value.
 
 _Example_
