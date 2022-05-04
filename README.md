@@ -378,6 +378,40 @@ result[1].slice(:priority, :size) # => {:priority=>30, :size=>"A"} ("A" is not o
 result[2].slice(:priority, :size) # => {:priority=>"11", :size=>"S"} (11 is not one of 10, 20, and 30)
 ```
 
+## I18n (Internationalization)
+
+strong_csv depends on [i18n](https://rubygems.org/gems/i18n) for internationalization.
+If you want to have a locale-specific error message, put the message catalog in your locale files.
+Here is an example of a locale file.
+
+```yaml
+ja:
+  strong_csv:
+    boolean:
+      cant_be_casted: "`%{value}`はBooleanに変換できません"
+    float:
+      cant_be_casted: "`%{value}`はFloatに変換できません"
+    integer:
+      cant_be_casted: "`%{value}`はIntegerに変換できません"
+    literal:
+      integer:
+        unexpected: "`%{expected}`ではなく`%{value}`が入力されています"
+        cant_be_casted: "`%{expected}`ではなく`%{value}`が入力されています"
+      float:
+        unexpected: "`%{expected}`ではなく`%{value}`が入力されています"
+        cant_be_casted: "`%{value}`はFloatに変換できません"
+      string:
+        unexpected: "`%{expected}`ではなく`%{value}`が入力されています"
+      range:
+        cant_be_casted: "`%{value}`は`%{expected}`の始端に変換できません"
+        out_of_range: "`%{value}`は`%{range}`の範囲外です"
+    string:
+      cant_be_casted: "`%{value}`はStringに変換できません"
+      out_of_range: "`%{value}`の文字数は`%{range}`の範囲外です"
+    time:
+      cant_be_casted: "`%{value}`は`%{time_format}`でTimeに変換できません"
+```
+
 ## Contributing
 
 Bug reports and pull requests are welcome on the [GitHub repository](https://github.com/yykamei/strong_csv).

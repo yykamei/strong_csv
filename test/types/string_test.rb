@@ -21,7 +21,7 @@ class TypesStringTest < Minitest::Test
     assert_instance_of StrongCSV::ValueResult, value_result
     refute value_result.success?
     assert_equal "foo_box", value_result.value
-    assert_equal ["`\"foo_box\"` is out of range `1..4`"], value_result.error_messages
+    assert_equal ["The length of `\"foo_box\"` is out of range `1..4`"], value_result.error_messages
   end
 
   def test_cast_nil
@@ -85,7 +85,7 @@ class TypesStringTest < Minitest::Test
       assert_instance_of StrongCSV::Row, row
       refute row.valid?
       assert_equal("abcd", row[:id])
-      assert_equal(["`\"abcd\"` is out of range `1..3`"], row.errors[:id])
+      assert_equal(["The length of `\"abcd\"` is out of range `1..3`"], row.errors[:id])
     end
   end
 

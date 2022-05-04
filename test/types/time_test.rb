@@ -25,7 +25,7 @@ class TypesTimeTest < Minitest::Test
     assert_instance_of StrongCSV::ValueResult, value_result
     refute value_result.success?
     assert_equal "foo", value_result.value
-    assert_equal ["`\"foo\"` can't be casted to Time with the format `%B`"], value_result.error_messages
+    assert_equal ["`\"foo\"` can't be casted to Time with the format `\"%B\"`"], value_result.error_messages
   end
 
   def test_cast_nil
@@ -33,7 +33,7 @@ class TypesTimeTest < Minitest::Test
     assert_instance_of StrongCSV::ValueResult, value_result
     refute value_result.success?
     assert_nil value_result.value
-    assert_equal ["`nil` can't be casted to Time"], value_result.error_messages
+    assert_equal ["`nil` can't be casted to Time with the format `\"%Y-%m-%d\"`"], value_result.error_messages
   end
 
   def test_without_headers
@@ -74,7 +74,7 @@ class TypesTimeTest < Minitest::Test
       assert_instance_of StrongCSV::Row, row
       refute row.valid?
       assert_equal("123", row[:id])
-      assert_equal(["`\"123\"` can't be casted to Time with the format `%H:%M`"], row.errors[:id])
+      assert_equal(["`\"123\"` can't be casted to Time with the format `\"%H:%M\"`"], row.errors[:id])
     end
   end
 
@@ -90,6 +90,6 @@ class TypesTimeTest < Minitest::Test
     refute result.all?(&:valid?)
     assert_in_delta Time.new(2022, 5, 16), result[0][:id], 1
     assert_nil result[1][:id]
-    assert_equal([nil, ["`nil` can't be casted to Time"]], result.map { |row| row.errors[:id] })
+    assert_equal([nil, ["`nil` can't be casted to Time with the format `\"%Y-%m-%d\"`"]], result.map { |row| row.errors[:id] })
   end
 end

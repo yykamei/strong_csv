@@ -15,11 +15,11 @@ class StrongCSV
       # @param value [Object] Value to be casted to Boolean
       # @return [ValueResult]
       def cast(value)
-        return ValueResult.new(original_value: value, error_messages: ["`#{value.inspect}` can't be casted to String"]) if value.nil?
+        return ValueResult.new(original_value: value, error_messages: [I18n.t("strong_csv.string.cant_be_casted", value: value.inspect, default: :"_strong_csv.string.cant_be_casted")]) if value.nil?
 
         casted = String(value)
         if @within && !@within.cover?(casted.size)
-          ValueResult.new(original_value: value, error_messages: ["`#{casted.inspect}` is out of range `#{@within.inspect}`"])
+          ValueResult.new(original_value: value, error_messages: [I18n.t("strong_csv.string.out_of_range", value: value.inspect, range: @within.inspect, default: :"_strong_csv.string.out_of_range")])
         else
           ValueResult.new(value: casted, original_value: value)
         end
