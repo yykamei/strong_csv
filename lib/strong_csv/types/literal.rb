@@ -13,10 +13,10 @@ class StrongCSV
           if int == self
             ValueResult.new(value: int, original_value: value)
           else
-            ValueResult.new(original_value: value, error_messages: ["`#{inspect}` is expected, but `#{int}` was given"])
+            ValueResult.new(original_value: value, error_messages: [I18n.t("strong_csv.literal.integer.unexpected", value: int.inspect, expected: inspect, default: :"_strong_csv.literal.integer.unexpected")])
           end
         rescue ArgumentError, TypeError
-          ValueResult.new(original_value: value, error_messages: ["`#{value.inspect}` can't be casted to #{self.class.name}"])
+          ValueResult.new(original_value: value, error_messages: [I18n.t("strong_csv.literal.integer.cant_be_casted", value: value.inspect, default: :"_strong_csv.literal.integer.cant_be_casted")])
         end
       end
 
@@ -28,10 +28,10 @@ class StrongCSV
           if float == self
             ValueResult.new(value: float, original_value: value)
           else
-            ValueResult.new(original_value: value, error_messages: ["`#{inspect}` is expected, but `#{float}` was given"])
+            ValueResult.new(original_value: value, error_messages: [I18n.t("strong_csv.literal.float.unexpected", value: float.inspect, expected: inspect, default: :"_strong_csv.literal.float.unexpected")])
           end
         rescue ArgumentError, TypeError
-          ValueResult.new(original_value: value, error_messages: ["`#{value.inspect}` can't be casted to #{self.class.name}"])
+          ValueResult.new(original_value: value, error_messages: [I18n.t("strong_csv.literal.float.cant_be_casted", value: value.inspect, default: :"_strong_csv.literal.float.cant_be_casted")])
         end
       end
 
@@ -39,7 +39,7 @@ class StrongCSV
         # @param value [Object] Value to be casted to Range
         # @return [ValueResult]
         def cast(value)
-          return ValueResult.new(original_value: value, error_messages: ["`nil` can't be casted to the beginning of `#{inspect}`"]) if value.nil?
+          return ValueResult.new(original_value: value, error_messages: [I18n.t("strong_csv.literal.range.cant_be_casted", value: value.inspect, expected: inspect, default: :"_strong_csv.literal.range.cant_be_casted")]) if value.nil?
 
           casted = case self.begin
                    when ::Float
@@ -54,10 +54,10 @@ class StrongCSV
           if cover?(casted)
             ValueResult.new(value: casted, original_value: value)
           else
-            ValueResult.new(original_value: value, error_messages: ["`#{casted.inspect}` is not within `#{inspect}`"])
+            ValueResult.new(original_value: value, error_messages: [I18n.t("strong_csv.literal.range.out_of_range", value: casted.inspect, range: inspect, default: :"_strong_csv.literal.range.out_of_range")])
           end
         rescue ArgumentError
-          ValueResult.new(original_value: value, error_messages: ["`#{value.inspect}` can't be casted to the beginning of `#{inspect}`"])
+          ValueResult.new(original_value: value, error_messages: [I18n.t("strong_csv.literal.range.cant_be_casted", value: value.inspect, expected: inspect, default: :"_strong_csv.literal.range.cant_be_casted")])
         end
       end
 
@@ -68,7 +68,7 @@ class StrongCSV
           if self == value
             ValueResult.new(value: self, original_value: value)
           else
-            ValueResult.new(original_value: value, error_messages: ["`#{inspect}` is expected, but `#{value.inspect}` was given"])
+            ValueResult.new(original_value: value, error_messages: [I18n.t("strong_csv.literal.string.unexpected", value: value.inspect, expected: inspect, default: :"_strong_csv.literal.string.unexpected")])
           end
         end
       end

@@ -13,6 +13,15 @@ Style/StringLiteralsInInterpolation:
 Style/HashLikeCase:
   Enabled: false
 
+Style/FormatStringToken:
+  Enabled: false
+
+Style/TrailingCommaInHashLiteral:
+  Enabled: false
+
+Style/TrailingCommaInArguments:
+  Enabled: false
+
 Layout/LineLength:
   Max: 240
 
