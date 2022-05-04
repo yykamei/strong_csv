@@ -6,6 +6,7 @@
 
 **Implemented enhancements:**
 
+- Use i18n to let users have own error messages [\#41](https://github.com/yykamei/strong_csv/pull/41) ([yykamei](https://github.com/yykamei))
 - Add \#slice to Row [\#36](https://github.com/yykamei/strong_csv/pull/36) ([yykamei](https://github.com/yykamei))
 
 **Merged pull requests:**
