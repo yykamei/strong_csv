@@ -41,3 +41,4 @@ jobs:
         env:
           VALIDATE_RUBY: "false"
           VALIDATE_JSCPD: "false"
+          VALIDATE_NATURAL_LANGUAGE: "false"
