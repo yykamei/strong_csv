@@ -78,10 +78,10 @@ strong_csv = StrongCSV.new do
     end
   end
 
-  # TODO: The followings are not implemented so far.
-
   # Regular expressions
   let :url, %r{\Ahttps://}
+
+  # TODO: The followings are not implemented so far.
 
   # Custom validation
   #
@@ -405,6 +405,9 @@ ja:
       range:
         cant_be_casted: "`%{value}`は`%{expected}`の始端に変換できません"
         out_of_range: "`%{value}`は`%{range}`の範囲外です"
+      regexp:
+        cant_be_casted: "`%{value}`はStringに変換できません"
+        unexpected: "`%{value}`は`%{expected}`とマッチしませんでした"
     string:
       cant_be_casted: "`%{value}`はStringに変換できません"
       out_of_range: "`%{value}`の文字数は`%{range}`の範囲外です"
