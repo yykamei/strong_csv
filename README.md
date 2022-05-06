@@ -159,6 +159,10 @@ end
         <td>The value must be casted to the specific <code>String</code> literal.</td>
     </tr>
     <tr>
+        <td><a href="#literal"><code>%r{\Ahttps://}</code> (Regexp literal)</a></td>
+        <td>The value must be casted to a <code>String</code> that matches the specified Regexp.</td>
+    </tr>
+    <tr>
         <td><a href="#union"><code>,</code> (Union type)</a></td>
         <td>The value must satisfy one of the subtypes.</td>
     </tr>
@@ -338,18 +342,19 @@ strong_csv = StrongCSV.new do
   let 1, "test"
   let 2, 2.5
   let 3, 1..10
+  let 4, /[a-z]+/
 end
 
 result = strong_csv.parse(<<~CSV)
-  123,test,2.5,9
-  123,test,2.5,0
-  123,Hey,2.5,10
+  123,test,2.5,9,abc
+  123,test,2.5,0,xyz
+  123,Hey,2.5,10,!
 CSV
 
 result.map(&:valid?) # => [true, false, false]
-result[0].slice(0, 1, 2, 3) # => {0=>123, 1=>"test", 2=>2.5, 3=>9}
-result[1].slice(0, 1, 2, 3) # => {0=>123, 1=>"test", 2=>2.5, 3=>"0"} (0 is out of 1..10)
-result[2].slice(0, 1, 2, 3) # => {0=>123, 1=>"Hey", 2=>2.5, 3=>10} ("Hey" is not equal to "test")
+result[0].slice(0, 1, 2, 3, 4) # => {0=>123, 1=>"test", 2=>2.5, 3=>9, 4=>"abc"}
+result[1].slice(0, 1, 2, 3, 4) # => {0=>123, 1=>"test", 2=>2.5, 3=>"0", 4=>"xyz"} (0 is out of 1..10)
+result[2].slice(0, 1, 2, 3, 4) # => {0=>123, 1=>"Hey", 2=>2.5, 3=>10, 4=>"!"} ("Hey" is not equal to "test", and "!" does not match /[a-z]+/)
 ```
 
 ### Union
