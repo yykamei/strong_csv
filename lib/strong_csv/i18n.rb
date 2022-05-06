@@ -28,6 +28,10 @@ I18n.backend.store_translations(
           cant_be_casted: "`%{value}` can't be casted to the beginning of `%{expected}`",
           out_of_range: "`%{value}` is not within `%{range}`",
         },
+        regexp: {
+          cant_be_casted: "`%{value}` can't be casted to String",
+          unexpected: "`%{value}` did not match `%{expected}`",
+        },
       },
       string: {
         cant_be_casted: "`%{value}` can't be casted to String",

@@ -72,6 +72,20 @@ class StrongCSV
           end
         end
       end
+
+      refine ::Regexp do
+        # @param value [Object] Value to be casted to String
+        # @return [ValueResult]
+        def cast(value)
+          return ValueResult.new(original_value: value, error_messages: [I18n.t("strong_csv.literal.regexp.cant_be_casted", value: value.inspect, default: :"_strong_csv.literal.regexp.cant_be_casted")]) if value.nil?
+
+          if self =~ value
+            ValueResult.new(value: value, original_value: value)
+          else
+            ValueResult.new(original_value: value, error_messages: [I18n.t("strong_csv.literal.regexp.unexpected", value: value.inspect, expected: inspect, default: :"_strong_csv.literal.regexp.unexpected")])
+          end
+        end
+      end
     end
   end
 end
