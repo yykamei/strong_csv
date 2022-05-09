@@ -12,7 +12,7 @@ Gem::Specification.new do |spec|
   spec.description = "strong_csv is a type checker for a CSV file. It lets developers declare types for each column to ensure all cells are satisfied with desired types."
   spec.homepage = "https://github.com/yykamei/strong_csv"
   spec.license = "MIT"
-  spec.required_ruby_version = ">= 2.5.5"
+  spec.required_ruby_version = ">= 2.5.5" # rubocop:disable Gemspec/RequiredRubyVersion
 
   spec.metadata["homepage_uri"] = spec.homepage
   spec.metadata["source_code_uri"] = spec.homepage
