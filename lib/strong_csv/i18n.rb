@@ -11,6 +11,7 @@ I18n.backend.store_translations(
       },
       integer: {
         cant_be_casted: "`%{value}` can't be casted to Integer",
+        constraint_error: "`%{value}` does not satisfy the specified constraint",
       },
       literal: {
         integer: {
