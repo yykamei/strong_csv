@@ -141,4 +141,44 @@ class TypesIntegerTest < Minitest::Test
     refute result.all?(&:valid?)
     assert_equal([3, " "], result.map { |row| row[:id] })
   end
+
+  def test_with_pick
+    strong_csv = StrongCSV.new do
+      let 0, integer
+      let 1, integer(constraint: ->(v) { twice.include?(v) })
+      pick 0, as: :twice do |xs|
+        xs.map { |x| x.to_i * 2 }
+      end
+    end
+    result = strong_csv.parse(<<~CSV)
+      3,8
+      4,20
+      10,6
+    CSV
+    assert result.all?(&:valid?)
+    assert_equal([3, 4, 10], result.map { |row| row[0] })
+    assert_equal([8, 20, 6], result.map { |row| row[1] })
+  end
+
+  def test_with_pick_and_headers
+    db_records = [1, 2, 5]
+    strong_csv = StrongCSV.new do
+      let :id, integer(constraint: ->(v) { ids.include?(v) })
+      pick :id, as: :ids do |xs|
+        xs = xs.map(&:to_i)
+        db_records.select { |x| xs.include?(x) }
+      end
+    end
+    result = strong_csv.parse(<<~CSV)
+      id
+      1
+      2
+      1
+      5
+      3
+    CSV
+    refute result.all?(&:valid?)
+    assert_equal([1, 2, 1, 5, "3"], result.map { |row| row[:id] })
+    assert_equal([nil, nil, nil, nil, ["`\"3\"` does not satisfy the specified constraint"]], result.map { |row| row.errors[:id] })
+  end
 end

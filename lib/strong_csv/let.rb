@@ -9,9 +9,14 @@ class StrongCSV
     # @return [Boolean]
     attr_reader :headers
 
+    # @return [Hash]
+    attr_reader :pickers
+
     def initialize
       @types = {}
       @headers = false
+      @pickers = {}
+      @picked = {}
     end
 
     # @param name [String, Symbol, Integer]
@@ -30,12 +35,35 @@ class StrongCSV
       validate_columns
     end
 
-    def integer
-      Types::Integer.new
+    # #pick is intended for defining a singleton method with `:as`.
+    # This might be useful for the case where you want to receive IDs that are stored in a database,
+    # and you want to make sure the IDs actually exist.
+    #
+    # @example
+    #  pick :user_id, as: :user_ids do |user_ids|
+    #    User.where(id: user_ids).ids
+    #  end
+    #
+    # @param column [Symbol, Integer]
+    # @param as [Symbol]
+    # @yieldparam values [Array<String>] The values for the column. NOTE: This is an array of String, not casted values.
+    def pick(column, as:, &block)
+      define_singleton_method(as) do
+        @picked[as]
+      end
+      @pickers[as] = lambda do |csv|
+        @picked[as] = block.call(csv.map { |row| row[column] })
+      end
     end
 
-    def integer?
-      optional(integer)
+    # @param options [Hash] See `Types::Integer#initialize` for more details.
+    def integer(**options)
+      Types::Integer.new(**options)
+    end
+
+    # @param options [Hash] See `Types::Integer#initialize` for more details.
+    def integer?(**options)
+      optional(integer(**options))
     end
 
     def boolean

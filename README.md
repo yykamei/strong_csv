@@ -81,8 +81,6 @@ strong_csv = StrongCSV.new do
   # Regular expressions
   let :url, %r{\Ahttps://}
 
-  # TODO: The followings are not implemented so far.
-
   # Custom validation
   #
   # This example sees the database to fetch exactly stored `User` IDs,
@@ -171,7 +169,7 @@ end
 ### `integer` and `integer?`
 
 The value must be casted to Integer. `integer?` allows the value to be `nil`, so you can declare optional integer type
-for columns.
+for columns. It also lets you allow values that satisfy the specified limitation through `:constraint`.
 
 _Example_
 
@@ -179,19 +177,24 @@ _Example_
 strong_csv = StrongCSV.new do
   let :stock, integer
   let :state, integer?
+  let :user_id, integer(constraint: ->(v) { user_ids.include?(v)})
+  pick :user_id, as: :user_ids do |values|
+    User.where(id: values).ids
+  end
 end
 
 result = strong_csv.parse(<<~CSV)
-  stock,state
-  12,0
-  20,
-  non-integer,1
+  stock,state,user_id
+  12,0,1
+  20,,2
+  non-integer,1,4
 CSV
 
 result.map(&:valid?) # => [true, true, false]
-result[0].slice(:stock, :state) # => {:stock=>12, :state=>0}
-result[1].slice(:stock, :state) # => {:stock=>20, :state=>nil}
-result[2].slice(:stock, :state) # => {:stock=>"non-integer", :state=>1} ("non-integer" cannot be casted to Integer)
+result[0].slice(:stock, :state, :user_id) # => {:stock=>12, :state=>0, :user_id=>1}
+result[1].slice(:stock, :state, :user_id) # => {:stock=>20, :state=>nil, :user_id=>2}
+result[2].slice(:stock, :state, :user_id) # => {:stock=>"non-integer", :state=>1, :user_id=>"4"}
+result[2].errors.slice(:stock, :user_id) # => {:stock=>["`\"non-integer\"` can't be casted to Integer"], :user_id=>["`\"4\"` does not satisfy the specified constraint"]}
 ```
 
 ### `float` and `float?`
@@ -398,6 +401,7 @@ ja:
       cant_be_casted: "`%{value}`はFloatに変換できません"
     integer:
       cant_be_casted: "`%{value}`はIntegerに変換できません"
+      constraint_error: "`%{value}`は指定された成約を満たしていません",
     literal:
       integer:
         unexpected: "`%{expected}`ではなく`%{value}`が入力されています"

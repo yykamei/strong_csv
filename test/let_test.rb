@@ -59,11 +59,13 @@ class LetTest < Minitest::Test
 
   def test_integer
     assert_instance_of StrongCSV::Types::Integer, StrongCSV::Let.new.integer
+    assert_instance_of StrongCSV::Types::Integer, StrongCSV::Let.new.integer(constraint: ->(_v) { true })
   end
 
   def test_integer?
     assert_instance_of StrongCSV::Types::Optional, StrongCSV::Let.new.integer?
     assert_instance_of StrongCSV::Types::Integer, StrongCSV::Let.new.integer?.instance_variable_get(:@type)
+    assert_instance_of StrongCSV::Types::Integer, StrongCSV::Let.new.integer?(constraint: ->(_v) { true }).instance_variable_get(:@type)
   end
 
   def test_boolean
