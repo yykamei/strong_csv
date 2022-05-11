@@ -109,6 +109,24 @@ strong_csv.parse(data, field_size_limit: 2048) do |row|
 end
 ```
 
+You can also define types without CSV headers by specifying column numbers.
+Note the numbers must start from `0` (zero-based index).
+
+```ruby
+StrongCSV.new do
+  let 0, integer
+  let 1, string
+  let 2, 1..10
+end
+```
+
+This declaration expects a CSV has the contents like this:
+
+```csv
+123,abc,3
+830,mno,10
+```
+
 ## Available types
 
 <table>
