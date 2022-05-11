@@ -103,7 +103,7 @@ strong_csv.parse(data, field_size_limit: 2048) do |row|
     row[:active] # => true
     # do something with row
   else
-    row.errors # => { user_id: ["must be present", "must be an integer"] }
+    row.errors # => { user_id: ["`nil` can't be casted to Integer"] }
     # do something with row.errors
   end
 end
