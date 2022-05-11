@@ -2,8 +2,6 @@
 
 <a href="https://rubygems.org/gems/strong_csv"><img alt="strong_csv" src="https://img.shields.io/gem/v/strong_csv"></a>
 
-NOTE: This repository is still under development 🚧🚜🚧
-
 Type checker for a CSV file inspired by [strong_json](https://github.com/soutaro/strong_json).
 
 ## Motivation
