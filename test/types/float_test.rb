@@ -145,4 +145,23 @@ class TypesFloatTest < Minitest::Test
     assert_equal([3, " "], result.map { |row| row[:id] })
     assert_equal([nil, ["`\" \"` can't be casted to Float"]], result.map { |row| row.errors[:id] })
   end
+
+  def test_with_pick
+    db_records = [1.1, 2.2, 3.3]
+    strong_csv = StrongCSV.new do
+      let :id, float(constraint: ->(v) { twice.include?(v) })
+      pick :id, as: :twice do |xs|
+        xs = xs.map(&:to_f)
+        db_records.select { |x| xs.include?(x) }
+      end
+    end
+    result = strong_csv.parse(<<~CSV)
+      id
+      1.1
+      3.3
+      2.2
+    CSV
+    assert result.all?(&:valid?)
+    assert_equal([1.1, 3.3, 2.2], result.map { |row| row[:id] })
+  end
 end

@@ -200,7 +200,7 @@ result[2].errors.slice(:stock, :user_id) # => {:stock=>["`\"non-integer\"` can't
 ### `float` and `float?`
 
 The value must be casted to Float. `float?` allows the value to be `nil`, so you can declare optional float type for
-columns.
+columns. It also lets you allow values that satisfy the specified limitation through `:constraint`.
 
 _Example_
 
@@ -399,6 +399,7 @@ ja:
       cant_be_casted: "`%{value}`はBooleanに変換できません"
     float:
       cant_be_casted: "`%{value}`はFloatに変換できません"
+      constraint_error: "`%{value}`は指定された成約を満たしていません",
     integer:
       cant_be_casted: "`%{value}`はIntegerに変換できません"
       constraint_error: "`%{value}`は指定された成約を満たしていません",
