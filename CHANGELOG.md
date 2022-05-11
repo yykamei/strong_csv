@@ -6,6 +6,7 @@
 
 **Implemented enhancements:**
 
+- Add :constraint to Types::Float [\#47](https://github.com/yykamei/strong_csv/pull/47) ([yykamei](https://github.com/yykamei))
 - Add Let\#pick to declare value picker and support constraint in Integer [\#45](https://github.com/yykamei/strong_csv/pull/45) ([yykamei](https://github.com/yykamei))
 
 ## [v0.4.0](https://github.com/yykamei/strong_csv/tree/v0.4.0) (2022-05-10)
