@@ -74,12 +74,14 @@ class StrongCSV
       optional(boolean)
     end
 
-    def float
-      Types::Float.new
+    # @param options [Hash] See `Types::Float#initialize` for more details.
+    def float(**options)
+      Types::Float.new(**options)
     end
 
-    def float?
-      optional(float)
+    # @param options [Hash] See `Types::Float#initialize` for more details.
+    def float?(**options)
+      optional(float(**options))
     end
 
     # @param options [Hash] See `Types::String#initialize` for more details.

@@ -79,11 +79,13 @@ class LetTest < Minitest::Test
 
   def test_float
     assert_instance_of StrongCSV::Types::Float, StrongCSV::Let.new.float
+    assert_instance_of StrongCSV::Types::Float, StrongCSV::Let.new.float(constraint: ->(_v) { true })
   end
 
   def test_float?
     assert_instance_of StrongCSV::Types::Optional, StrongCSV::Let.new.float?
     assert_instance_of StrongCSV::Types::Float, StrongCSV::Let.new.float?.instance_variable_get(:@type)
+    assert_instance_of StrongCSV::Types::Float, StrongCSV::Let.new.float?(constraint: ->(_v) { true }).instance_variable_get(:@type)
   end
 
   def test_string
