@@ -21,7 +21,7 @@ require_relative "strong_csv/types/union"
 require_relative "strong_csv/let"
 require_relative "strong_csv/row"
 
-# The top-level namespace for the strong_csv gem.
+# StrongCSV is a library for parsing CSV contents with type checking.
 class StrongCSV
   class Error < StandardError; end
 

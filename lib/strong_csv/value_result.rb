@@ -15,7 +15,7 @@ class StrongCSV
       @error_messages = error_messages
     end
 
-    # @return [Object] The casted value if it's valid. Otherwise, returns the original value.
+    # @return [::Float, ::Integer, ::Object, ::String, ::Range, boolean, ::Time, nil] The casted value if it's valid. Otherwise, returns the original value.
     def value
       success? ? @value : @original_value
     end

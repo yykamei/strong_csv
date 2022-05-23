@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require "test_helper"
+require_relative "test_helper"
 
 class RowTest < Minitest::Test
   def test_row_initialize_without_headers
