@@ -1,4 +1,163 @@
-module StrongCSV
+# TypeProf 0.21.2
+
+type literals = ::Integer | ::Float | ::Range[untyped] | ::String | ::Regexp
+type declarable = StrongCSV::Types::Base | literals
+type casted = bool | ::Float | ::Integer | ::Range[untyped] | ::String | ::Regexp
+type column = ::Integer | ::Symbol
+
+# Classes
+class StrongCSV
   VERSION: String
-  # See the writing guide of rbs: https://github.com/ruby/rbs#guides
+
+  @let: Let
+
+  def initialize: -> void
+
+  def parse: (String | IO, **untyped) -> Array[Row]
+    | (String | IO, **untyped) { (Row) -> void } -> untyped
+
+  class ValueResult
+    DEFAULT_VALUE: Object
+
+    @value: (casted)?
+    @original_value: untyped
+
+    attr_reader error_messages: [::String]?
+
+    def initialize: (original_value: ::String | nil, ?value: (casted | ::Object)?, ?error_messages: [::String]?) -> void
+
+    def value: -> ((casted | ::Object | nil)?)
+
+    def success?: -> bool
+  end
+
+  module Types
+    class Base
+      def cast: (untyped _value) -> bot
+    end
+
+    class Boolean < Base
+      TRUE_VALUES: Set[::String]
+      FALSE_VALUES: Set[::String]
+
+      def cast: (::String | nil) -> ValueResult
+    end
+
+    class Float < Base
+      DEFAULT_CONSTRAINT: ^(::Float) -> true
+
+      @constraint: ^(::Float) -> boolish
+
+      def initialize: (?constraint: ^(::Float) -> boolish) -> void
+
+      def cast: (::String | nil) -> ValueResult
+    end
+
+    class Integer < Base
+      DEFAULT_CONSTRAINT: ^(::Integer) -> true
+
+      @constraint: ^(::Integer) -> boolish
+
+      def initialize: (?constraint: ^(::Integer) -> boolish) -> void
+
+      def cast: (::String | nil) -> ValueResult
+    end
+
+    module Literal
+      def cast: (untyped value) -> ValueResult
+        | (untyped value) -> ValueResult
+        | (untyped value) -> ValueResult
+        | (untyped value) -> ValueResult
+        | (untyped value) -> ValueResult
+    end
+
+    class Optional < Base
+      @type: Boolean | Float | Integer | String | Time | Literal
+
+      def initialize: (declarable) -> void
+
+      def cast: (::String | nil) -> ValueResult
+    end
+
+    class String < Base
+      @within: Range[untyped] | nil
+
+      def initialize: (?within: Range[untyped] | nil) -> void
+
+      def cast: (::String | nil) -> ValueResult
+    end
+
+    class Time < Base
+      @format: ::String
+
+      def initialize: (?format: ::String) -> void
+
+      def cast: (::String | nil) -> ValueResult
+    end
+
+    class Union < Base
+      @types: Array[untyped]
+
+      def initialize: (untyped `type`, *untyped types) -> void
+
+      def cast: (::String | nil) -> untyped
+    end
+  end
+
+  class Let
+    @picked: Hash[untyped, untyped]
+
+    attr_reader types: Hash[column, [declarable, ^(casted) -> untyped | nil]]
+    attr_reader headers: bool
+    attr_reader pickers: Hash[untyped, Proc]
+
+    def initialize: -> void
+
+    def let: (::String | column, declarable, *declarable) -> void
+      | (::String | column, declarable, *declarable) { (casted) -> untyped } -> void
+
+    def pick: (column, as: ::Symbol) { (Array[::String]) -> untyped } -> void
+
+    def integer: (**untyped) -> Types::Integer
+
+    def integer?: (**untyped) -> Types::Optional
+
+    def boolean: -> Types::Boolean
+
+    def boolean?: -> Types::Optional
+
+    def float: (**untyped) -> Types::Float
+
+    def float?: (**untyped) -> Types::Optional
+
+    def string: (**untyped) -> Types::String
+
+    def string?: (**untyped) -> Types::Optional
+
+    def time: (**untyped) -> Types::Time
+
+    def time?: (**untyped) -> Types::Optional
+
+    def optional: (*declarable) -> Types::Optional
+
+    private
+
+    def validate_columns: -> bool
+  end
+
+  class Row
+    extend Forwardable
+
+    @values: Hash[column, casted | ::Object | nil]
+
+    attr_reader errors: Hash[column, Array[::String]]
+    attr_reader lineno: ::Integer
+
+    def initialize: (row: Array[::String] | CSV::Row, types: Hash[column, [declarable, (^(casted | ::Object | nil) -> untyped | nil)]], lineno: ::Integer) -> void
+
+    def valid?: -> bool
+  end
+
+  class Error < StandardError
+  end
 end

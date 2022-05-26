@@ -19,7 +19,7 @@ Gem::Specification.new do |spec|
   spec.metadata["changelog_uri"] = "https://github.com/yykamei/strong_csv/blob/main/CHANGELOG.md"
   spec.metadata["rubygems_mfa_required"] = "true"
 
-  spec.files = Dir["lib/**/*", "LICENSE", "README.md"]
+  spec.files = Dir["lib/**/*", "sig/**/*", "LICENSE", "README.md"]
 
   spec.add_dependency "i18n", ">= 1.8.11", "< 2"
 end

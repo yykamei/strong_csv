@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require "test_helper"
+require_relative "test_helper"
 
 class LetTest < Minitest::Test
   def test_initialize
@@ -28,6 +28,7 @@ class LetTest < Minitest::Test
   end
 
   def test_initialize_raises_with_non_compatible_keys
+    skip "We cannot test this case with rbs/test/setup enabled"
     assert_raises TypeError do
       StrongCSV::Let.new.let(nil, 123)
     end
