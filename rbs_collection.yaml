@@ -13,3 +13,5 @@ gems:
   - name: forwardable
   - name: set
   - name: time
+  - name: strong_csv
+    ignore: true
