@@ -74,7 +74,7 @@ class StrongCSV
     class Optional < Base
       @type: Boolean | Float | Integer | String | Time | Literal
 
-      def initialize: (Boolean | Float | Integer | String | Time | Literal `type`) -> void
+      def initialize: (declarable) -> void
 
       def cast: (::String | nil) -> ValueResult
     end

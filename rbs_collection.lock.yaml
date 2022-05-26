@@ -22,14 +22,6 @@ gems:
   version: '0'
   source:
     type: stdlib
-- name: activesupport
-  version: '6.0'
-  source:
-    type: git
-    name: ruby/gem_rbs_collection
-    revision: 8e1f19e0c8768b6bac2815fe65a3310298ba400e
-    remote: https://github.com/ruby/gem_rbs_collection.git
-    repo_dir: gems
 - name: ast
   version: '2.4'
   source:
@@ -40,14 +32,6 @@ gems:
     repo_dir: gems
 - name: i18n
   version: '1.10'
-  source:
-    type: git
-    name: ruby/gem_rbs_collection
-    revision: 8e1f19e0c8768b6bac2815fe65a3310298ba400e
-    remote: https://github.com/ruby/gem_rbs_collection.git
-    repo_dir: gems
-- name: listen
-  version: '3.2'
   source:
     type: git
     name: ruby/gem_rbs_collection
@@ -74,27 +58,7 @@ gems:
   version: 2.5.0
   source:
     type: rubygems
-- name: strong_csv
-  version: 0.5.0
-  source:
-    type: rubygems
-- name: monitor
-  version: '0'
-  source:
-    type: stdlib
-- name: date
-  version: '0'
-  source:
-    type: stdlib
-- name: singleton
-  version: '0'
-  source:
-    type: stdlib
 - name: logger
-  version: '0'
-  source:
-    type: stdlib
-- name: mutex_m
   version: '0'
   source:
     type: stdlib
@@ -115,6 +79,10 @@ gems:
   source:
     type: stdlib
 - name: tsort
+  version: '0'
+  source:
+    type: stdlib
+- name: monitor
   version: '0'
   source:
     type: stdlib
