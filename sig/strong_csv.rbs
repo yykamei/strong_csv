@@ -2,7 +2,7 @@
 
 type literals = ::Integer | ::Float | ::Range[untyped] | ::String | ::Regexp
 type declarable = StrongCSV::Types::Base | literals
-type casted = bool | ::Float | ::Integer | ::Range[untyped] | ::String | ::Regexp
+type casted = bool | ::Float | ::Integer | ::Range[untyped] | ::String | ::Regexp | ::Time
 type column = ::Integer | ::Symbol
 
 # Classes

@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class StrongCSV
-  # ValueResult represents a CSV field is valid or not and contains its casted value if it's valid.
+  # ValueResult represents whether a CSV field is valid or not, and contains its casted value if it's valid.
   class ValueResult
     DEFAULT_VALUE = Object.new
     private_constant :DEFAULT_VALUE
@@ -15,11 +15,13 @@ class StrongCSV
       @error_messages = error_messages
     end
 
-    # @return [::Float, ::Integer, ::Object, ::String, ::Range, boolean, ::Time, nil] The casted value if it's valid. Otherwise, returns the original value.
+    # @return [::Float, ::Integer, ::Object, ::String, ::Range, Boolean, ::Time, nil] The casted value if it's valid. Otherwise, returns the original value.
     def value
       success? ? @value : @original_value
     end
 
+    # It returns true if the value is successfully casted.
+    #
     # @return [Boolean]
     def success?
       @error_messages.nil?
