@@ -28,6 +28,9 @@ class StrongCSV
       end
     end
 
+    # It returns true if the row has no errors.
+    #
+    # @return [Boolean]
     def valid?
       @errors.empty?
     end
