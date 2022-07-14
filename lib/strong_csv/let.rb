@@ -89,6 +89,7 @@ class StrongCSV
       Types::String.new(**options)
     end
 
+    # @param options [Hash] See `Types::String#initialize` for more details.
     def string?(**options)
       optional(string(**options))
     end
@@ -98,6 +99,7 @@ class StrongCSV
       Types::Time.new(**options)
     end
 
+    # @param options [Hash] See `Types::Time#initialize` for more details.
     def time?(**options)
       optional(time(**options))
     end
