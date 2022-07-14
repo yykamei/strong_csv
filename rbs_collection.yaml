@@ -15,3 +15,5 @@ gems:
   - name: time
   - name: strong_csv
     ignore: true
+  - name: rbs
+    ignore: true
