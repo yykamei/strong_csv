@@ -9,6 +9,10 @@
 - Update `ValueResult` API docs [\#52](https://github.com/yykamei/strong_csv/pull/52) ([yykamei](https://github.com/yykamei))
 - Add RBS signature [\#49](https://github.com/yykamei/strong_csv/pull/49) ([yykamei](https://github.com/yykamei))
 
+**Merged pull requests:**
+
+- Add YARD tags to `string?` and `time?` [\#54](https://github.com/yykamei/strong_csv/pull/54) ([yykamei](https://github.com/yykamei))
+
 ## [v0.5.0](https://github.com/yykamei/strong_csv/tree/v0.5.0) (2022-05-12)
 
 [Full Changelog](https://github.com/yykamei/strong_csv/compare/v0.4.0...v0.5.0)
