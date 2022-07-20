@@ -20,6 +20,4 @@ Gem::Specification.new do |spec|
   spec.metadata["rubygems_mfa_required"] = "true"
 
   spec.files = Dir["lib/**/*", "sig/**/*", "LICENSE", "README.md"]
-
-  spec.add_dependency "i18n", ">= 1.8.11", "< 2"
 end

@@ -21,10 +21,10 @@ class StrongCSV
         if @constraint.call(float)
           ValueResult.new(value: float, original_value: value)
         else
-          ValueResult.new(original_value: value, error_messages: [I18n.t("strong_csv.float.constraint_error", value: value.inspect, default: :"_strong_csv.float.constraint_error")])
+          ValueResult.new(original_value: value, error_messages: ["`#{value.inspect}` does not satisfy the specified constraint"])
         end
       rescue ArgumentError, TypeError
-        ValueResult.new(original_value: value, error_messages: [I18n.t("strong_csv.float.cant_be_casted", value: value.inspect, default: :"_strong_csv.float.cant_be_casted")])
+        ValueResult.new(original_value: value, error_messages: ["`#{value.inspect}` can't be casted to Float"])
       end
     end
   end
