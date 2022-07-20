@@ -13,10 +13,10 @@ class StrongCSV
           if int == self
             ValueResult.new(value: int, original_value: value)
           else
-            ValueResult.new(original_value: value, error_messages: [I18n.t("strong_csv.literal.integer.unexpected", value: int.inspect, expected: inspect, default: :"_strong_csv.literal.integer.unexpected")])
+            ValueResult.new(original_value: value, error_messages: ["`#{inspect}` is expected, but `#{int.inspect}` was given"])
           end
         rescue ArgumentError, TypeError
-          ValueResult.new(original_value: value, error_messages: [I18n.t("strong_csv.literal.integer.cant_be_casted", value: value.inspect, default: :"_strong_csv.literal.integer.cant_be_casted")])
+          ValueResult.new(original_value: value, error_messages: ["`#{value.inspect}` can't be casted to Integer"])
         end
       end
 
@@ -28,10 +28,10 @@ class StrongCSV
           if float == self
             ValueResult.new(value: float, original_value: value)
           else
-            ValueResult.new(original_value: value, error_messages: [I18n.t("strong_csv.literal.float.unexpected", value: float.inspect, expected: inspect, default: :"_strong_csv.literal.float.unexpected")])
+            ValueResult.new(original_value: value, error_messages: ["`#{inspect}` is expected, but `#{float.inspect}` was given"])
           end
         rescue ArgumentError, TypeError
-          ValueResult.new(original_value: value, error_messages: [I18n.t("strong_csv.literal.float.cant_be_casted", value: value.inspect, default: :"_strong_csv.literal.float.cant_be_casted")])
+          ValueResult.new(original_value: value, error_messages: ["`#{value.inspect}` can't be casted to Float"])
         end
       end
 
@@ -39,7 +39,7 @@ class StrongCSV
         # @param value [Object] Value to be casted to Range
         # @return [ValueResult]
         def cast(value)
-          return ValueResult.new(original_value: value, error_messages: [I18n.t("strong_csv.literal.range.cant_be_casted", value: value.inspect, expected: inspect, default: :"_strong_csv.literal.range.cant_be_casted")]) if value.nil?
+          return ValueResult.new(original_value: value, error_messages: ["`#{value.inspect}` can't be casted to the beginning of `#{inspect}`"]) if value.nil?
 
           casted = case self.begin
                    when ::Float
@@ -54,10 +54,10 @@ class StrongCSV
           if cover?(casted)
             ValueResult.new(value: casted, original_value: value)
           else
-            ValueResult.new(original_value: value, error_messages: [I18n.t("strong_csv.literal.range.out_of_range", value: casted.inspect, range: inspect, default: :"_strong_csv.literal.range.out_of_range")])
+            ValueResult.new(original_value: value, error_messages: ["`#{casted.inspect}` is not within `#{inspect}`"])
           end
         rescue ArgumentError
-          ValueResult.new(original_value: value, error_messages: [I18n.t("strong_csv.literal.range.cant_be_casted", value: value.inspect, expected: inspect, default: :"_strong_csv.literal.range.cant_be_casted")])
+          ValueResult.new(original_value: value, error_messages: ["`#{value.inspect}` can't be casted to the beginning of `#{inspect}`"])
         end
       end
 
@@ -68,7 +68,7 @@ class StrongCSV
           if self == value
             ValueResult.new(value: self, original_value: value)
           else
-            ValueResult.new(original_value: value, error_messages: [I18n.t("strong_csv.literal.string.unexpected", value: value.inspect, expected: inspect, default: :"_strong_csv.literal.string.unexpected")])
+            ValueResult.new(original_value: value, error_messages: ["`#{inspect}` is expected, but `#{value.inspect}` was given"])
           end
         end
       end
@@ -77,12 +77,12 @@ class StrongCSV
         # @param value [Object] Value to be casted to String
         # @return [ValueResult]
         def cast(value)
-          return ValueResult.new(original_value: value, error_messages: [I18n.t("strong_csv.literal.regexp.cant_be_casted", value: value.inspect, default: :"_strong_csv.literal.regexp.cant_be_casted")]) if value.nil?
+          return ValueResult.new(original_value: value, error_messages: ["`#{value.inspect}` can't be casted to String"]) if value.nil?
 
           if self =~ value
             ValueResult.new(value: value, original_value: value)
           else
-            ValueResult.new(original_value: value, error_messages: [I18n.t("strong_csv.literal.regexp.unexpected", value: value.inspect, expected: inspect, default: :"_strong_csv.literal.regexp.unexpected")])
+            ValueResult.new(original_value: value, error_messages: ["`#{value.inspect}` did not match `#{inspect}`"])
           end
         end
       end

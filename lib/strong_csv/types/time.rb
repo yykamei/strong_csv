@@ -15,11 +15,11 @@ class StrongCSV
       # @param value [Object] Value to be casted to Time
       # @return [ValueResult]
       def cast(value)
-        return ValueResult.new(original_value: value, error_messages: [I18n.t("strong_csv.time.cant_be_casted", value: value.inspect, time_format: @format.inspect, default: :"_strong_csv.time.cant_be_casted")]) if value.nil?
+        return ValueResult.new(original_value: value, error_messages: ["`#{value.inspect}` can't be casted to Time with the format `#{@format.inspect}`"]) if value.nil?
 
         ValueResult.new(value: ::Time.strptime(value.to_s, @format), original_value: value)
       rescue ArgumentError
-        ValueResult.new(original_value: value, error_messages: [I18n.t("strong_csv.time.cant_be_casted", value: value.inspect, time_format: @format.inspect, default: :"_strong_csv.time.cant_be_casted")])
+        ValueResult.new(original_value: value, error_messages: ["`#{value.inspect}` can't be casted to Time with the format `#{@format.inspect}`"])
       end
     end
   end
