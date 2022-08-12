@@ -14,7 +14,7 @@ Of course, it depends, but there would be common validation logic for CSV files.
 For example, some columns may have to be integers because of database requirements.
 It would be cumbersome to write such validations always.
 
-strong_json helps you to mitigate such a drudgery by letting you declare desired types beforehand.
+strong_csv helps you to mitigate such a drudgery by letting you declare desired types beforehand.
 
 ## Installation
 
