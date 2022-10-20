@@ -27,15 +27,23 @@ gems:
   source:
     type: git
     name: ruby/gem_rbs_collection
-    revision: 73137fe17c719cf52eaf099d541c0fbd9192500e
+    revision: 96e192a6cb7cad12d89a8923fdab3ab8d6054d0b
     remote: https://github.com/ruby/gem_rbs_collection.git
     repo_dir: gems
+- name: json
+  version: '0'
+  source:
+    type: stdlib
+- name: minitest
+  version: '0'
+  source:
+    type: stdlib
 - name: parallel
   version: '1.20'
   source:
     type: git
     name: ruby/gem_rbs_collection
-    revision: 73137fe17c719cf52eaf099d541c0fbd9192500e
+    revision: 96e192a6cb7cad12d89a8923fdab3ab8d6054d0b
     remote: https://github.com/ruby/gem_rbs_collection.git
     repo_dir: gems
 - name: rainbow
@@ -43,6 +51,10 @@ gems:
   source:
     type: git
     name: ruby/gem_rbs_collection
-    revision: 73137fe17c719cf52eaf099d541c0fbd9192500e
+    revision: 96e192a6cb7cad12d89a8923fdab3ab8d6054d0b
     remote: https://github.com/ruby/gem_rbs_collection.git
     repo_dir: gems
+- name: mutex_m
+  version: '0'
+  source:
+    type: stdlib
