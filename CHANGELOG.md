@@ -1,5 +1,13 @@
 # Changelog
 
+## [Unreleased](https://github.com/yykamei/strong_csv/tree/HEAD)
+
+[Full Changelog](https://github.com/yykamei/strong_csv/compare/v0.7.0...HEAD)
+
+**Merged pull requests:**
+
+- Run `rbs collection update` [\#59](https://github.com/yykamei/strong_csv/pull/59) ([yykamei](https://github.com/yykamei))
+
 ## [v0.7.0](https://github.com/yykamei/strong_csv/tree/v0.7.0) (2022-07-20)
 
 [Full Changelog](https://github.com/yykamei/strong_csv/compare/v0.6.0...v0.7.0)
