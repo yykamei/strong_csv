@@ -40,3 +40,6 @@ Metrics/AbcSize:
 
 Naming/MethodParameterName:
   Enabled: false
+
+Minitest/MultipleAssertions:
+  Enabled: false
