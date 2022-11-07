@@ -7,45 +7,51 @@ class LiteralRangeTest < Minitest::Test
 
   def test_cast_integer_with_integer_literal_range
     value_result = (1...5).cast("4")
+
     assert_instance_of StrongCSV::ValueResult, value_result
-    assert value_result.success?
+    assert_predicate value_result, :success?
     assert_equal 4, value_result.value
   end
 
   def test_cast_float_with_float_literal_range
     value_result = (-1.0...5).cast("-0.999")
+
     assert_instance_of StrongCSV::ValueResult, value_result
-    assert value_result.success?
-    assert_equal(-0.999, value_result.value)
+    assert_predicate value_result, :success?
+    assert_in_delta(-0.999, value_result.value)
   end
 
   def test_cast_string_with_string_literal_range
     value_result = ("a".."z").cast("z")
+
     assert_instance_of StrongCSV::ValueResult, value_result
-    assert value_result.success?
+    assert_predicate value_result, :success?
     assert_equal "z", value_result.value
   end
 
   def test_cast_float_with_integer_literal_range
     value_result = (1..34).cast("1.34")
+
     assert_instance_of StrongCSV::ValueResult, value_result
-    refute value_result.success?
+    refute_predicate value_result, :success?
     assert_equal "1.34", value_result.value
     assert_equal ["`\"1.34\"` can't be casted to the beginning of `1..34`"], value_result.error_messages
   end
 
   def test_cast_out_of_range_integer_with_integer_literal_range
     value_result = (1..34).cast("-1")
+
     assert_instance_of StrongCSV::ValueResult, value_result
-    refute value_result.success?
+    refute_predicate value_result, :success?
     assert_equal "-1", value_result.value
     assert_equal ["`-1` is not within `1..34`"], value_result.error_messages
   end
 
   def test_cast_nil
     value_result = (0..9).cast(nil)
+
     assert_instance_of StrongCSV::ValueResult, value_result
-    refute value_result.success?
+    refute_predicate value_result, :success?
     assert_nil value_result.value
     assert_equal ["`nil` can't be casted to the beginning of `0..9`"], value_result.error_messages
   end
@@ -56,7 +62,7 @@ class LiteralRangeTest < Minitest::Test
     end
     strong_csv.parse("5") do |row|
       assert_instance_of StrongCSV::Row, row
-      assert row.valid?
+      assert_predicate row, :valid?
       assert_equal 5, row[0]
     end
   end
@@ -71,7 +77,7 @@ class LiteralRangeTest < Minitest::Test
     CSV
     strong_csv.parse(data) do |row|
       assert_instance_of StrongCSV::Row, row
-      assert row.valid?
+      assert_predicate row, :valid?
       assert_equal "C", row[:id]
     end
   end

@@ -7,23 +7,26 @@ class LiteralFloatTest < Minitest::Test
 
   def test_cast
     value_result = 123.3.cast("123.3")
+
     assert_instance_of StrongCSV::ValueResult, value_result
-    assert value_result.success?
-    assert_equal 123.3, value_result.value
+    assert_predicate value_result, :success?
+    assert_in_delta(123.3, value_result.value)
   end
 
   def test_cast_unexpected_value
     value_result = 8.0.cast("13")
+
     assert_instance_of StrongCSV::ValueResult, value_result
-    refute value_result.success?
+    refute_predicate value_result, :success?
     assert_equal "13", value_result.value
     assert_equal ["`8.0` is expected, but `13.0` was given"], value_result.error_messages
   end
 
   def test_cast_nil
     value_result = 31.0.cast(nil)
+
     assert_instance_of StrongCSV::ValueResult, value_result
-    refute value_result.success?
+    refute_predicate value_result, :success?
     assert_nil value_result.value
     assert_equal ["`nil` can't be casted to Float"], value_result.error_messages
   end
@@ -34,8 +37,8 @@ class LiteralFloatTest < Minitest::Test
     end
     strong_csv.parse("40.0") do |row|
       assert_instance_of StrongCSV::Row, row
-      assert row.valid?
-      assert_equal 40.0, row[0]
+      assert_predicate row, :valid?
+      assert_in_delta(40.0, row[0])
     end
   end
 
@@ -49,8 +52,8 @@ class LiteralFloatTest < Minitest::Test
     CSV
     strong_csv.parse(data) do |row|
       assert_instance_of StrongCSV::Row, row
-      assert row.valid?
-      assert_equal 4.1, row[:id]
+      assert_predicate row, :valid?
+      assert_in_delta(4.1, row[:id])
     end
   end
 
@@ -64,8 +67,8 @@ class LiteralFloatTest < Minitest::Test
     CSV
     strong_csv.parse(data) do |row|
       assert_instance_of StrongCSV::Row, row
-      assert row.valid?
-      assert_equal(-4.2, row[:id])
+      assert_predicate row, :valid?
+      assert_in_delta(-4.2, row[:id])
     end
   end
 

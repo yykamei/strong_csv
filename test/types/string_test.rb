@@ -12,23 +12,26 @@ class TypesStringTest < Minitest::Test
 
   def test_cast
     value_result = StrongCSV::Types::String.new.cast("-1")
+
     assert_instance_of StrongCSV::ValueResult, value_result
-    assert value_result.success?
+    assert_predicate value_result, :success?
     assert_equal("-1", value_result.value)
   end
 
   def test_cast_out_of_range
     value_result = StrongCSV::Types::String.new(within: 1..4).cast("foo_box")
+
     assert_instance_of StrongCSV::ValueResult, value_result
-    refute value_result.success?
+    refute_predicate value_result, :success?
     assert_equal "foo_box", value_result.value
     assert_equal ["The length of `\"foo_box\"` is out of range `1..4`"], value_result.error_messages
   end
 
   def test_cast_nil
     value_result = StrongCSV::Types::String.new.cast(nil)
+
     assert_instance_of StrongCSV::ValueResult, value_result
-    refute value_result.success?
+    refute_predicate value_result, :success?
     assert_nil value_result.value
     assert_equal ["`nil` can't be casted to String"], value_result.error_messages
   end
@@ -39,7 +42,7 @@ class TypesStringTest < Minitest::Test
     end
     strong_csv.parse("40") do |row|
       assert_instance_of StrongCSV::Row, row
-      assert row.valid?
+      assert_predicate row, :valid?
       assert_equal "40", row[0]
     end
   end
@@ -54,7 +57,7 @@ class TypesStringTest < Minitest::Test
     CSV
     strong_csv.parse(data) do |row|
       assert_instance_of StrongCSV::Row, row
-      assert row.valid?
+      assert_predicate row, :valid?
       assert_equal "4", row[:id]
     end
   end
@@ -69,7 +72,7 @@ class TypesStringTest < Minitest::Test
     CSV
     strong_csv.parse(data) do |row|
       assert_instance_of StrongCSV::Row, row
-      assert row.valid?
+      assert_predicate row, :valid?
       assert_equal("-4", row[:id])
     end
   end
@@ -84,7 +87,7 @@ class TypesStringTest < Minitest::Test
     CSV
     strong_csv.parse(data) do |row|
       assert_instance_of StrongCSV::Row, row
-      refute row.valid?
+      refute_predicate row, :valid?
       assert_equal("abcd", row[:id])
       assert_equal(["The length of `\"abcd\"` is out of range `1..3`"], row.errors[:id])
     end
