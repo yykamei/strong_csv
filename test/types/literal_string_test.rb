@@ -7,23 +7,26 @@ class LiteralStringTest < Minitest::Test
 
   def test_cast
     value_result = "abc".cast("abc")
+
     assert_instance_of StrongCSV::ValueResult, value_result
-    assert value_result.success?
+    assert_predicate value_result, :success?
     assert_equal "abc", value_result.value
   end
 
   def test_cast_unexpected_value
     value_result = "x".cast("13")
+
     assert_instance_of StrongCSV::ValueResult, value_result
-    refute value_result.success?
+    refute_predicate value_result, :success?
     assert_equal "13", value_result.value
     assert_equal ["`\"x\"` is expected, but `\"13\"` was given"], value_result.error_messages
   end
 
   def test_cast_nil
     value_result = "😇".cast(nil)
+
     assert_instance_of StrongCSV::ValueResult, value_result
-    refute value_result.success?
+    refute_predicate value_result, :success?
     assert_nil value_result.value
     assert_equal ["`\"😇\"` is expected, but `nil` was given"], value_result.error_messages
   end

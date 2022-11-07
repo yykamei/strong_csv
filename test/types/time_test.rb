@@ -5,8 +5,9 @@ require_relative "../test_helper"
 class TypesTimeTest < Minitest::Test
   def test_cast
     value_result = StrongCSV::Types::Time.new.cast("2022-05-03T12:34:28-05:00")
+
     assert_instance_of StrongCSV::ValueResult, value_result
-    assert value_result.success?
+    assert_predicate value_result, :success?
     assert_equal 2022, value_result.value.year
     assert_equal 5, value_result.value.month
     assert_equal 3, value_result.value.day
@@ -14,24 +15,27 @@ class TypesTimeTest < Minitest::Test
 
   def test_cast_time_with_format
     value_result = StrongCSV::Types::Time.new(format: "%H:%M").cast("14:38")
+
     assert_instance_of StrongCSV::ValueResult, value_result
-    assert value_result.success?
+    assert_predicate value_result, :success?
     assert_equal 14, value_result.value.hour
     assert_equal 38, value_result.value.min
   end
 
   def test_cast_unexpected_value
     value_result = StrongCSV::Types::Time.new(format: "%B").cast("foo")
+
     assert_instance_of StrongCSV::ValueResult, value_result
-    refute value_result.success?
+    refute_predicate value_result, :success?
     assert_equal "foo", value_result.value
     assert_equal ["`\"foo\"` can't be casted to Time with the format `\"%B\"`"], value_result.error_messages
   end
 
   def test_cast_nil
     value_result = StrongCSV::Types::Time.new.cast(nil)
+
     assert_instance_of StrongCSV::ValueResult, value_result
-    refute value_result.success?
+    refute_predicate value_result, :success?
     assert_nil value_result.value
     assert_equal ["`nil` can't be casted to Time with the format `\"%Y-%m-%d\"`"], value_result.error_messages
   end
@@ -42,7 +46,7 @@ class TypesTimeTest < Minitest::Test
     end
     strong_csv.parse("2022-05-16") do |row|
       assert_instance_of StrongCSV::Row, row
-      assert row.valid?
+      assert_predicate row, :valid?
       assert_in_delta Time.new(2022, 5, 16), row[0], 1
     end
   end
@@ -57,7 +61,7 @@ class TypesTimeTest < Minitest::Test
     CSV
     strong_csv.parse(data) do |row|
       assert_instance_of StrongCSV::Row, row
-      assert row.valid?
+      assert_predicate row, :valid?
       assert_in_delta Time.new(2022, 5, 16), row[:id], 1
     end
   end
@@ -72,7 +76,7 @@ class TypesTimeTest < Minitest::Test
     CSV
     strong_csv.parse(data) do |row|
       assert_instance_of StrongCSV::Row, row
-      refute row.valid?
+      refute_predicate row, :valid?
       assert_equal("123", row[:id])
       assert_equal(["`\"123\"` can't be casted to Time with the format `\"%H:%M\"`"], row.errors[:id])
     end

@@ -7,23 +7,26 @@ class LiteralRegexpTest < Minitest::Test
 
   def test_cast
     value_result = /\Aabc/.cast("abc!!!")
+
     assert_instance_of StrongCSV::ValueResult, value_result
-    assert value_result.success?
+    assert_predicate value_result, :success?
     assert_equal "abc!!!", value_result.value
   end
 
   def test_cast_unexpected_value
     value_result = /\A\d+\z/.cast("1df3")
+
     assert_instance_of StrongCSV::ValueResult, value_result
-    refute value_result.success?
+    refute_predicate value_result, :success?
     assert_equal "1df3", value_result.value
     assert_equal ["`\"1df3\"` did not match `/\\A\\d+\\z/`"], value_result.error_messages
   end
 
   def test_cast_nil
     value_result = /abc/.cast(nil)
+
     assert_instance_of StrongCSV::ValueResult, value_result
-    refute value_result.success?
+    refute_predicate value_result, :success?
     assert_nil value_result.value
     assert_equal ["`nil` can't be casted to String"], value_result.error_messages
   end

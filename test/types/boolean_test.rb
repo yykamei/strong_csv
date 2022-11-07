@@ -5,23 +5,26 @@ require_relative "../test_helper"
 class TypesBooleanTest < Minitest::Test
   def test_cast
     value_result = StrongCSV::Types::Boolean.new.cast("True")
+
     assert_instance_of StrongCSV::ValueResult, value_result
-    assert value_result.success?
+    assert_predicate value_result, :success?
     assert value_result.value
   end
 
   def test_cast_unexpected_value
     value_result = StrongCSV::Types::Boolean.new.cast("1.3")
+
     assert_instance_of StrongCSV::ValueResult, value_result
-    refute value_result.success?
+    refute_predicate value_result, :success?
     assert_equal "1.3", value_result.value
     assert_equal ['`"1.3"` can\'t be casted to Boolean'], value_result.error_messages
   end
 
   def test_cast_nil
     value_result = StrongCSV::Types::Boolean.new.cast(nil)
+
     assert_instance_of StrongCSV::ValueResult, value_result
-    refute value_result.success?
+    refute_predicate value_result, :success?
     assert_nil value_result.value
     assert_equal ["`nil` can't be casted to Boolean"], value_result.error_messages
   end
@@ -29,10 +32,12 @@ class TypesBooleanTest < Minitest::Test
   def test_cast_with_all_possible_values
     %w[true TRUE True].each do |value|
       value_result = StrongCSV::Types::Boolean.new.cast(value)
+
       assert value_result.value
     end
     %w[false FALSE False].each do |value|
       value_result = StrongCSV::Types::Boolean.new.cast(value)
+
       refute value_result.value
     end
   end
@@ -44,7 +49,7 @@ class TypesBooleanTest < Minitest::Test
     end
     strong_csv.parse("True,FALSE") do |row|
       assert_instance_of StrongCSV::Row, row
-      assert row.valid?
+      assert_predicate row, :valid?
       assert row[0]
       refute row[1]
     end
@@ -60,7 +65,7 @@ class TypesBooleanTest < Minitest::Test
     CSV
     strong_csv.parse(data) do |row|
       assert_instance_of StrongCSV::Row, row
-      assert row.valid?
+      assert_predicate row, :valid?
       refute row[:id]
     end
   end
