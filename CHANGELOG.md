@@ -6,6 +6,7 @@
 
 **Merged pull requests:**
 
+- Update rbs collection [\#62](https://github.com/yykamei/strong_csv/pull/62) ([yykamei](https://github.com/yykamei))
 - Run `rbs collection update` [\#59](https://github.com/yykamei/strong_csv/pull/59) ([yykamei](https://github.com/yykamei))
 
 ## [v0.7.0](https://github.com/yykamei/strong_csv/tree/v0.7.0) (2022-07-20)
