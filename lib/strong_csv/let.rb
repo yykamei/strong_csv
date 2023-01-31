@@ -13,7 +13,7 @@ class StrongCSV
     attr_reader :pickers
 
     def initialize
-      @types = {}
+      @types = []
       @headers = false
       @pickers = {}
       @picked = {}
@@ -22,13 +22,13 @@ class StrongCSV
     # @param name [String, Symbol, Integer]
     # @param type [StrongCSV::Type::Base]
     # @param types [Array<StrongCSV::Type::Base>]
-    def let(name, type, *types, &block)
+    def let(name, type, *types, error_message: nil, &block)
       type = types.empty? ? type : Types::Union.new(type, *types)
       case name
       when ::Integer
-        @types[name] = [type, block]
+        @types << TypeWrapper.new(name: name, type: type, block: block, error_message: error_message)
       when ::String, ::Symbol
-        @types[name.to_sym] = [type, block]
+        @types << TypeWrapper.new(name: name.to_sym, type: type, block: block, error_message: error_message)
       else
         raise TypeError, "Invalid type specified for `name`. `name` must be String, Symbol, or Integer: #{name.inspect}"
       end
@@ -112,12 +112,12 @@ class StrongCSV
     private
 
     def validate_columns
-      if @types.keys.all? { |k| k.is_a?(Integer) }
+      if @types.all? { |t| t.name.is_a?(Integer) }
         @headers = false
-      elsif @types.keys.all? { |k| k.is_a?(Symbol) }
+      elsif @types.all? { |k| k.name.is_a?(Symbol) }
         @headers = true
       else
-        raise ArgumentError, "`types` cannot be mixed with Integer and Symbol keys: #{@types.keys.inspect}"
+        raise ArgumentError, "`types` cannot be mixed with Integer and Symbol keys: #{@types.map(&:name).inspect}"
       end
     end
   end

@@ -8,7 +8,7 @@ class LetTest < Minitest::Test
     let.let(:abc, 123)
     let.let(:xyz, 243)
 
-    assert_equal({ abc: [123, nil], xyz: [243, nil] }, let.types)
+    assert_equal [StrongCSV::TypeWrapper.new(name: :abc, type: 123), StrongCSV::TypeWrapper.new(name: :xyz, type: 243)], let.types
     assert let.headers
   end
 
@@ -17,7 +17,7 @@ class LetTest < Minitest::Test
     let.let("abc", 123)
     let.let("xyz", 243)
 
-    assert_equal({ abc: [123, nil], xyz: [243, nil] }, let.types)
+    assert_equal [StrongCSV::TypeWrapper.new(name: :abc, type: 123), StrongCSV::TypeWrapper.new(name: :xyz, type: 243)], let.types
     assert let.headers
   end
 
@@ -26,7 +26,7 @@ class LetTest < Minitest::Test
     let.let(0, 123)
     let.let(1, 89)
 
-    assert_equal({ 0 => [123, nil], 1 => [89, nil] }, let.types)
+    assert_equal [StrongCSV::TypeWrapper.new(name: 0, type: 123), StrongCSV::TypeWrapper.new(name: 1, type: 89)], let.types
     refute let.headers
   end
 
@@ -49,8 +49,8 @@ class LetTest < Minitest::Test
     let = StrongCSV::Let.new
     let.let(:id, "abc") { |v| v }
 
-    assert_equal "abc", let.types[:id][0]
-    assert_instance_of Proc, let.types[:id][1]
+    assert_equal "abc", let.types[0].type
+    assert_instance_of Proc, let.types[0].block
     assert let.headers
   end
 
@@ -58,9 +58,16 @@ class LetTest < Minitest::Test
     let = StrongCSV::Let.new
     let.let(:id, 10..50, StrongCSV::Types::Boolean.new) { |v| v }
 
-    assert_instance_of StrongCSV::Types::Union, let.types[:id][0]
-    assert_instance_of Proc, let.types[:id][1]
+    assert_instance_of StrongCSV::Types::Union, let.types[0].type
+    assert_instance_of Proc, let.types[0].block
     assert let.headers
+  end
+
+  def test_error_message_via_let
+    let = StrongCSV::Let.new
+    let.let(0, "book", error_message: "My custom error message")
+
+    assert_equal "My custom error message", let.types[0].error_message
   end
 
   def test_integer

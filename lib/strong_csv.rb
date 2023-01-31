@@ -16,6 +16,7 @@ require_relative "strong_csv/types/optional"
 require_relative "strong_csv/types/string"
 require_relative "strong_csv/types/time"
 require_relative "strong_csv/types/union"
+require_relative "strong_csv/type_wrapper"
 require_relative "strong_csv/let"
 require_relative "strong_csv/row"
 

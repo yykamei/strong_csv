@@ -107,14 +107,13 @@ class StrongCSV
   class Let
     @picked: Hash[untyped, untyped]
 
-    attr_reader types: Hash[column, [declarable, ^(casted) -> untyped | nil]]
+    attr_reader types: Array[TypeWrapper]
     attr_reader headers: bool
     attr_reader pickers: Hash[untyped, Proc]
 
     def initialize: -> void
 
-    def let: (::String | column, declarable, *declarable) -> void
-      | (::String | column, declarable, *declarable) { (casted) -> untyped } -> void
+    def let: (::String | column, declarable, *declarable, ?error_message: ::String?) ?{ (casted) -> untyped } -> void
 
     def pick: (column, as: ::Symbol) { (Array[::String]) -> untyped } -> void
 
@@ -153,9 +152,18 @@ class StrongCSV
     attr_reader errors: Hash[column, Array[::String]]
     attr_reader lineno: ::Integer
 
-    def initialize: (row: Array[::String] | CSV::Row, types: Hash[column, [declarable, (^(casted | ::Object | nil) -> untyped | nil)]], lineno: ::Integer) -> void
+    def initialize: (row: Array[::String] | CSV::Row, types: Array[TypeWrapper], lineno: ::Integer) -> void
 
     def valid?: -> bool
+  end
+
+  class TypeWrapper
+    attr_accessor name: (::Symbol | ::Integer)
+    attr_accessor type: declarable
+    attr_accessor error_message: (::String | nil)
+    attr_accessor block: (^(casted | ::Object | nil) -> untyped | nil)
+
+    def cast: (::String | nil) -> [(casted | ::Object | nil), (::String | nil)]
   end
 
   class Error < StandardError

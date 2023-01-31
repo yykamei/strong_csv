@@ -61,6 +61,7 @@ strong_csv = StrongCSV.new do
   let :description, string?(within: 1..1000)
   let :active, boolean
   let :started_at, time?(format: "%Y-%m-%dT%H:%M:%S")
+  let :price, integer, error_message: "This should be Integer"
 
   # Literal declaration
   let :status, 0..6
@@ -91,8 +92,8 @@ strong_csv = StrongCSV.new do
 end
 
 data = <<~CSV
-  stock,tax_rate,name,active,status,priority,size,url
-  12,0.8,special item,True,4,20,M,https://example.com
+  stock,tax_rate,name,active,status,priority,size,url,price
+  12,0.8,special item,True,4,20,M,https://example.com,PRICE
 CSV
 
 strong_csv.parse(data, field_size_limit: 2048) do |row|
@@ -101,7 +102,7 @@ strong_csv.parse(data, field_size_limit: 2048) do |row|
     row[:active] # => true
     # do something with row
   else
-    row.errors # => { user_id: ["`nil` can't be casted to Integer"] }
+    row.errors # => {:price=>["This should be Integer"], :user_id=>["`nil` can't be casted to Integer"]}
     # do something with row.errors
   end
 end
