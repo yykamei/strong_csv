@@ -4,7 +4,6 @@ class StrongCSV
   # Row is a representation of a row in a CSV file, which has casted values with specified types.
   class Row
     extend Forwardable
-    using Types::Literal
 
     def_delegators :@values, :[], :fetch, :slice
 
@@ -21,10 +20,10 @@ class StrongCSV
       @values = {}
       @errors = {}
       @lineno = lineno
-      types.each do |key, (type, block)|
-        value_result = type.cast(row[key])
-        @values[key] = block && value_result.success? ? block.call(value_result.value) : value_result.value
-        @errors[key] = value_result.error_messages unless value_result.success?
+      types.each do |wrapper|
+        cell = row[wrapper.name]
+        @values[wrapper.name], error = wrapper.cast(cell)
+        @errors[wrapper.name] = error if error
       end
     end
 

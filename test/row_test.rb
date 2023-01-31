@@ -4,7 +4,11 @@ require_relative "test_helper"
 
 class RowTest < Minitest::Test
   def test_row_initialize_without_headers
-    row = StrongCSV::Row.new(row: %w[50 88], types: { 0 => [StrongCSV::Types::Integer.new, nil], 1 => [StrongCSV::Types::Integer.new, nil] }, lineno: 3)
+    types = [
+      StrongCSV::TypeWrapper.new(name: 0, type: StrongCSV::Types::Integer.new),
+      StrongCSV::TypeWrapper.new(name: 1, type: StrongCSV::Types::Integer.new)
+    ]
+    row = StrongCSV::Row.new(row: %w[50 88], types: types, lineno: 3)
 
     assert_predicate row, :valid?
     assert_equal 50, row[0]
@@ -14,7 +18,11 @@ class RowTest < Minitest::Test
 
   def test_row_initialize_with_headers
     csv_row = CSV::Row.new(%i[abc xyz], %w[34 91])
-    row = StrongCSV::Row.new(row: csv_row, types: { abc: [StrongCSV::Types::Integer.new, nil], xyz: [StrongCSV::Types::Integer.new, nil] }, lineno: 2)
+    types = [
+      StrongCSV::TypeWrapper.new(name: :abc, type: StrongCSV::Types::Integer.new),
+      StrongCSV::TypeWrapper.new(name: :xyz, type: StrongCSV::Types::Integer.new)
+    ]
+    row = StrongCSV::Row.new(row: csv_row, types: types, lineno: 2)
 
     assert_predicate row, :valid?
     assert_equal 34, row[:abc]
@@ -23,7 +31,11 @@ class RowTest < Minitest::Test
   end
 
   def test_row_forwardable
-    row = StrongCSV::Row.new(row: %w[☕️ 12.0], types: { 0 => [StrongCSV::Types::String.new, nil], 1 => [StrongCSV::Types::Float.new, nil] }, lineno: 3)
+    types = [
+      StrongCSV::TypeWrapper.new(name: 0, type: StrongCSV::Types::String.new),
+      StrongCSV::TypeWrapper.new(name: 1, type: StrongCSV::Types::Float.new)
+    ]
+    row = StrongCSV::Row.new(row: %w[☕️ 12.0], types: types, lineno: 3)
 
     assert_equal({ 0 => "☕️", 1 => 12.0 }, row.slice(0, 1))
     assert_equal "☕️", row[0]
@@ -32,16 +44,36 @@ class RowTest < Minitest::Test
 
   def test_row_with_invalid_data
     csv_row = CSV::Row.new(%i[abc], %w[abc!])
-    row = StrongCSV::Row.new(row: csv_row, types: { abc: [StrongCSV::Types::Integer.new, nil], x: [StrongCSV::Types::Integer.new, nil] }, lineno: 2)
+    types = [
+      StrongCSV::TypeWrapper.new(name: :abc, type: StrongCSV::Types::Integer.new),
+      StrongCSV::TypeWrapper.new(name: :x, type: StrongCSV::Types::Integer.new)
+    ]
+    row = StrongCSV::Row.new(row: csv_row, types: types, lineno: 2)
 
     refute_predicate row, :valid?
     assert_equal "abc!", row[:abc]
     assert_equal({ abc: ["`\"abc!\"` can't be casted to Integer"], x: ["`nil` can't be casted to Integer"] }, row.errors)
   end
 
+  def test_row_with_invalid_data_with_error_message
+    csv_row = CSV::Row.new(%i[abc], %w[abc!])
+    types = [
+      StrongCSV::TypeWrapper.new(name: :abc, type: StrongCSV::Types::Integer.new, error_message: "😡"),
+      StrongCSV::TypeWrapper.new(name: :x, type: StrongCSV::Types::Float.new)
+    ]
+    row = StrongCSV::Row.new(row: csv_row, types: types, lineno: 2)
+
+    refute_predicate row, :valid?
+    assert_equal "abc!", row[:abc]
+    assert_equal({ abc: ["😡"], x: ["`nil` can't be casted to Float"] }, row.errors)
+  end
+
   def test_row_with_invalid_data_lacking_headers
     csv_row = CSV::Row.new(%i[abc], %w[abc!])
-    row = StrongCSV::Row.new(row: csv_row, types: { xyz: [StrongCSV::Types::Integer.new, nil] }, lineno: 2)
+    types = [
+      StrongCSV::TypeWrapper.new(name: :xyz, type: StrongCSV::Types::Integer.new)
+    ]
+    row = StrongCSV::Row.new(row: csv_row, types: types, lineno: 2)
 
     refute_predicate row, :valid?
     assert_raises KeyError do
@@ -53,7 +85,11 @@ class RowTest < Minitest::Test
 
   def test_row_access_values
     csv_row = CSV::Row.new(%i[abc xyz], %w[34 91])
-    row = StrongCSV::Row.new(row: csv_row, types: { abc: [StrongCSV::Types::Integer.new, nil], xyz: [StrongCSV::Types::Integer.new, nil] }, lineno: 2)
+    types = [
+      StrongCSV::TypeWrapper.new(name: :abc, type: StrongCSV::Types::Integer.new),
+      StrongCSV::TypeWrapper.new(name: :xyz, type: StrongCSV::Types::Integer.new)
+    ]
+    row = StrongCSV::Row.new(row: csv_row, types: types, lineno: 2)
 
     assert_predicate row, :valid?
     assert_equal 34, row[:abc]
@@ -67,7 +103,11 @@ class RowTest < Minitest::Test
 
   def test_block
     csv_row = CSV::Row.new(%i[abc xyz], %w[34 false])
-    row = StrongCSV::Row.new(row: csv_row, types: { abc: [StrongCSV::Types::Integer.new, nil], xyz: [StrongCSV::Types::Boolean.new, ->(v) { v ? "🎉" : "🤔" }] }, lineno: 2)
+    types = [
+      StrongCSV::TypeWrapper.new(name: :abc, type: StrongCSV::Types::Integer.new),
+      StrongCSV::TypeWrapper.new(name: :xyz, type: StrongCSV::Types::Boolean.new, block: ->(v) { v ? "🎉" : "🤔" })
+    ]
+    row = StrongCSV::Row.new(row: csv_row, types: types, lineno: 2)
 
     assert_predicate row, :valid?
     assert_equal 34, row[:abc]
@@ -76,7 +116,11 @@ class RowTest < Minitest::Test
 
   def test_block_without_calling_due_to_error
     csv_row = CSV::Row.new(%i[abc xyz], %w[34 NO])
-    row = StrongCSV::Row.new(row: csv_row, types: { abc: [StrongCSV::Types::Integer.new, ->(v) { v > 30 ? "🍔" : "😇" }], xyz: [StrongCSV::Types::Boolean.new, ->(v) { v ? "🎉" : "🤔" }] }, lineno: 2)
+    types = [
+      StrongCSV::TypeWrapper.new(name: :abc, type: StrongCSV::Types::Integer.new, block: ->(v) { v > 30 ? "🍔" : "😇" }),
+      StrongCSV::TypeWrapper.new(name: :xyz, type: StrongCSV::Types::Boolean.new, block: ->(v) { v ? "🎉" : "🤔" })
+    ]
+    row = StrongCSV::Row.new(row: csv_row, types: types, lineno: 2)
 
     refute_predicate row, :valid?
     assert_equal "🍔", row[:abc]
