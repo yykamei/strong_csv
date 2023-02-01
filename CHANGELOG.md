@@ -4,6 +4,10 @@
 
 [Full Changelog](https://github.com/yykamei/strong_csv/compare/v0.7.0...HEAD)
 
+**Implemented enhancements:**
+
+- Support :error\_message on \#let [\#66](https://github.com/yykamei/strong_csv/pull/66) ([yykamei](https://github.com/yykamei))
+
 **Merged pull requests:**
 
 - Update rbs collection [\#62](https://github.com/yykamei/strong_csv/pull/62) ([yykamei](https://github.com/yykamei))
