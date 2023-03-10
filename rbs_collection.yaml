@@ -11,7 +11,6 @@ path: .gem_rbs_collection
 gems:
   - name: csv
   - name: forwardable
-  - name: set
   - name: time
   - name: strong_csv
     ignore: true
