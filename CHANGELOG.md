@@ -1,8 +1,8 @@
 # Changelog
 
-## [Unreleased](https://github.com/yykamei/strong_csv/tree/HEAD)
+## [v0.8.0](https://github.com/yykamei/strong_csv/tree/v0.8.0) (2023-03-20)
 
-[Full Changelog](https://github.com/yykamei/strong_csv/compare/v0.7.0...HEAD)
+[Full Changelog](https://github.com/yykamei/strong_csv/compare/v0.7.0...v0.8.0)
 
 **Implemented enhancements:**
 
