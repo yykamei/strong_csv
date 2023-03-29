@@ -16,10 +16,6 @@ jobs:
         with:
           token: ${{ secrets.PAT_FOR_RELEASE }}
 
-      - uses: yykamei/actions-update-changelog@main
-        with:
-          future-release: v${{ github.event.inputs.version }}
-
       - uses: ruby/setup-ruby@v1
         with:
           ruby-version: '3'
