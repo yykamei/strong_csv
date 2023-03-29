@@ -48,5 +48,5 @@ jobs:
       - uses: yykamei/actions-release-actions@main
         with:
           tag: v${{ github.event.inputs.version }}
-          title: v${{ github.event.inputs.version }}
+          overwrite-major-minor: 'false'
           apply: ${{ github.event.inputs.apply }}
