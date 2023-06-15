@@ -21,6 +21,21 @@ require_relative "strong_csv/let"
 require_relative "strong_csv/row"
 
 # StrongCSV is a library for parsing CSV contents with type checking.
+#
+# @example
+#   strong_csv = StrongCSV.new do
+#     let :name, string(within: 1..255)
+#     let :score, integer
+#   end
+#
+#   result = strong_csv.parse(<<~CSV)
+#     name,score
+#     JJ,X
+#     Tomo,23
+#     Haru,9
+#   CSV
+#   result.map(&:valid?) # => [false, true, true]
+#
 class StrongCSV
   class Error < StandardError; end
 
