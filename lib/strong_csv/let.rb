@@ -23,7 +23,7 @@ class StrongCSV
     # @param type [StrongCSV::Type::Base]
     # @param types [Array<StrongCSV::Type::Base>]
     def let(name, type, *types, error_message: nil, &block)
-      type = types.empty? ? type : Types::Union.new(type, *types)
+      type = Types::Union.new(type, *types) unless types.empty?
       case name
       when ::Integer
         @types << TypeWrapper.new(name: name, type: type, block: block, error_message: error_message)
