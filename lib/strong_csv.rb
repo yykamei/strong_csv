@@ -62,7 +62,7 @@ class StrongCSV
         yield Row.new(row: row, types: @let.types, lineno: csv.lineno)
       end
     else
-      csv.each.map { |row| Row.new(row: row, types: @let.types, lineno: csv.lineno) }
+      csv.map { |row| Row.new(row: row, types: @let.types, lineno: csv.lineno) }
     end
   end
 end
