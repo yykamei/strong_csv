@@ -2,7 +2,7 @@
 sources:
 - type: git
   name: ruby/gem_rbs_collection
-  revision: 87fba082504c606c03edf724cdf2e119bcd46c8c
+  revision: 5666e737d2b27a8425b4e3855c1a38cae54989f7
   remote: https://github.com/ruby/gem_rbs_collection.git
   repo_dir: gems
 path: ".gem_rbs_collection"
@@ -12,7 +12,7 @@ gems:
   source:
     type: git
     name: ruby/gem_rbs_collection
-    revision: 7765c1821affc50f5b09fda8fba3a7c9b429b216
+    revision: 5666e737d2b27a8425b4e3855c1a38cae54989f7
     remote: https://github.com/ruby/gem_rbs_collection.git
     repo_dir: gems
 - name: csv
@@ -40,7 +40,7 @@ gems:
   source:
     type: git
     name: ruby/gem_rbs_collection
-    revision: 7765c1821affc50f5b09fda8fba3a7c9b429b216
+    revision: 5666e737d2b27a8425b4e3855c1a38cae54989f7
     remote: https://github.com/ruby/gem_rbs_collection.git
     repo_dir: gems
 - name: rainbow
@@ -48,7 +48,7 @@ gems:
   source:
     type: git
     name: ruby/gem_rbs_collection
-    revision: 7765c1821affc50f5b09fda8fba3a7c9b429b216
+    revision: 5666e737d2b27a8425b4e3855c1a38cae54989f7
     remote: https://github.com/ruby/gem_rbs_collection.git
     repo_dir: gems
 - name: time
