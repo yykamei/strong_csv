@@ -42,7 +42,7 @@ jobs:
 
       - run: bundle exec rubocop --debug
 
-      - uses: github/super-linter@v5
+      - uses: super-linter/super-linter@v5
         env:
           VALIDATE_RUBY: "false"
           VALIDATE_JSCPD: "false"
