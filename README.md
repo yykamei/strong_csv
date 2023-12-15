@@ -109,7 +109,9 @@ end
 ```
 
 You can also define types without CSV headers by specifying column numbers.
-Note the numbers must start from `0` (zero-based index).
+
+> [!NOTE]
+> The numbers must start from `0` (zero-based index).
 
 ```ruby
 StrongCSV.new do
