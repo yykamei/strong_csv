@@ -6,6 +6,8 @@ on:
   workflow_dispatch:
   schedule:
     - cron: "0 10 * * *"
+permissions:
+  contents: read
 jobs:
   test:
     name: Test on Ruby ${{ matrix.ruby }}
