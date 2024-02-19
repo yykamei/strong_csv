@@ -1,3 +1,5 @@
 quiet: true
 skip-check:
   - CKV_GHA_7
+skip-path:
+  - "vendor/"
