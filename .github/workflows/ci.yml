@@ -53,3 +53,4 @@ jobs:
           VALIDATE_RUBY: "false"
           VALIDATE_JSCPD: "false"
           VALIDATE_NATURAL_LANGUAGE: "false"
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
