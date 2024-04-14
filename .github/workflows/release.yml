@@ -17,9 +17,15 @@ jobs:
       contents: write
       id-token: write
     steps:
+      - uses: actions/create-github-app-token@v1
+        id: app-token
+        with:
+          app-id: ${{ vars.APP_ID }}
+          private-key: ${{ secrets.PRIVATE_KEY }}
+
       - uses: actions/checkout@v4
         with:
-          token: ${{ secrets.PAT_FOR_RELEASE }}
+          token: ${{ steps.app-token.outputs.token }}
 
       - uses: rubygems/configure-rubygems-credentials@v1.0.0
 
@@ -52,6 +58,7 @@ jobs:
 
       - uses: yykamei/actions-release-actions@main
         with:
+          token: ${{ steps.app-token.outputs.token }}
           tag: v${{ github.event.inputs.version }}
           overwrite-major-minor: 'false'
           apply: ${{ github.event.inputs.apply }}
