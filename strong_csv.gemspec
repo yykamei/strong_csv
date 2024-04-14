@@ -15,7 +15,6 @@ Gem::Specification.new do |spec|
   spec.required_ruby_version = ">= 2.5.5" # rubocop:disable Gemspec/RequiredRubyVersion
 
   spec.metadata["homepage_uri"] = spec.homepage
-  spec.metadata["source_code_uri"] = spec.homepage
   spec.metadata["rubygems_mfa_required"] = "true"
 
   spec.files = Dir["lib/**/*", "sig/**/*", "LICENSE", "README.md"]
