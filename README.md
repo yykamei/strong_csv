@@ -66,7 +66,7 @@ strong_csv = StrongCSV.new do
   # Literal declaration
   let :status, 0..6
   let :priority, 10, 20, 30, 40, 50
-  let :size, "S", "M", "L" do |value|
+  let :size, "S", "M", "L" do |value| # The input must be one of "S", "M", or "L", and it will be casted as the returned value of the block.
     case value
     when "S"
       1
