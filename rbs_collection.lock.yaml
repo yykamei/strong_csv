@@ -6,7 +6,7 @@ gems:
   source:
     type: git
     name: ruby/gem_rbs_collection
-    revision: 5666e737d2b27a8425b4e3855c1a38cae54989f7
+    revision: 218cf130d31f63e110e350efc3fa265311b0f238
     remote: https://github.com/ruby/gem_rbs_collection.git
     repo_dir: gems
 - name: csv
@@ -38,7 +38,7 @@ gems:
   source:
     type: git
     name: ruby/gem_rbs_collection
-    revision: 5666e737d2b27a8425b4e3855c1a38cae54989f7
+    revision: 218cf130d31f63e110e350efc3fa265311b0f238
     remote: https://github.com/ruby/gem_rbs_collection.git
     repo_dir: gems
 - name: parser
@@ -46,7 +46,7 @@ gems:
   source:
     type: git
     name: ruby/gem_rbs_collection
-    revision: c34ed02f870fb02571f664062eb13ef507702029
+    revision: 218cf130d31f63e110e350efc3fa265311b0f238
     remote: https://github.com/ruby/gem_rbs_collection.git
     repo_dir: gems
 - name: rainbow
@@ -54,7 +54,7 @@ gems:
   source:
     type: git
     name: ruby/gem_rbs_collection
-    revision: 5666e737d2b27a8425b4e3855c1a38cae54989f7
+    revision: 218cf130d31f63e110e350efc3fa265311b0f238
     remote: https://github.com/ruby/gem_rbs_collection.git
     repo_dir: gems
 - name: rake
@@ -62,7 +62,7 @@ gems:
   source:
     type: git
     name: ruby/gem_rbs_collection
-    revision: c34ed02f870fb02571f664062eb13ef507702029
+    revision: 218cf130d31f63e110e350efc3fa265311b0f238
     remote: https://github.com/ruby/gem_rbs_collection.git
     repo_dir: gems
 - name: regexp_parser
@@ -70,7 +70,7 @@ gems:
   source:
     type: git
     name: ruby/gem_rbs_collection
-    revision: c34ed02f870fb02571f664062eb13ef507702029
+    revision: 218cf130d31f63e110e350efc3fa265311b0f238
     remote: https://github.com/ruby/gem_rbs_collection.git
     repo_dir: gems
 - name: rubocop
@@ -78,7 +78,7 @@ gems:
   source:
     type: git
     name: ruby/gem_rbs_collection
-    revision: c34ed02f870fb02571f664062eb13ef507702029
+    revision: 218cf130d31f63e110e350efc3fa265311b0f238
     remote: https://github.com/ruby/gem_rbs_collection.git
     repo_dir: gems
 - name: rubocop-ast
@@ -86,7 +86,7 @@ gems:
   source:
     type: git
     name: ruby/gem_rbs_collection
-    revision: c34ed02f870fb02571f664062eb13ef507702029
+    revision: 218cf130d31f63e110e350efc3fa265311b0f238
     remote: https://github.com/ruby/gem_rbs_collection.git
     repo_dir: gems
 - name: time
