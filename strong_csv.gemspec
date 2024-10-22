@@ -14,6 +14,7 @@ Gem::Specification.new do |spec|
   spec.license = "MIT"
   spec.required_ruby_version = ">= 2.5.5" # rubocop:disable Gemspec/RequiredRubyVersion
   spec.add_dependency "csv"
+  spec.add_dependency "forwardable"
 
   spec.metadata["homepage_uri"] = spec.homepage
   spec.metadata["rubygems_mfa_required"] = "true"
