@@ -26,6 +26,9 @@ Style/TrailingCommaInHashLiteral:
 Style/TrailingCommaInArguments:
   Enabled: false
 
+Style/RedundantCondition:
+  Enabled: false
+
 Layout/LineLength:
   Max: 240
 
