@@ -9,7 +9,7 @@ class StrongCSV # rubocop:disable Style/Documentation
   # @!attribute name
   #   @return [Symbol, Integer] The name for the type. This is the CSV header name. If the CSV does not have its header, Integer should be set.
   # @!attribute type
-  #   @return [StrongCSV::Type::Base]
+  #   @return [StrongCSV::Types::Base]
   # @!attribute error_message
   #   @return [String, nil] The error message returned if #cast fails. If omitted, the default error message will be used.
   # @!attribute block
