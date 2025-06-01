@@ -20,8 +20,8 @@ class StrongCSV
     end
 
     # @param name [String, Symbol, Integer]
-    # @param type [StrongCSV::Type::Base]
-    # @param types [Array<StrongCSV::Type::Base>]
+    # @param type [StrongCSV::Types::Base]
+    # @param types [Array<StrongCSV::Types::Base>]
     def let(name, type, *types, error_message: nil, &block)
       type = Types::Union.new(type, *types) unless types.empty?
       case name
