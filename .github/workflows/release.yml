@@ -27,6 +27,7 @@ jobs:
       - uses: actions/checkout@v5
         with:
           token: ${{ steps.app-token.outputs.token }}
+          persist-credentials: true
 
       - uses: rubygems/configure-rubygems-credentials@v1.0.0
 
