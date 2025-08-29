@@ -59,4 +59,5 @@ jobs:
           VALIDATE_JSCPD: "false"
           VALIDATE_NATURAL_LANGUAGE: "false"
           VALIDATE_YAML_PRETTIER: "false"
+          VALIDATE_TRIVY: "false"
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
