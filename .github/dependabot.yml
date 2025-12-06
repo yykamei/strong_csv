@@ -15,11 +15,6 @@ updates:
       interval: weekly
       time: "09:00"
       timezone: Asia/Tokyo
-    ignore:
-      - dependency-name: "*"
-        update-types:
-          - "version-update:semver-minor"
-          - "version-update:semver-patch"
   - package-ecosystem: gitsubmodule
     directory: "/"
     schedule:
