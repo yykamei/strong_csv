@@ -9,15 +9,21 @@ updates:
     open-pull-requests-limit: 10
     allow:
       - dependency-type: all
+    cooldown:
+      default-days: 5
   - package-ecosystem: github-actions
     directory: "/"
     schedule:
       interval: weekly
       time: "09:00"
       timezone: Asia/Tokyo
+    cooldown:
+      default-days: 5
   - package-ecosystem: gitsubmodule
     directory: "/"
     schedule:
       interval: daily
       time: "09:00"
       timezone: Asia/Tokyo
+    cooldown:
+      default-days: 5
