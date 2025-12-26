@@ -22,9 +22,9 @@ class StrongCSV
     @value: (casted)?
     @original_value: untyped
 
-    attr_reader error_messages: [::String]?
+    attr_reader error_messages: Array[::String]?
 
-    def initialize: (original_value: ::String | nil, ?value: (casted | ::Object)?, ?error_messages: [::String]?) -> void
+    def initialize: (original_value: ::String | nil, ?value: (casted | ::Object)?, ?error_messages: Array[::String]?) -> void
 
     def value: -> ((casted | ::Object | nil)?)
 
