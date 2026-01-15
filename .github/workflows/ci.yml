@@ -31,6 +31,7 @@ jobs:
           bundler: ${{ matrix.ruby == '2.5' && '2.2.28' || 'latest' }}
 
       - run: bundle exec rbs collection install
+        if: ${{ matrix.ruby >= '3.0' }}
 
       - run: bundle exec rake test
 
