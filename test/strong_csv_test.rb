@@ -30,7 +30,7 @@ class StrongCSVTest < Minitest::Test
     result = strong_csv.parse("abc\n123\n455")
 
     assert_instance_of Array, result
-    assert(result.all? { |row| row.is_a?(StrongCSV::Row) })
+    assert(result.all?(StrongCSV::Row))
     assert_equal([123, 455], result.map { |row| row[:abc] })
   end
 
