@@ -1,4 +1,9 @@
 rules:
+  # TODO: Consider adding a GitHub Environment to release.yml instead.
+  # See: secrets.PRIVATE_KEY in .github/workflows/release.yml
+  secrets-outside-env:
+    ignore:
+      - release.yml
   unpinned-uses:
     config:
       policies:
