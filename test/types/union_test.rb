@@ -46,6 +46,14 @@ class TypesUnionTest < Minitest::Test
     assert_equal ["`nil` can't be casted to Integer", "`nil` can't be casted to Boolean"], value_result.error_messages
   end
 
+  def test_cast_deduplicates_identical_error_messages
+    value_result = StrongCSV::Types::Union.new(10, 10).cast("3")
+
+    assert_instance_of StrongCSV::ValueResult, value_result
+    refute_predicate value_result, :success?
+    assert_equal ["`10` is expected, but `3` was given"], value_result.error_messages
+  end
+
   def test_with_multiple_values
     strong_csv = StrongCSV.new do
       let 0, integer, boolean

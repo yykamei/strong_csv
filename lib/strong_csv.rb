@@ -52,10 +52,7 @@ class StrongCSV
     options = options.merge(headers: @let.headers, header_converters: :symbol)
     csv = CSV.new(csv, **options)
 
-    @let.pickers.each_value do |picker|
-      picker.call(csv)
-      csv.rewind
-    end
+    @let.pick_all(csv)
 
     if block_given?
       csv.each do |row|
