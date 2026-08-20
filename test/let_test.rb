@@ -126,4 +126,68 @@ class LetTest < Minitest::Test
   def test_optional
     assert_instance_of StrongCSV::Types::Optional, StrongCSV::Let.new.optional(123)
   end
+
+  def test_pick_all
+    let = StrongCSV::Let.new
+    let.pick(:id, as: :ids) { |xs| xs.map(&:to_i) }
+    let.pick(:name, as: :names) { |xs| xs }
+
+    csv = CSV.new("id,name\n1,foo\n2,bar\n", headers: true, header_converters: :symbol)
+    let.pick_all(csv)
+
+    assert_equal [1, 2], let.ids
+    assert_equal %w[foo bar], let.names
+  end
+
+  def test_pick_all_without_headers
+    let = StrongCSV::Let.new
+    let.pick(0, as: :first) { |xs| xs.map(&:to_i) }
+
+    csv = CSV.new("1\n2\n", headers: false)
+    let.pick_all(csv)
+
+    assert_equal [1, 2], let.first
+  end
+
+  def test_pick_all_with_empty_csv
+    let = StrongCSV::Let.new
+    let.pick(:id, as: :ids) { |xs| xs }
+
+    csv = CSV.new("id\n", headers: true, header_converters: :symbol)
+    let.pick_all(csv)
+
+    assert_equal [], let.ids
+  end
+
+  def test_pick_all_without_pickers
+    let = StrongCSV::Let.new
+
+    csv = CSV.new("id\n1\n", headers: true, header_converters: :symbol)
+    let.pick_all(csv)
+  end
+
+  def test_pick_all_leaves_csv_at_the_beginning
+    let = StrongCSV::Let.new
+    let.pick(:id, as: :ids) { |xs| xs.map(&:to_i) }
+
+    csv = CSV.new("id\n1\n2\n", headers: true, header_converters: :symbol)
+    let.pick_all(csv)
+    first = let.ids
+    let.pick_all(csv)
+
+    assert_equal [1, 2], first
+    assert_equal first, let.ids
+  end
+
+  def test_pick_all_block_can_read_earlier_picker_result
+    let = StrongCSV::Let.new
+    let.pick(:id, as: :ids) { |xs| xs.map(&:to_i) }
+    let.pick(:id, as: :twice) { |_xs| let.ids.map { |x| x * 2 } }
+
+    csv = CSV.new("id\n1\n2\n3\n", headers: true, header_converters: :symbol)
+    let.pick_all(csv)
+
+    assert_equal [1, 2, 3], let.ids
+    assert_equal [2, 4, 6], let.twice
+  end
 end

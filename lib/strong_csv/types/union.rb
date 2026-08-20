@@ -16,11 +16,15 @@ class StrongCSV
       # @param value [Object] Value to be casted to Integer
       # @return [ValueResult]
       def cast(value)
-        results = @types.map { |type| type.cast(value) }
-        results.find(&:success?) || results.reduce do |memo, result|
-          memo.error_messages.concat(result.error_messages).uniq!
-          memo
+        error_messages = nil
+        @types.each do |type|
+          result = type.cast(value)
+          return result if result.success?
+
+          error_messages = (error_messages || []).concat(result.error_messages).uniq
         end
+
+        ValueResult.new(original_value: value, error_messages: error_messages)
       end
     end
   end

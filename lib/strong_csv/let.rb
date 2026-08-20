@@ -17,6 +17,7 @@ class StrongCSV
       @headers = false
       @pickers = {}
       @picked = {}
+      @picker_columns = {}
     end
 
     # @param name [String, Symbol, Integer]
@@ -51,9 +52,23 @@ class StrongCSV
       define_singleton_method(as) do
         @picked[as]
       end
-      @pickers[as] = lambda do |csv|
-        @picked[as] = block.call(csv.map { |row| row[column] })
+      @pickers[as] = lambda do |values|
+        @picked[as] = block.call(values)
       end
+      @picker_columns[as] = column
+    end
+
+    # It collects the values for each picker in a single pass over the CSV,
+    # then invokes the picker blocks with the collected values.
+    # The CSV stream is rewound before returning so the caller can continue
+    # reading from the beginning.
+    def pick_all(csv)
+      return if @pickers.empty?
+
+      buffers = Hash.new { |hash, key| hash[key] = [] }
+      csv.each { |row| @pickers.each_key { |as| buffers[as] << row[@picker_columns[as]] } }
+      csv.rewind
+      @pickers.each { |as, picker| picker.call(buffers[as]) }
     end
 
     # @param options [Hash] See `Types::Integer#initialize` for more details.
