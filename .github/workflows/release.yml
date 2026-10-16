@@ -51,7 +51,7 @@ jobs:
 
       - run: git diff
 
-      - uses: yykamei/actions-git-push@c9bcec4304fde1cf89d4abdf23280713e66c034d # main
+      - uses: yykamei/actions-git-push@423a63c2b538dca1f485a0eb7f569d2546cd49a0 # main
         with:
           commit-message: Bump to ${{ inputs.version }}
         if: inputs.apply
@@ -61,7 +61,7 @@ jobs:
       - run: gem push ./*.gem
         if: inputs.apply
 
-      - uses: yykamei/actions-release-actions@451f5f47bc1e9cdad23d644cefd5413fe557b94a # main
+      - uses: yykamei/actions-release-actions@ebcee1950d6798f9356621195f43038cfd39973e # main
         with:
           token: ${{ steps.app-token.outputs.token }}
           tag: v${{ inputs.version }}
