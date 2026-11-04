@@ -64,6 +64,12 @@ class StrongCSV
     end
 
     module Literal
+      REGEXP_TIMEOUT: ::Float
+
+      def self.regexp_with_timeout: (::Regexp) -> ::Regexp
+
+      def self.regexp_match: (::Regexp, untyped) -> (::Integer | nil | :timeout)
+
       def cast: (untyped value) -> ValueResult
         | (untyped value) -> ValueResult
         | (untyped value) -> ValueResult

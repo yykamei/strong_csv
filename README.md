@@ -379,6 +379,14 @@ result[1].slice(0, 1, 2, 3, 4) # => {0=>123, 1=>"test", 2=>2.5, 3=>"0", 4=>"xyz"
 result[2].slice(0, 1, 2, 3, 4) # => {0=>123, 1=>"Hey", 2=>2.5, 3=>10, 4=>"!"} ("Hey" is not equal to "test", and "!" does not match /[a-z]+/)
 ```
 
+> [!NOTE]
+> On Ruby 3.2 and later, Regexp literals are matched with a one-second timeout per match by
+> default. A match that exceeds the timeout is treated as a non-match. On Ruby 3.2 and later,
+> pass a Regexp with an explicit timeout to change the limit, e.g.
+> `let :id, Regexp.new("\\A[a-z]+\\z", timeout: 5.0)`. A per-Regexp timeout or the global
+> `Regexp.timeout` takes precedence over the default. Ruby 3.1 and earlier have no regexp
+> timeout, and the `timeout:` keyword must not be used there because it is not supported.
+
 ### Union
 
 There would be a case that it's alright if a value satisfies one of the types.
