@@ -302,7 +302,19 @@ result[2].slice(:name, :description) # => {:name=>nil, :description=>"🤷"} (`n
 The value must be casted to Time. `time?` allows the value to be `nil` as an optional time value.
 They have the `:format` argument, which is used as the format
 of [`Time.strptime`](https://rubydoc.info/stdlib/time/Time.strptime);
-it means you can ensure the value must satisfy the time format. The default value of `:format` is `"%Y-%m-%d"`.
+it means you can ensure the value must satisfy the time format.
+The whole value must match the format; trailing characters are rejected.
+A value with a timezone directive is invalid when the zone cannot be
+resolved to an offset; numeric offsets must use a supported form such as
+`+05`, `+0530`, `+05:30`, or `+05:30:45`. Use `%z` for numeric offsets
+and `%Z` for named zones. Zone-bearing
+formats other than `%s` or `%Q` must include a year, and day-of-year
+and week-date directives are not supported with a timezone. Fractional
+epoch values with a zero whole-second part are invalid. Zone names
+follow Ruby's built-in abbreviation table, so prefer a numeric offset
+when the offset must be unambiguous. Values without a timezone directive
+are interpreted in the process timezone. The default value of `:format`
+is `"%Y-%m-%d"`.
 
 _Example_
 
