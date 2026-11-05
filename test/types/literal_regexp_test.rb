@@ -58,4 +58,81 @@ class LiteralRegexpTest < Minitest::Test
     assert result.all?(&:valid?)
     assert_equal(%w[abcz 123], result.map { |row| row[:id] })
   end
+
+  def test_regexp_with_timeout
+    skip "Regexp timeout is not supported on this Ruby" unless defined?(::Regexp::TimeoutError)
+
+    regexp = /\Aabc\z/i
+    matcher = StrongCSV::Types::Literal.regexp_with_timeout(regexp)
+
+    refute_same regexp, matcher
+    assert_in_delta(1.0, matcher.timeout)
+    assert_equal regexp.options, matcher.options
+  end
+
+  def test_regexp_with_timeout_respects_existing_timeout
+    skip "Regexp timeout is not supported on this Ruby" unless defined?(::Regexp::TimeoutError)
+
+    regexp = ::Regexp.new("\\Aabc\\z", timeout: 0.5)
+    matcher = StrongCSV::Types::Literal.regexp_with_timeout(regexp)
+
+    assert_same regexp, matcher
+  end
+
+  def test_regexp_with_timeout_respects_global_timeout
+    skip "Regexp timeout is not supported on this Ruby" unless defined?(::Regexp::TimeoutError)
+
+    previous = ::Regexp.timeout
+    begin
+      ::Regexp.timeout = 5.0
+      regexp = /\Aabc\z/
+
+      assert_same regexp, StrongCSV::Types::Literal.regexp_with_timeout(regexp)
+    ensure
+      ::Regexp.timeout = previous
+    end
+  end
+
+  def test_cast_with_timeout
+    skip "Regexp timeout is not supported on this Ruby" unless defined?(::Regexp::TimeoutError)
+
+    regexp = ::Regexp.new("\\A(?=(a+)+$)", timeout: 0.001)
+    value = "a" * 40
+    value << "!"
+    value_result = regexp.cast(value)
+
+    refute_predicate value_result, :success?
+    assert_equal value, value_result.value
+    assert_includes value_result.error_messages.first, "matching timed out"
+  end
+
+  def test_cast_with_default_timeout
+    skip "Regexp timeout is not supported on this Ruby" unless defined?(::Regexp::TimeoutError)
+
+    value = "a" * 40
+    value << "!"
+    value_result = /\A(?=(a+)+$)/.cast(value)
+
+    refute_predicate value_result, :success?
+    assert_equal value, value_result.value
+    assert_includes value_result.error_messages.first, "matching timed out"
+  end
+
+  def test_cast_with_ignorecase_option
+    value_result = /abc/i.cast("ABC")
+
+    assert_instance_of StrongCSV::ValueResult, value_result
+    assert_predicate value_result, :success?
+    assert_equal "ABC", value_result.value
+  end
+
+  def test_cast_with_multibyte_regexp
+    skip "Regexp timeout is not supported on this Ruby" unless defined?(::Regexp::TimeoutError)
+
+    value_result = /\Aあ+\z/.cast("ああ")
+
+    assert_instance_of StrongCSV::ValueResult, value_result
+    assert_predicate value_result, :success?
+    assert_equal "ああ", value_result.value
+  end
 end
