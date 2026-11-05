@@ -51,6 +51,9 @@ jobs:
 
       - run: git diff
 
+      # The direct push of the bump commit cannot carry the required checks, so
+      # GitHub rejects it with GH006 unless the release app (ID 872868) is a
+      # bypass actor with mode "Always" on the "Require CI on main" ruleset.
       - uses: yykamei/actions-git-push@423a63c2b538dca1f485a0eb7f569d2546cd49a0 # main
         with:
           commit-message: Bump to ${{ inputs.version }}
