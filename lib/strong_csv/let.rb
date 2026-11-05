@@ -40,6 +40,9 @@ class StrongCSV
     # This might be useful for the case where you want to receive IDs that are stored in a database,
     # and you want to make sure the IDs actually exist.
     #
+    # The block receives all values of the column at once, so they are buffered in memory
+    # for the entire CSV.
+    #
     # @example
     #  pick :user_id, as: :user_ids do |user_ids|
     #    User.where(id: user_ids).ids
@@ -60,6 +63,7 @@ class StrongCSV
 
     # It collects the values for each picker in a single pass over the CSV,
     # then invokes the picker blocks with the collected values.
+    # The collected values are held in memory until the picker blocks return.
     # The CSV stream is rewound before returning so the caller can continue
     # reading from the beginning.
     def pick_all(csv)

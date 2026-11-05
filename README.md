@@ -108,6 +108,11 @@ strong_csv.parse(data, field_size_limit: 2048) do |row|
 end
 ```
 
+`pick` buffers all values of the specified column in memory before invoking the block,
+because the block receives the complete array. For very large CSV files, this can consume
+a large amount of memory; the streaming form of `StrongCSV#parse` does not remove this
+buffering for picked columns.
+
 You can also define types without CSV headers by specifying column numbers.
 
 > [!NOTE]
