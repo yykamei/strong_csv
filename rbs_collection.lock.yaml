@@ -6,13 +6,17 @@ gems:
   source:
     type: git
     name: ruby/gem_rbs_collection
-    revision: 218cf130d31f63e110e350efc3fa265311b0f238
+    revision: 80af38d2169942fad2c7aaff054d914dc7127fdf
     remote: https://github.com/ruby/gem_rbs_collection.git
     repo_dir: gems
 - name: csv
-  version: '0'
+  version: '3.3'
   source:
-    type: stdlib
+    type: git
+    name: ruby/gem_rbs_collection
+    revision: 80af38d2169942fad2c7aaff054d914dc7127fdf
+    remote: https://github.com/ruby/gem_rbs_collection.git
+    repo_dir: gems
 - name: fileutils
   version: '0'
   source:
@@ -25,16 +29,32 @@ gems:
   version: '0'
   source:
     type: stdlib
-- name: minitest
-  version: '0'
+- name: language_server-protocol
+  version: 3.17.0.6
   source:
-    type: stdlib
+    type: rubygems
+- name: lint_roller
+  version: '1.1'
+  source:
+    type: git
+    name: ruby/gem_rbs_collection
+    revision: 80af38d2169942fad2c7aaff054d914dc7127fdf
+    remote: https://github.com/ruby/gem_rbs_collection.git
+    repo_dir: gems
+- name: minitest
+  version: '5.25'
+  source:
+    type: git
+    name: ruby/gem_rbs_collection
+    revision: 80af38d2169942fad2c7aaff054d914dc7127fdf
+    remote: https://github.com/ruby/gem_rbs_collection.git
+    repo_dir: gems
 - name: parallel
   version: '1.20'
   source:
     type: git
     name: ruby/gem_rbs_collection
-    revision: 218cf130d31f63e110e350efc3fa265311b0f238
+    revision: 80af38d2169942fad2c7aaff054d914dc7127fdf
     remote: https://github.com/ruby/gem_rbs_collection.git
     repo_dir: gems
 - name: parser
@@ -42,27 +62,43 @@ gems:
   source:
     type: git
     name: ruby/gem_rbs_collection
-    revision: 218cf130d31f63e110e350efc3fa265311b0f238
+    revision: 80af38d2169942fad2c7aaff054d914dc7127fdf
     remote: https://github.com/ruby/gem_rbs_collection.git
     repo_dir: gems
+- name: pp
+  version: '0'
+  source:
+    type: stdlib
+- name: prettyprint
+  version: '0'
+  source:
+    type: stdlib
 - name: prism
-  version: 1.7.0
+  version: 2.1.0
   source:
     type: rubygems
+- name: racc
+  version: '1.8'
+  source:
+    type: git
+    name: ruby/gem_rbs_collection
+    revision: 80af38d2169942fad2c7aaff054d914dc7127fdf
+    remote: https://github.com/ruby/gem_rbs_collection.git
+    repo_dir: gems
 - name: rainbow
   version: '3.0'
   source:
     type: git
     name: ruby/gem_rbs_collection
-    revision: 218cf130d31f63e110e350efc3fa265311b0f238
+    revision: 80af38d2169942fad2c7aaff054d914dc7127fdf
     remote: https://github.com/ruby/gem_rbs_collection.git
     repo_dir: gems
 - name: rake
-  version: '13.0'
+  version: '13.4'
   source:
     type: git
     name: ruby/gem_rbs_collection
-    revision: 218cf130d31f63e110e350efc3fa265311b0f238
+    revision: 80af38d2169942fad2c7aaff054d914dc7127fdf
     remote: https://github.com/ruby/gem_rbs_collection.git
     repo_dir: gems
 - name: regexp_parser
@@ -70,7 +106,7 @@ gems:
   source:
     type: git
     name: ruby/gem_rbs_collection
-    revision: 218cf130d31f63e110e350efc3fa265311b0f238
+    revision: 80af38d2169942fad2c7aaff054d914dc7127fdf
     remote: https://github.com/ruby/gem_rbs_collection.git
     repo_dir: gems
 - name: rubocop
@@ -78,17 +114,29 @@ gems:
   source:
     type: git
     name: ruby/gem_rbs_collection
-    revision: 218cf130d31f63e110e350efc3fa265311b0f238
+    revision: 80af38d2169942fad2c7aaff054d914dc7127fdf
     remote: https://github.com/ruby/gem_rbs_collection.git
     repo_dir: gems
 - name: rubocop-ast
-  version: '1.30'
+  version: '1.46'
   source:
     type: git
     name: ruby/gem_rbs_collection
-    revision: 218cf130d31f63e110e350efc3fa265311b0f238
+    revision: 80af38d2169942fad2c7aaff054d914dc7127fdf
     remote: https://github.com/ruby/gem_rbs_collection.git
     repo_dir: gems
+- name: ruby-progressbar
+  version: '1.13'
+  source:
+    type: git
+    name: ruby/gem_rbs_collection
+    revision: 80af38d2169942fad2c7aaff054d914dc7127fdf
+    remote: https://github.com/ruby/gem_rbs_collection.git
+    repo_dir: gems
+- name: singleton
+  version: '0'
+  source:
+    type: stdlib
 - name: stringio
   version: '0'
   source:
@@ -97,4 +145,12 @@ gems:
   version: '0'
   source:
     type: stdlib
+- name: unicode-display_width
+  version: '3.3'
+  source:
+    type: git
+    name: ruby/gem_rbs_collection
+    revision: 80af38d2169942fad2c7aaff054d914dc7127fdf
+    remote: https://github.com/ruby/gem_rbs_collection.git
+    repo_dir: gems
 gemfile_lock_path: Gemfile.lock
