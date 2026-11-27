@@ -158,6 +158,8 @@ class StrongCSV
 
     def picked: -> Hash[untyped, untyped]
 
+    def rewind!: (untyped) -> void
+
     def header_errors: (untyped) -> Array[::String]
 
     def required_columns: -> Array[::Symbol]
@@ -193,5 +195,8 @@ class StrongCSV
   end
 
   class HeaderError < Error
+  end
+
+  class NotSeekableError < Error
   end
 end

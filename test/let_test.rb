@@ -235,6 +235,44 @@ class LetTest < Minitest::Test
     end
   end
 
+  def test_pick_all_raises_on_non_seekable_input
+    let = StrongCSV::Let.new
+    let.pick(:id, as: :ids) { |xs| xs }
+    reader, csv = build_pipe_csv("id\n1\n")
+
+    error = assert_raises(StrongCSV::NotSeekableError) do
+      let.pick_all(csv)
+    end
+    assert_equal "pick requires a seekable input; buffer the CSV before parsing", error.message
+    assert_kind_of SystemCallError, error.cause
+  ensure
+    reader.close
+  end
+
+  def test_pick_all_reports_header_errors_before_seekability
+    let = StrongCSV::Let.new
+    let.let(:id, StrongCSV::Types::Integer.new)
+    let.pick(:name, as: :names) { |xs| xs }
+    reader, csv = build_pipe_csv("id\n1\n")
+
+    assert_raises StrongCSV::HeaderError do
+      let.pick_all(csv)
+    end
+  ensure
+    reader.close
+  end
+
+  def test_pick_all_raises_on_input_without_rewind
+    let = StrongCSV::Let.new
+    let.pick(:id, as: :ids) { |xs| xs }
+    csv = CSV.new(NonRewindableIO.new("id\n1\n"), headers: true, header_converters: :symbol)
+
+    error = assert_raises(StrongCSV::NotSeekableError) do
+      let.pick_all(csv)
+    end
+    assert_kind_of NoMethodError, error.cause
+  end
+
   def test_with_picked_restores_previous_context_after_an_exception
     let = StrongCSV::Let.new
     let.pick(:id, as: :ids) { |xs| xs }
@@ -251,6 +289,33 @@ class LetTest < Minitest::Test
 
     assert_raises StrongCSV::Error do
       let.ids
+    end
+  end
+
+  private
+
+  def build_pipe_csv(content)
+    reader, writer = IO.pipe
+    writer.write(content)
+    writer.close
+    [reader, CSV.new(reader, headers: true, header_converters: :symbol)]
+  end
+
+  # An IO-like object without `rewind`, used to exercise the non-seekable path.
+  class NonRewindableIO
+    def initialize(content)
+      @lines = content.lines
+      @index = 0
+    end
+
+    def gets(*_args)
+      line = @lines[@index]
+      @index += 1
+      line
+    end
+
+    def eof?
+      @index >= @lines.length
     end
   end
 end

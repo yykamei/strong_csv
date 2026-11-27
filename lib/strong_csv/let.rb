@@ -83,8 +83,9 @@ class StrongCSV
         end
         @pickers.each_key { |as| buffers[as] << row[@picker_columns[as]] }
       end
+      # Report a schema mismatch before the seekability requirement.
       validate_headers(csv.headers) unless header_checked
-      csv.rewind
+      rewind!(csv)
       with_picked(picked_values) do
         @pickers.each { |as, block| picked_values[as] = block.call(buffers[as]) }
       end
@@ -201,6 +202,12 @@ class StrongCSV
       raise Error, "picked values are only available during parse" if context.nil?
 
       context
+    end
+
+    def rewind!(csv)
+      csv.rewind
+    rescue IOError, NoMethodError, SystemCallError => e
+      raise NotSeekableError, "pick requires a seekable input; buffer the CSV before parsing", cause: e
     end
 
     def header_errors(headers)

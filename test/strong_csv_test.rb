@@ -46,6 +46,30 @@ class StrongCSVTest < Minitest::Test
     end
   end
 
+  def test_parse_raises_on_non_seekable_pick_input
+    called = false
+    strong_csv = StrongCSV.new do
+      pick :id, as: :ids do |values|
+        called = true
+        values
+      end
+      let :id, integer
+    end
+
+    reader, writer = IO.pipe
+    writer.write("id\n1\n")
+    writer.close
+
+    error = assert_raises(StrongCSV::NotSeekableError) do
+      strong_csv.parse(reader)
+    end
+    assert_kind_of SystemCallError, error.cause
+    refute called
+  ensure
+    reader.close
+    writer.close unless writer.closed?
+  end
+
   def test_parse_isolates_picked_values_between_threads
     strong_csv, a_ready = build_concurrent_picker
 
