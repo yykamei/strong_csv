@@ -16,8 +16,8 @@ class StrongCSV
       @types = []
       @headers = false
       @pickers = {}
-      @picked = {}
       @picker_columns = {}
+      @picked_key = :"strong_csv_picked_#{object_id}"
     end
 
     # @param name [String, Symbol, Integer]
@@ -52,12 +52,14 @@ class StrongCSV
     # @param as [Symbol]
     # @yieldparam values [Array<String>] The values for the column. NOTE: This is an array of String, not casted values.
     def pick(column, as:, &block)
+      raise TypeError, "`column` must be Symbol or Integer: #{column.inspect}" unless column.is_a?(::Symbol) || column.is_a?(::Integer)
+      raise TypeError, "`as` must be a Symbol: #{as.inspect}" unless as.is_a?(::Symbol)
+      raise ArgumentError, "`as` conflicts with an existing method: #{as.inspect}" if respond_to?(as, true)
+
       define_singleton_method(as) do
-        @picked[as]
+        picked[as]
       end
-      @pickers[as] = lambda do |values|
-        @picked[as] = block.call(values)
-      end
+      @pickers[as] = block
       @picker_columns[as] = column
     end
 
@@ -66,13 +68,37 @@ class StrongCSV
     # The collected values are held in memory until the picker blocks return.
     # The CSV stream is rewound before returning so the caller can continue
     # reading from the beginning.
+    #
+    # @return [Hash{Symbol => Object}] The picked values by picker name.
     def pick_all(csv)
-      return if @pickers.empty?
+      picked_values = {}
+      return picked_values if @pickers.empty?
 
       buffers = Hash.new { |hash, key| hash[key] = [] }
       csv.each { |row| @pickers.each_key { |as| buffers[as] << row[@picker_columns[as]] } }
       csv.rewind
-      @pickers.each { |as, picker| picker.call(buffers[as]) }
+      with_picked(picked_values) do
+        @pickers.each { |as, block| picked_values[as] = block.call(buffers[as]) }
+      end
+      picked_values
+    end
+
+    # Runs the block with the picked values for the current parse.
+    #
+    # The constraint and block closures created by the DSL call picker methods
+    # on this instance, so the per-parse values must be reachable without
+    # changing those closures. Fiber-local storage keeps concurrent threads and
+    # fibers isolated and is restored when the block returns. Picker methods
+    # raise outside this scope instead of silently returning nil.
+    #
+    # @param picked [Hash{Symbol => Object}]
+    # @return [Object] The block's return value.
+    def with_picked(picked)
+      previous = Thread.current[@picked_key]
+      Thread.current[@picked_key] = picked
+      yield
+    ensure
+      Thread.current[@picked_key] = previous
     end
 
     # @param options [Hash] See `Types::Integer#initialize` for more details.
@@ -129,6 +155,13 @@ class StrongCSV
     end
 
     private
+
+    def picked
+      context = Thread.current[@picked_key]
+      raise Error, "picked values are only available during parse" if context.nil?
+
+      context
+    end
 
     def validate_columns
       if @types.all? { |t| t.name.is_a?(Integer) }

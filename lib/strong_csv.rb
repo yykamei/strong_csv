@@ -52,14 +52,16 @@ class StrongCSV
     options = options.merge(headers: @let.headers, header_converters: :symbol)
     csv = CSV.new(csv, **options)
 
-    @let.pick_all(csv)
+    picked = @let.pick_all(csv)
 
-    if block_given?
-      csv.each do |row|
-        yield Row.new(row: row, types: @let.types, lineno: csv.lineno)
+    @let.with_picked(picked) do
+      if block_given?
+        csv.each do |row|
+          yield Row.new(row: row, types: @let.types, lineno: csv.lineno)
+        end
+      else
+        csv.map { |row| Row.new(row: row, types: @let.types, lineno: csv.lineno) }
       end
-    else
-      csv.map { |row| Row.new(row: row, types: @let.types, lineno: csv.lineno) }
     end
   end
 end
