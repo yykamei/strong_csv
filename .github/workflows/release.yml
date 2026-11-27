@@ -18,6 +18,17 @@ jobs:
       contents: write
       id-token: write
     steps:
+      # `version` is written into a Ruby file and executed by `gem build`;
+      # reject anything that is not a plain version before that.
+      - name: Validate version
+        env:
+          INPUTS_VERSION: ${{ inputs.version }}
+        run: |
+          if [[ ! "$INPUTS_VERSION" =~ ^[0-9]+\.[0-9]+\.[0-9]+([.-][0-9A-Za-z.-]+)?$ ]]; then
+            echo "::error::Invalid version input; expected a numeric version"
+            exit 1
+          fi
+
       - uses: actions/create-github-app-token@64ab729a6294000f5aa4a4bc0b73d1f32bc45510 # v3.3.0
         id: app-token
         with:
@@ -37,17 +48,20 @@ jobs:
           ruby-version: "3"
           bundler-cache: true
 
-      - name: Update `StrongCSV::VERSION`
-        run: |
-          cat <<RUBY > lib/strong_csv/version.rb
-          # frozen_string_literal: true
-
-          class StrongCSV
-            VERSION = "${INPUTS_VERSION}"
-          end
-          RUBY
+      - name: Validate RubyGems version
         env:
           INPUTS_VERSION: ${{ inputs.version }}
+        run: |
+          ruby -e 'abort "invalid version" unless Gem::Version.correct?(ENV.fetch("INPUTS_VERSION"))'
+
+      - name: Update `StrongCSV::VERSION`
+        env:
+          INPUTS_VERSION: ${{ inputs.version }}
+        run: |
+          ruby -e '
+            version = ENV.fetch("INPUTS_VERSION")
+            File.write("lib/strong_csv/version.rb", "# frozen_string_literal: true\n\nclass StrongCSV\n  VERSION = #{version.dump}\nend\n")
+          '
 
       - run: git diff
 
