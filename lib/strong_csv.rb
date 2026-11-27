@@ -7,6 +7,7 @@ require "time"
 
 require_relative "strong_csv/version"
 require_relative "strong_csv/value_result"
+require_relative "strong_csv/types/safe_inspect"
 require_relative "strong_csv/types/base"
 require_relative "strong_csv/types/boolean"
 require_relative "strong_csv/types/float"

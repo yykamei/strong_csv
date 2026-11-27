@@ -20,6 +20,22 @@ class TypesIntegerTest < Minitest::Test
     assert_equal ['`"1.3"` can\'t be casted to Integer'], value_result.error_messages
   end
 
+  def test_cast_unexpected_long_value_bounds_the_error_message
+    value_result = StrongCSV::Types::Integer.new.cast("x" * 10_000)
+
+    refute_predicate value_result, :success?
+    assert_operator value_result.error_messages.first.length, :<, 1_000
+    assert_includes value_result.error_messages.first, "..."
+  end
+
+  def test_cast_escapes_invisible_characters_in_the_error_message
+    value_result = StrongCSV::Types::Integer.new.cast("\u202Eevil")
+
+    refute_predicate value_result, :success?
+    assert_includes value_result.error_messages.first, "\\u202E"
+    refute_includes value_result.error_messages.first, "\u202E"
+  end
+
   def test_cast_nil
     value_result = StrongCSV::Types::Integer.new.cast(nil)
 

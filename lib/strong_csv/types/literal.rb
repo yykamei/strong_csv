@@ -52,10 +52,10 @@ class StrongCSV
           if int == self
             ValueResult.new(value: int, original_value: value)
           else
-            ValueResult.new(original_value: value, error_messages: ["`#{inspect}` is expected, but `#{int.inspect}` was given"])
+            ValueResult.new(original_value: value, error_messages: ["`#{inspect}` is expected, but `#{SafeInspect.render(int)}` was given"])
           end
         rescue ArgumentError, TypeError
-          ValueResult.new(original_value: value, error_messages: ["`#{value.inspect}` can't be casted to Integer"])
+          ValueResult.new(original_value: value, error_messages: ["`#{SafeInspect.render(value)}` can't be casted to Integer"])
         end
       end
 
@@ -67,10 +67,10 @@ class StrongCSV
           if float == self
             ValueResult.new(value: float, original_value: value)
           else
-            ValueResult.new(original_value: value, error_messages: ["`#{inspect}` is expected, but `#{float.inspect}` was given"])
+            ValueResult.new(original_value: value, error_messages: ["`#{inspect}` is expected, but `#{SafeInspect.render(float)}` was given"])
           end
         rescue ArgumentError, TypeError
-          ValueResult.new(original_value: value, error_messages: ["`#{value.inspect}` can't be casted to Float"])
+          ValueResult.new(original_value: value, error_messages: ["`#{SafeInspect.render(value)}` can't be casted to Float"])
         end
       end
 
@@ -78,7 +78,7 @@ class StrongCSV
         # @param value [Object] Value to be casted to Range
         # @return [ValueResult]
         def cast(value)
-          return ValueResult.new(original_value: value, error_messages: ["`#{value.inspect}` can't be casted to the beginning of `#{inspect}`"]) if value.nil?
+          return ValueResult.new(original_value: value, error_messages: ["`#{SafeInspect.render(value)}` can't be casted to the beginning of `#{inspect}`"]) if value.nil?
 
           casted = case self.begin
                    when ::Float
@@ -93,10 +93,10 @@ class StrongCSV
           if cover?(casted)
             ValueResult.new(value: casted, original_value: value)
           else
-            ValueResult.new(original_value: value, error_messages: ["`#{casted.inspect}` is not within `#{inspect}`"])
+            ValueResult.new(original_value: value, error_messages: ["`#{SafeInspect.render(casted)}` is not within `#{inspect}`"])
           end
         rescue ArgumentError
-          ValueResult.new(original_value: value, error_messages: ["`#{value.inspect}` can't be casted to the beginning of `#{inspect}`"])
+          ValueResult.new(original_value: value, error_messages: ["`#{SafeInspect.render(value)}` can't be casted to the beginning of `#{inspect}`"])
         end
       end
 
@@ -107,7 +107,7 @@ class StrongCSV
           if self == value
             ValueResult.new(value: self, original_value: value)
           else
-            ValueResult.new(original_value: value, error_messages: ["`#{inspect}` is expected, but `#{value.inspect}` was given"])
+            ValueResult.new(original_value: value, error_messages: ["`#{inspect}` is expected, but `#{SafeInspect.render(value)}` was given"])
           end
         end
       end
@@ -116,13 +116,13 @@ class StrongCSV
         # @param value [Object] Value to be casted to String
         # @return [ValueResult]
         def cast(value)
-          return ValueResult.new(original_value: value, error_messages: ["`#{value.inspect}` can't be casted to String"]) if value.nil?
+          return ValueResult.new(original_value: value, error_messages: ["`#{SafeInspect.render(value)}` can't be casted to String"]) if value.nil?
 
           case Literal.regexp_match(self, value)
           when :timeout
             ValueResult.new(original_value: value, error_messages: ["`#{inspect}` matching timed out"])
           when nil
-            ValueResult.new(original_value: value, error_messages: ["`#{value.inspect}` did not match `#{inspect}`"])
+            ValueResult.new(original_value: value, error_messages: ["`#{SafeInspect.render(value)}` did not match `#{inspect}`"])
           else
             ValueResult.new(value: value, original_value: value)
           end

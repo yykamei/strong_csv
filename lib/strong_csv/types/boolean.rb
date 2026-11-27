@@ -17,7 +17,7 @@ class StrongCSV
         boolean = FALSE_VALUES.include?(value) ? false : nil
         return ValueResult.new(value: boolean, original_value: value) unless boolean.nil?
 
-        ValueResult.new(original_value: value, error_messages: ["`#{value.inspect}` can't be casted to Boolean"])
+        ValueResult.new(original_value: value, error_messages: ["`#{SafeInspect.render(value)}` can't be casted to Boolean"])
       end
     end
   end
