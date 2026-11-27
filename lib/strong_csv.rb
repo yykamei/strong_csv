@@ -39,9 +39,13 @@ require_relative "strong_csv/row"
 class StrongCSV
   class Error < StandardError; end
 
+  # Raised when the CSV header does not contain every declared column exactly once.
+  class HeaderError < Error; end
+
   def initialize(&block)
     @let = Let.new
     @let.instance_eval(&block) if block_given?
+    @let.validate_declarations
   end
 
   # @param csv [String, IO]
@@ -54,14 +58,24 @@ class StrongCSV
 
     picked = @let.pick_all(csv)
 
-    @let.with_picked(picked) do
+    header_checked = false
+    each_row = lambda do |row|
+      unless header_checked
+        @let.validate_headers(csv.headers)
+        header_checked = true
+      end
+      Row.new(row: row, types: @let.types, lineno: csv.lineno)
+    end
+
+    result = @let.with_picked(picked) do
       if block_given?
-        csv.each do |row|
-          yield Row.new(row: row, types: @let.types, lineno: csv.lineno)
-        end
+        csv.each { |row| yield each_row.call(row) }
       else
-        csv.map { |row| Row.new(row: row, types: @let.types, lineno: csv.lineno) }
+        csv.map { |row| each_row.call(row) }
       end
     end
+
+    @let.validate_headers(csv.headers) unless header_checked
+    result
   end
 end
