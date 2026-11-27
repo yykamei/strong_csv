@@ -27,8 +27,10 @@ class StrongCSV
         # Matches the value against the Regexp with the default timeout.
         #
         # @param regexp [Regexp]
-        # @param value [Object]
-        # @return [Integer, nil, :timeout] The match position, nil, or :timeout when the match exceeded the limit
+        # @param value [String]
+        # @return [Integer, nil, :timeout, :incompatible_encoding] The match
+        #   position, nil, :timeout when the match exceeded the limit, or
+        #   :incompatible_encoding when the value cannot be matched.
         def regexp_match(regexp, value)
           matcher = regexp_with_timeout(regexp)
 
@@ -37,9 +39,15 @@ class StrongCSV
               matcher =~ value
             rescue ::Regexp::TimeoutError
               :timeout
+            rescue ::Encoding::CompatibilityError, ::ArgumentError
+              :incompatible_encoding
             end
           else
-            matcher =~ value
+            begin
+              matcher =~ value
+            rescue ::Encoding::CompatibilityError, ::ArgumentError
+              :incompatible_encoding
+            end
           end
         end
       end
@@ -116,11 +124,13 @@ class StrongCSV
         # @param value [Object] Value to be casted to String
         # @return [ValueResult]
         def cast(value)
-          return ValueResult.new(original_value: value, error_messages: ["`#{SafeInspect.render(value)}` can't be casted to String"]) if value.nil?
+          return ValueResult.new(original_value: value, error_messages: ["`#{SafeInspect.render(value)}` can't be casted to String"]) unless value.is_a?(::String)
 
           case Literal.regexp_match(self, value)
           when :timeout
             ValueResult.new(original_value: value, error_messages: ["`#{inspect}` matching timed out"])
+          when :incompatible_encoding
+            ValueResult.new(original_value: value, error_messages: ["`#{SafeInspect.render(value)}` can't be matched against `#{inspect}` because of incompatible encodings"])
           when nil
             ValueResult.new(original_value: value, error_messages: ["`#{SafeInspect.render(value)}` did not match `#{inspect}`"])
           else

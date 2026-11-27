@@ -24,7 +24,7 @@ class StrongCSV
 
     attr_reader error_messages: Array[::String]?
 
-    def initialize: (original_value: ::String | nil, ?value: (casted | ::Object)?, ?error_messages: Array[::String]?) -> void
+    def initialize: (original_value: untyped, ?value: (casted | ::Object)?, ?error_messages: Array[::String]?) -> void
 
     def value: -> ((casted | ::Object | nil)?)
 
@@ -74,7 +74,7 @@ class StrongCSV
 
       def self.regexp_with_timeout: (::Regexp) -> ::Regexp
 
-      def self.regexp_match: (::Regexp, untyped) -> (::Integer | nil | :timeout)
+      def self.regexp_match: (::Regexp, ::String) -> (::Integer | nil | :timeout | :incompatible_encoding)
 
       def cast: (untyped value) -> ValueResult
         | (untyped value) -> ValueResult

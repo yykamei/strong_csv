@@ -31,6 +31,66 @@ class LiteralRegexpTest < Minitest::Test
     assert_equal ["`nil` can't be casted to String"], value_result.error_messages
   end
 
+  def test_cast_non_string_value
+    value_result = /\A\d+\z/.cast(123)
+
+    assert_instance_of StrongCSV::ValueResult, value_result
+    refute_predicate value_result, :success?
+    assert_equal 123, value_result.value
+    assert_equal ["`123` can't be casted to String"], value_result.error_messages
+  end
+
+  def test_cast_incompatible_encoding
+    value = "x\xFF".b
+    value_result = /\Aあ\z/.cast(value)
+
+    assert_instance_of StrongCSV::ValueResult, value_result
+    refute_predicate value_result, :success?
+    assert_equal value, value_result.value
+    assert_includes value_result.error_messages.first, "incompatible encodings"
+  end
+
+  def test_cast_invalid_byte_sequence
+    value = "\xFF".b.force_encoding(Encoding::UTF_8)
+    value_result = /\A\w+\z/.cast(value)
+
+    assert_instance_of StrongCSV::ValueResult, value_result
+    refute_predicate value_result, :success?
+    assert_equal value, value_result.value
+    assert_includes value_result.error_messages.first, "incompatible encodings"
+  end
+
+  def test_with_binary_csv
+    strong_csv = StrongCSV.new do
+      let :id, /\Aあ\z/
+    end
+    result = strong_csv.parse("id\n\xFF\n".b)
+
+    refute_predicate result.first, :valid?
+    assert_includes result.first.errors[:id].first, "incompatible encodings"
+  end
+
+  def test_with_invalid_byte_sequence_converter
+    strong_csv = StrongCSV.new do
+      let :id, /\A\w+\z/
+    end
+    converter = ->(field) { field.dup.force_encoding(Encoding::UTF_8) }
+    result = strong_csv.parse("id\n\xFF\n".b, converters: converter)
+
+    refute_predicate result.first, :valid?
+    assert_includes result.first.errors[:id].first, "incompatible encodings"
+  end
+
+  def test_with_numeric_converter
+    strong_csv = StrongCSV.new do
+      let :id, /\A1\z/
+    end
+    result = strong_csv.parse("id\n1\n", converters: :numeric)
+
+    refute_predicate result.first, :valid?
+    assert_equal "`1` can't be casted to String", result.first.errors[:id].first
+  end
+
   def test_with_regexp_literal
     strong_csv = StrongCSV.new do
       let :id, /\A\w+\z/
