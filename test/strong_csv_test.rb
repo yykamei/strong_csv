@@ -72,4 +72,24 @@ class StrongCSVTest < Minitest::Test
     assert_operator row.errors[:id].first.length, :<, 2_000
     assert_includes row.errors[:id].first, "..."
   end
+
+  def test_parse_raises_on_malformed_csv
+    strong_csv = StrongCSV.new do
+      let :id, integer
+    end
+
+    assert_raises(CSV::MalformedCSVError) do
+      strong_csv.parse("id\n\"unclosed\n")
+    end
+  end
+
+  def test_parse_raises_on_invalid_encoding
+    strong_csv = StrongCSV.new do
+      let :id, integer
+    end
+
+    assert_raises(CSV::InvalidEncodingError) do
+      strong_csv.parse("id\n\xFF\n")
+    end
+  end
 end
