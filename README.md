@@ -43,11 +43,11 @@ The most important APIs of strong_csv are `StrongCSV.new` and `StrongCSV#parse`.
 Inside the block, you will mainly use `let` and declare types for a column.
 
 After defining types, you can parse CSV content with `StrongCSV#parse`.
-`StrongCSV#parse` won't raise errors as possible and just store error messages in its rows.
-The reason why it won't raise errors is CSV content may contain _invalid_ rows,
-but sometimes, it makes sense to ignore them and process something for _valid_ rows.
-If you want to stop all processes with invalid rows,
-check whether all rows are valid before proceeding with computation.
+`StrongCSV#parse` stores invalid cell values as error messages in the row
+instead of raising, so an application can skip invalid rows and process the
+valid ones. To stop on any invalid row, check whether all rows are valid
+before proceeding. Structural CSV errors, such as malformed quoting or an
+invalid byte sequence, still raise; see [Security](#security).
 
 Here is an example usage of this gem:
 
@@ -112,6 +112,15 @@ end
 because the block receives the complete array. For very large CSV files, this can consume
 a large amount of memory; the streaming form of `StrongCSV#parse` does not remove this
 buffering for picked columns.
+
+`pick` also requires a seekable input. A request body or socket cannot be
+rewound; buffer it before parsing. Picked values are scoped to a single
+`parse` call, so a `StrongCSV` instance can be shared across concurrent
+requests once its declarations are complete.
+
+When you declare columns by name, every declared column must appear exactly
+once in the CSV header; otherwise `StrongCSV#parse` raises
+`StrongCSV::HeaderError`. Extra columns are ignored.
 
 You can also define types without CSV headers by specifying column numbers.
 
@@ -194,6 +203,8 @@ This declaration expects a CSV has the contents like this:
 
 The value must be casted to Integer. `integer?` allows the value to be `nil`, so you can declare optional integer type
 for columns. It also lets you allow values that satisfy the specified limitation through `:constraint`.
+The conversion follows Ruby's `Integer()` rules; see [Security](#security)
+for accepted forms such as `010` (octal) and `1_0`.
 
 _Example_
 
@@ -225,6 +236,8 @@ result[2].errors.slice(:stock, :user_id) # => {:stock=>["`\"non-integer\"` can't
 
 The value must be casted to Float. `float?` allows the value to be `nil`, so you can declare optional float type for
 columns. It also lets you allow values that satisfy the specified limitation through `:constraint`.
+The conversion follows Ruby's `Float()` rules; see [Security](#security)
+for accepted forms such as `1_0.5` and `1e400` (`Infinity`).
 
 _Example_
 
@@ -401,8 +414,9 @@ result[2].slice(0, 1, 2, 3, 4) # => {0=>123, 1=>"Hey", 2=>2.5, 3=>10, 4=>"!"} ("
 > default. A match that exceeds the timeout is treated as a non-match. On Ruby 3.2 and later,
 > pass a Regexp with an explicit timeout to change the limit, e.g.
 > `let :id, Regexp.new("\\A[a-z]+\\z", timeout: 5.0)`. A per-Regexp timeout or the global
-> `Regexp.timeout` takes precedence over the default. Ruby 3.1 and earlier have no regexp
-> timeout, and the `timeout:` keyword must not be used there because it is not supported.
+> `Regexp.timeout` takes precedence over the default. Ruby 2.5–3.1 has no regexp timeout.
+> When parsing untrusted input on those versions, keep `field_size_limit` small or avoid
+> Regexp literals; see [Security](#security).
 
 ### Union
 
@@ -429,6 +443,67 @@ result[0].slice(:priority, :size) # => {:priority=>10, :size=>"M"}
 result[1].slice(:priority, :size) # => {:priority=>30, :size=>"A"} ("A" is not one of "S", "M", and "L")
 result[2].slice(:priority, :size) # => {:priority=>"11", :size=>"S"} (11 is not one of 10, 20, and 30)
 ```
+
+## Security
+
+strong_csv validates cell values; it does not sandbox the CSV parser or
+enforce resource limits. Treat CSV content as untrusted and apply limits at
+the application boundary.
+
+### Resource limits
+
+- Set `field_size_limit`; the CSV default is unlimited.
+  `strong_csv.parse(data, field_size_limit: 2048)` forwards it to `CSV.new`.
+- Limit the number of rows and the total time or bytes at the application
+  boundary. `parse` without a block materializes every row.
+- `pick` buffers all values of the picked columns for the whole CSV, even
+  when parsing with a block.
+
+### Exceptions
+
+Invalid cell values are stored in `row.errors` and do not raise. Structurally
+invalid CSV raises `CSV::MalformedCSVError` or `CSV::InvalidEncodingError`;
+rescue these at the boundary. `pick` requires a seekable input and raises
+`StrongCSV::NotSeekableError` when a stream cannot be rewound. Declared
+symbol columns must appear exactly once in the header; otherwise `parse`
+raises `StrongCSV::HeaderError`.
+
+### Regular expressions
+
+On Ruby 3.2 and later, a Regexp literal match has a one-second default
+timeout; a timed-out match is an invalid cell. Set a per-Regexp timeout when
+one second is too long for your request budget. Ruby 2.5–3.1 has no regexp
+timeout, so keep `field_size_limit` small or avoid Regexp literals for
+untrusted input on those versions.
+
+### Numeric conversion
+
+`integer` and `float` use Ruby's `Integer()` and `Float()` rules. For
+example, `Integer("010")` is octal (`8`), `Integer("0x10")` is `16`,
+`Integer("1_0")` is `10`, surrounding whitespace is ignored, and
+`Float("1e400")` is `Infinity`. Reject non-finite floats with a
+`constraint:` when it matters. If exact decimal syntax matters, validate the
+raw cell with a custom type before casting.
+
+### CSV options
+
+`headers` and `header_converters` are set by strong_csv. Other options are
+forwarded to `CSV.new`; `converters`, `strip`, and `liberal_parsing` change
+the values or parsing semantics and can bypass the type declarations. Only
+pass options you control.
+
+### Reading values
+
+`row[]` returns the original String when a cell is invalid. Check `valid?`
+before using values from a row.
+
+### Error messages
+
+Built-in error messages include the cell value truncated to 256 characters
+and escape invisible control and format characters, so `row.errors` is
+safer to log. Custom `error_message:` values are used as given.
+
+To report a vulnerability, follow [SECURITY.md](SECURITY.md).
 
 ## Contributing
 
