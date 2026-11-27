@@ -43,4 +43,33 @@ class StrongCSVTest < Minitest::Test
       assert_instance_of Integer, row[:abc]
     end
   end
+
+  def test_parse_with_non_utf8_default_encoding
+    previous_external = Encoding.default_external
+    previous_internal = Encoding.default_internal
+    Encoding.default_external = Encoding::Windows_31J
+    Encoding.default_internal = nil
+    strong_csv = StrongCSV.new do
+      let :score, integer
+    end
+    row = strong_csv.parse("score\n１\n".encode(Encoding::Windows_31J)).first
+
+    refute_predicate row, :valid?
+    assert_includes row.errors[:score].first, "１"
+  ensure
+    Encoding.default_external = previous_external
+    Encoding.default_internal = previous_internal
+  end
+
+  def test_parse_with_long_utf16_value
+    strong_csv = StrongCSV.new do
+      let :id, boolean
+    end
+    data = "id\n#{"あ" * 300}\n".encode(Encoding::UTF_16LE)
+    row = strong_csv.parse(data, encoding: Encoding::UTF_16LE).first
+
+    refute_predicate row, :valid?
+    assert_operator row.errors[:id].first.length, :<, 2_000
+    assert_includes row.errors[:id].first, "..."
+  end
 end

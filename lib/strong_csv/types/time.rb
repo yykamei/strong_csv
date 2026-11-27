@@ -40,7 +40,7 @@ class StrongCSV
       private
 
       def failure(value)
-        ValueResult.new(original_value: value, error_messages: ["`#{value.inspect}` can't be casted to Time with the format `#{@format.inspect}`"])
+        ValueResult.new(original_value: value, error_messages: ["`#{SafeInspect.render(value)}` can't be casted to Time with the format `#{@format.inspect}`"])
       end
 
       def parsed_valid?(parsed)

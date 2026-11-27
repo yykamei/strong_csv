@@ -21,10 +21,10 @@ class StrongCSV
         if @constraint.call(int)
           ValueResult.new(value: int, original_value: value)
         else
-          ValueResult.new(original_value: value, error_messages: ["`#{value.inspect}` does not satisfy the specified constraint"])
+          ValueResult.new(original_value: value, error_messages: ["`#{SafeInspect.render(value)}` does not satisfy the specified constraint"])
         end
       rescue ArgumentError, TypeError
-        ValueResult.new(original_value: value, error_messages: ["`#{value.inspect}` can't be casted to Integer"])
+        ValueResult.new(original_value: value, error_messages: ["`#{SafeInspect.render(value)}` can't be casted to Integer"])
       end
     end
   end

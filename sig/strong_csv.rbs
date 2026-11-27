@@ -32,6 +32,12 @@ class StrongCSV
   end
 
   module Types
+    module SafeInspect
+      MAX_LENGTH: Integer
+
+      def self.render: (untyped) -> ::String
+    end
+
     class Base
       def cast: (untyped _value) -> bot
     end
