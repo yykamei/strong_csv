@@ -133,10 +133,10 @@ class LetTest < Minitest::Test
     let.pick(:name, as: :names) { |xs| xs }
 
     csv = CSV.new("id,name\n1,foo\n2,bar\n", headers: true, header_converters: :symbol)
-    let.pick_all(csv)
+    picked = let.pick_all(csv)
 
-    assert_equal [1, 2], let.ids
-    assert_equal %w[foo bar], let.names
+    assert_equal [1, 2], picked[:ids]
+    assert_equal %w[foo bar], picked[:names]
   end
 
   def test_pick_all_without_headers
@@ -144,9 +144,9 @@ class LetTest < Minitest::Test
     let.pick(0, as: :first) { |xs| xs.map(&:to_i) }
 
     csv = CSV.new("1\n2\n", headers: false)
-    let.pick_all(csv)
+    picked = let.pick_all(csv)
 
-    assert_equal [1, 2], let.first
+    assert_equal [1, 2], picked[:first]
   end
 
   def test_pick_all_with_empty_csv
@@ -154,16 +154,17 @@ class LetTest < Minitest::Test
     let.pick(:id, as: :ids) { |xs| xs }
 
     csv = CSV.new("id\n", headers: true, header_converters: :symbol)
-    let.pick_all(csv)
+    picked = let.pick_all(csv)
 
-    assert_equal [], let.ids
+    assert_equal [], picked[:ids]
   end
 
   def test_pick_all_without_pickers
     let = StrongCSV::Let.new
 
     csv = CSV.new("id\n1\n", headers: true, header_converters: :symbol)
-    let.pick_all(csv)
+
+    assert_equal({}, let.pick_all(csv))
   end
 
   def test_pick_all_leaves_csv_at_the_beginning
@@ -171,12 +172,11 @@ class LetTest < Minitest::Test
     let.pick(:id, as: :ids) { |xs| xs.map(&:to_i) }
 
     csv = CSV.new("id\n1\n2\n", headers: true, header_converters: :symbol)
-    let.pick_all(csv)
-    first = let.ids
-    let.pick_all(csv)
+    first = let.pick_all(csv)
+    second = let.pick_all(csv)
 
-    assert_equal [1, 2], first
-    assert_equal first, let.ids
+    assert_equal [1, 2], first[:ids]
+    assert_equal first, second
   end
 
   def test_pick_all_block_can_read_earlier_picker_result
@@ -185,9 +185,72 @@ class LetTest < Minitest::Test
     let.pick(:id, as: :twice) { |_xs| let.ids.map { |x| x * 2 } }
 
     csv = CSV.new("id\n1\n2\n3\n", headers: true, header_converters: :symbol)
-    let.pick_all(csv)
+    picked = let.pick_all(csv)
 
-    assert_equal [1, 2, 3], let.ids
-    assert_equal [2, 4, 6], let.twice
+    assert_equal [1, 2, 3], picked[:ids]
+    assert_equal [2, 4, 6], picked[:twice]
+  end
+
+  def test_pick_rejects_name_colliding_with_existing_method
+    let = StrongCSV::Let.new
+
+    assert_raises ArgumentError do
+      let.pick(:id, as: :types) { |xs| xs }
+    end
+  end
+
+  def test_pick_rejects_duplicate_name
+    let = StrongCSV::Let.new
+    let.pick(:id, as: :ids) { |xs| xs }
+
+    assert_raises ArgumentError do
+      let.pick(:id, as: :ids) { |xs| xs }
+    end
+  end
+
+  def test_pick_rejects_unsupported_column_type
+    skip "We cannot test this case with rbs/test/setup enabled"
+    let = StrongCSV::Let.new
+
+    assert_raises TypeError do
+      let.pick("id", as: :ids) { |xs| xs }
+    end
+  end
+
+  def test_pick_rejects_non_symbol_name
+    skip "We cannot test this case with rbs/test/setup enabled"
+    let = StrongCSV::Let.new
+
+    assert_raises TypeError do
+      let.pick(:id, as: "ids") { |xs| xs }
+    end
+  end
+
+  def test_picker_method_raises_outside_parse
+    let = StrongCSV::Let.new
+    let.pick(:id, as: :ids) { |xs| xs }
+
+    assert_raises StrongCSV::Error do
+      let.ids
+    end
+  end
+
+  def test_with_picked_restores_previous_context_after_an_exception
+    let = StrongCSV::Let.new
+    let.pick(:id, as: :ids) { |xs| xs }
+
+    let.with_picked({ ids: [1] }) do
+      assert_equal [1], let.ids
+
+      assert_raises RuntimeError do
+        let.with_picked({ ids: [2] }) { raise "boom" }
+      end
+
+      assert_equal [1], let.ids
+    end
+
+    assert_raises StrongCSV::Error do
+      let.ids
+    end
   end
 end

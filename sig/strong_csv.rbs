@@ -111,7 +111,7 @@ class StrongCSV
   end
 
   class Let
-    @picked: Hash[untyped, untyped]
+    @picked_key: Symbol
     @picker_columns: Hash[untyped, column]
 
     attr_reader types: Array[TypeWrapper]
@@ -124,7 +124,9 @@ class StrongCSV
 
     def pick: (column, as: ::Symbol) { (Array[::String]) -> untyped } -> void
 
-    def pick_all: (untyped) -> void
+    def pick_all: (untyped) -> Hash[untyped, untyped]
+
+    def with_picked: [T] (Hash[untyped, untyped]) { () -> T } -> T
 
     def integer: (**untyped) -> Types::Integer
 
@@ -149,6 +151,8 @@ class StrongCSV
     def optional: (*declarable) -> Types::Optional
 
     private
+
+    def picked: -> Hash[untyped, untyped]
 
     def validate_columns: -> bool
   end
