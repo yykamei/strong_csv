@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require "date"
+
 require_relative "../test_helper"
 
 class LiteralRangeTest < Minitest::Test
@@ -54,6 +56,61 @@ class LiteralRangeTest < Minitest::Test
     refute_predicate value_result, :success?
     assert_nil value_result.value
     assert_equal ["`nil` can't be casted to the beginning of `0..9`"], value_result.error_messages
+  end
+
+  def test_cast_date
+    date = Date.new(2020, 1, 1)
+    value_result = (1..10).cast(date)
+
+    assert_instance_of StrongCSV::ValueResult, value_result
+    refute_predicate value_result, :success?
+    assert_equal date, value_result.value
+    assert_includes value_result.error_messages.first, "can't be casted to the beginning"
+  end
+
+  def test_cast_infinity
+    value_result = (1..10).cast(Float::INFINITY)
+
+    assert_instance_of StrongCSV::ValueResult, value_result
+    refute_predicate value_result, :success?
+    assert_includes value_result.error_messages.first, "can't be casted to the beginning"
+  end
+
+  def test_cast_with_unsupported_begin_type
+    assert_raises TypeError do
+      (:a..:z).cast("b")
+    end
+  end
+
+  def test_literal_range_with_infinite_value
+    strong_csv = StrongCSV.new do
+      let :id, 1..10
+    end
+    result = strong_csv.parse("id\n1e999\n", converters: :numeric)
+
+    refute_predicate result.first, :valid?
+    assert_includes result.first.errors[:id].first, "can't be casted to the beginning"
+  end
+
+  def test_literal_range_with_utf16_value
+    strong_csv = StrongCSV.new do
+      let :id, 1..10
+    end
+    data = "id\n1\n".encode(Encoding::UTF_16LE)
+    result = strong_csv.parse(data, encoding: Encoding::UTF_16LE)
+
+    refute_predicate result.first, :valid?
+    assert_includes result.first.errors[:id].first, "can't be casted to the beginning"
+  end
+
+  def test_literal_range_with_date_converter
+    strong_csv = StrongCSV.new do
+      let :id, 1..10
+    end
+    result = strong_csv.parse("id\n2020-01-01\n", converters: :date)
+
+    refute_predicate result.first, :valid?
+    assert_includes result.first.errors[:id].first, "can't be casted to the beginning"
   end
 
   def test_initialize_without_headers

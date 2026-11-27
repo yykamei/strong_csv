@@ -4,10 +4,14 @@ class StrongCSV
   module Types
     # Literal is a module to collect all the literal types for CSV parsing.
     # This module is intended for refining built-in classes and provide `#cast` like `Base` class.
-    module Literal
+    module Literal # rubocop:disable Metrics/ModuleLength
       # The default time limit, in seconds, for matching a Regexp literal on Ruby 3.2 and later.
       REGEXP_TIMEOUT = 1.0
-      private_constant :REGEXP_TIMEOUT
+
+      # Internal error for a range begin type that cannot be casted.
+      class UnsupportedBeginType < TypeError; end
+
+      private_constant :REGEXP_TIMEOUT, :UnsupportedBeginType
 
       class << self
         # Returns a Regexp that enforces the default match timeout.
@@ -86,24 +90,32 @@ class StrongCSV
         # @param value [Object] Value to be casted to Range
         # @return [ValueResult]
         def cast(value)
-          return ValueResult.new(original_value: value, error_messages: ["`#{SafeInspect.render(value)}` can't be casted to the beginning of `#{inspect}`"]) if value.nil?
+          return failure(value) if value.nil?
 
-          casted = case self.begin
-                   when ::Float
-                     Float(value)
-                   when ::Integer
-                     Integer(value)
-                   when ::String
-                     value
-                   else
-                     raise TypeError, "#{self.begin.class} is not supported"
-                   end
-          if cover?(casted)
+          begin
+            casted = case self.begin
+                     when ::Float then Float(value)
+                     when ::Integer then Integer(value)
+                     when ::String then value
+                     else raise UnsupportedBeginType, "#{self.begin.class} is not supported"
+                     end
+            within = cover?(casted)
+          rescue UnsupportedBeginType
+            raise
+          rescue ArgumentError, Encoding::CompatibilityError, RangeError, TypeError
+            return failure(value)
+          end
+
+          if within
             ValueResult.new(value: casted, original_value: value)
           else
             ValueResult.new(original_value: value, error_messages: ["`#{SafeInspect.render(casted)}` is not within `#{inspect}`"])
           end
-        rescue ArgumentError
+        end
+
+        private
+
+        def failure(value)
           ValueResult.new(original_value: value, error_messages: ["`#{SafeInspect.render(value)}` can't be casted to the beginning of `#{inspect}`"])
         end
       end
