@@ -75,7 +75,15 @@ class StrongCSV
       return picked_values if @pickers.empty?
 
       buffers = Hash.new { |hash, key| hash[key] = [] }
-      csv.each { |row| @pickers.each_key { |as| buffers[as] << row[@picker_columns[as]] } }
+      header_checked = false
+      csv.each do |row|
+        unless header_checked
+          validate_headers(csv.headers)
+          header_checked = true
+        end
+        @pickers.each_key { |as| buffers[as] << row[@picker_columns[as]] }
+      end
+      validate_headers(csv.headers) unless header_checked
       csv.rewind
       with_picked(picked_values) do
         @pickers.each { |as, block| picked_values[as] = block.call(buffers[as]) }
@@ -99,6 +107,38 @@ class StrongCSV
       yield
     ensure
       Thread.current[@picked_key] = previous
+    end
+
+    # Finalizes the header mode after all declarations are known.
+    #
+    # Index-based `let` declarations cannot be combined with a Symbol picker
+    # column because the picker would index a row by Symbol.
+    #
+    # @raise [ArgumentError] when Symbol pick columns are combined with
+    #   index-based `let` declarations.
+    def validate_declarations
+      if @types.empty?
+        @headers = @picker_columns.values.any?(::Symbol)
+        return
+      end
+
+      return if @headers
+      return unless @picker_columns.values.any?(::Symbol)
+
+      raise ArgumentError, "Symbol pick columns require header-based `let` declarations"
+    end
+
+    # Verifies that every declared symbol column appears exactly once in the
+    # CSV header. Extra columns are ignored, and index-based declarations are
+    # not checked.
+    #
+    # @param headers [Array<Symbol>, true, false, nil]
+    # @raise [HeaderError] when a declared column is missing or duplicated.
+    def validate_headers(headers)
+      return unless @headers
+
+      errors = header_errors(headers)
+      raise HeaderError, "invalid CSV headers (#{errors.join(", ")})" unless errors.empty?
     end
 
     # @param options [Hash] See `Types::Integer#initialize` for more details.
@@ -161,6 +201,26 @@ class StrongCSV
       raise Error, "picked values are only available during parse" if context.nil?
 
       context
+    end
+
+    def header_errors(headers)
+      required = required_columns
+      return ["missing: #{required.inspect}"] unless headers.is_a?(::Array)
+
+      missing = required - headers
+      duplicated = required.select { |name| headers.count(name) > 1 }
+      error_messages(missing, duplicated)
+    end
+
+    def required_columns
+      (@types.map(&:name) + @picker_columns.values.grep(::Symbol)).uniq
+    end
+
+    def error_messages(missing, duplicated)
+      messages = []
+      messages << "missing: #{missing.inspect}" unless missing.empty?
+      messages << "duplicated: #{duplicated.inspect}" unless duplicated.empty?
+      messages
     end
 
     def validate_columns

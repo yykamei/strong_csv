@@ -62,6 +62,184 @@ class StrongCSVTest < Minitest::Test
     assert_predicate rows[:b], :valid?
   end
 
+  def test_parse_raises_on_missing_declared_header
+    strong_csv = StrongCSV.new do
+      let :id, integer
+      let :name, string?
+    end
+
+    error = assert_raises(StrongCSV::HeaderError) do
+      strong_csv.parse("id\n1\n")
+    end
+
+    assert_includes error.message, ":name"
+  end
+
+  def test_parse_raises_on_duplicate_declared_header
+    strong_csv = StrongCSV.new do
+      let :id, integer
+    end
+
+    error = assert_raises(StrongCSV::HeaderError) do
+      strong_csv.parse("id,id\n1,2\n")
+    end
+
+    assert_includes error.message, ":id"
+  end
+
+  def test_parse_allows_extra_headers
+    strong_csv = StrongCSV.new do
+      let :id, integer
+    end
+    result = strong_csv.parse("id,extra\n1,x\n")
+
+    assert_predicate result.first, :valid?
+    assert_equal 1, result.first[:id]
+  end
+
+  def test_parse_does_not_validate_headers_for_index_declarations
+    strong_csv = StrongCSV.new do
+      let 0, integer
+    end
+    result = strong_csv.parse("1\n2\n")
+
+    assert_equal([1, 2], result.map { |row| row[0] })
+  end
+
+  def test_parse_raises_on_missing_picked_header
+    strong_csv = StrongCSV.new do
+      let :id, integer
+      pick :name, as: :names do |values|
+        values
+      end
+    end
+
+    assert_raises(StrongCSV::HeaderError) do
+      strong_csv.parse("id\n1\n")
+    end
+  end
+
+  def test_parse_checks_headers_before_picker_blocks_run
+    called = false
+    strong_csv = StrongCSV.new do
+      let :id, integer
+      pick :name, as: :names do |values|
+        called = true
+        values
+      end
+    end
+
+    assert_raises(StrongCSV::HeaderError) do
+      strong_csv.parse("id\n1\n")
+    end
+    refute called
+  end
+
+  def test_parse_raises_on_missing_declared_header_without_data_rows
+    strong_csv = StrongCSV.new do
+      let :id, integer
+      let :name, string?
+    end
+
+    assert_raises(StrongCSV::HeaderError) do
+      strong_csv.parse("id\n")
+    end
+  end
+
+  def test_parse_raises_on_duplicate_declared_header_without_data_rows
+    strong_csv = StrongCSV.new do
+      let :id, integer
+    end
+
+    assert_raises(StrongCSV::HeaderError) do
+      strong_csv.parse("id,id\n")
+    end
+  end
+
+  def test_parse_raises_on_empty_input
+    strong_csv = StrongCSV.new do
+      let :id, integer
+    end
+
+    assert_raises(StrongCSV::HeaderError) do
+      strong_csv.parse("")
+    end
+  end
+
+  def test_parse_accepts_valid_header_only_input
+    strong_csv = StrongCSV.new do
+      let :id, integer
+    end
+
+    assert_equal([], strong_csv.parse("id\n"))
+  end
+
+  def test_parse_does_not_run_pickers_on_header_only_input
+    called = false
+    strong_csv = StrongCSV.new do
+      let :id, integer
+      pick :name, as: :names do |values|
+        called = true
+        values
+      end
+    end
+
+    assert_raises(StrongCSV::HeaderError) do
+      strong_csv.parse("id\n")
+    end
+    refute called
+  end
+
+  def test_header_error_reports_missing_and_duplicated_headers
+    strong_csv = StrongCSV.new do
+      let :id, integer
+      let :name, string?
+    end
+
+    error = assert_raises(StrongCSV::HeaderError) do
+      strong_csv.parse("id,id\n1,2\n")
+    end
+
+    assert_includes error.message, ":id"
+    assert_includes error.message, ":name"
+  end
+
+  def test_header_error_does_not_include_untrusted_header_values
+    strong_csv = StrongCSV.new do
+      let :id, integer
+    end
+
+    error = assert_raises(StrongCSV::HeaderError) do
+      strong_csv.parse("attacker_supplied\n1\n")
+    end
+
+    refute_includes error.message, "attacker_supplied"
+  end
+
+  def test_initialize_rejects_symbol_pick_with_index_declarations
+    assert_raises ArgumentError do
+      StrongCSV.new do
+        let 0, integer
+        pick :name, as: :names do |values|
+          values
+        end
+      end
+    end
+  end
+
+  def test_pick_only_with_symbol_column_treats_first_row_as_headers
+    picked = nil
+    strong_csv = StrongCSV.new do
+      pick :id, as: :ids do |values|
+        picked = values
+        values
+      end
+    end
+    strong_csv.parse("id\n1\n2\n")
+
+    assert_equal %w[1 2], picked
+  end
+
   def test_parse_isolates_picked_values_between_fibers
     strong_csv = build_fiber_picker
     rows = {}
