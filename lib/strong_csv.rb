@@ -42,6 +42,9 @@ class StrongCSV
   # Raised when the CSV header does not contain every declared column exactly once.
   class HeaderError < Error; end
 
+  # Raised when `pick` is used with an input that cannot be rewound.
+  class NotSeekableError < Error; end
+
   def initialize(&block)
     @let = Let.new
     @let.instance_eval(&block) if block_given?
